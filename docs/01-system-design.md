@@ -178,6 +178,14 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 - 与日志 trace 机制集成:Event 创建时自动取当前 trace_id,发布/分发时恢复该 trace 上下文;
 - 发布/订阅模型,核心层与适配层均可使用;Phase 0 仅 Mock 测试,不连接真实模块。
 
+### 4.18 Provider 抽象层(未来能力接入契约)
+
+- 统一契约:所有 Provider 继承 BaseProvider,统一生命周期 CREATED → INITIALIZED → SHUTDOWN 与调用门控(未初始化即调用报错);
+- 四类 Provider:LLMProvider(规划)、OCRProvider(文字识别)、VisionProvider(画面状态)、StorageProvider(持久化);
+- Phase 0 只实现 Interface / Protocol / Mock,禁止真实 API 调用、真实 OCR、截图分析、游戏逻辑;
+- 所有调用统一:解析/生成 trace_id → 写模块日志(LLM→agent.log、OCR/Vision→vision.log、Storage→startup.log)→ 发布 Event Bus 事件(成功/失败),失败统一 ERROR_OCCURRED 且抛 ProviderError;
+- 接口与 Mock 分离:未来接入真实实现只替换 Mock,不影响上层调用方。
+
 ## 5. 模块依赖关系
 
 ### 5.1 分层依赖规则
@@ -203,6 +211,7 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 | sessions | logging、events | runtime、agent |
 | events | models | 全部模块(横切) |
 | game.window | config、logging | runtime(READY 检测)、input.* |
+| providers | events、logging_setup | agent.planner、vision、task、sessions(后续接入) |
 
 详细调用图见 [02-architecture.md](02-architecture.md)。
 

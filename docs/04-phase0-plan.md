@@ -36,7 +36,8 @@
 | M3 事件总线 | events/:强类型 Event + EventType/Priority 枚举 + 异步优先级队列 + trace 集成 | 单测:强类型校验、优先级排序、同优先级 FIFO、trace 跨订阅者关联 |
 | M4 Runtime + 状态机 | OFFLINE/STARTING/READY/RUNNING/PAUSED/STOPPING/ERROR 严格迁移表;状态变化发布事件 + runtime.log + trace_id | 单测覆盖合法/非法迁移、Bus 命令消费、事件发布;READY 下禁止输入 |
 | M4.5 只读窗口检测 | game/window.py:GameWindowDetector 接口 + Mock(存在检测 / Title / Process / Rect) | 单测用 Mock 窗口对象;READY 状态展示检测结果 |
-| M5 Agent 框架 | Controller + Agent Loop + Reflex/Planner/Executor 接口 + Mock | Mock 环境跑通完整 Loop;Reflex 紧急事件可打断 |
+| M5 Provider 接口层 | providers/:LLM / OCR / Vision / Storage 抽象 + Mock,统一生命周期 / trace / 日志 / Event Bus | 单测:Mock 生命周期、异常处理、接口契约、事件发布 |
+| M5b Agent 框架 | Controller + Agent Loop + Reflex/Planner/Executor 接口 + Mock | Mock 环境跑通完整 Loop;Reflex 紧急事件可打断 |
 | M6 知识库框架 | loader / versioning / update 报告骨架 + schema/(JSON Schema),不导入具体数据 | 加载 schema、档案不匹配提示、生成更新报告 |
 | M7 Session 骨架 | session_xxx 目录,state/actions/decision/errors 落盘 | 一次运行生成完整会话文件 |
 | M8 WebUI 骨架 | 状态页 / 日志页 / START / PAUSE / STOP(仅状态切换) | 浏览器可访问,按钮驱动状态机且不产生输入 |

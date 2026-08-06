@@ -23,6 +23,12 @@ Maple-Agent/
 │       │   └── defaults.yaml    #   默认值
 │       ├── logging_setup.py     # 日志基础设施:分模块文件 + trace_id/correlation_id + 轮转
 │       ├── models/              # 领域模型(Pydantic): GameState、Action、Plan、Event
+│       ├── providers/           # Provider 抽象层(Phase 0 仅接口 + Mock)
+│       │   ├── base.py          #   BaseProvider:生命周期 + trace + 日志 + Event
+│       │   ├── llm.py           #   LLMProvider + MockLLMProvider
+│       │   ├── ocr.py           #   OCRProvider + MockOCRProvider
+│       │   ├── vision.py        #   VisionProvider + MockVisionProvider
+│       │   └── storage.py       #   StorageProvider + MockStorageProvider
 │       ├── events/              # 进程内事件总线
 │       │   ├── bus.py           #   异步优先级队列 + 发布/订阅
 │       │   └── types.py         #   强类型 Event / EventType / Priority
@@ -110,6 +116,7 @@ Maple-Agent/
 | `src/maple_agent/game/window.py` | 只读窗口检测接口(存在检测 / Title / Process / Rect),禁止内存读取 / 注入 / Hook |
 | `src/maple_agent/agent/controller.py` | Agent Loop 编排与执行门控 |
 | `src/maple_agent/agent/planner/llm/` | LLM Provider 抽象,不绑定 DeepSeek |
+| `src/maple_agent/providers/` | Provider 抽象层:LLM / OCR / Vision / Storage 接口 + Mock,统一生命周期 / trace / 日志 / Event |
 | `src/maple_agent/events/` | Event Bus:Reflex / Runtime / Error 事件,支持优先级 |
 | `src/maple_agent/input/interface.py` | 输入抽象契约(Phase 0 仅接口 + Mock) |
 | `src/maple_agent/vision/interface.py` | 视觉抽象契约(截图/识别/OCR) |

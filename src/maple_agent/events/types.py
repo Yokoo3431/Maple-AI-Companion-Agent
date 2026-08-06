@@ -34,6 +34,10 @@ class EventType(StrEnum):
     # Error
     ERROR_OCCURRED = "error.occurred"
 
+    # Storage
+    STORAGE_SAVED = "storage.saved"
+    STORAGE_LOADED = "storage.loaded"
+
 
 class Priority(StrEnum):
     """事件优先级(数值越大越先处理)。"""
@@ -66,6 +70,8 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.STOPPED: Priority.NORMAL,
     EventType.SCREEN_UPDATED: Priority.LOW,
     EventType.PLAN_CREATED: Priority.NORMAL,
+    EventType.STORAGE_SAVED: Priority.NORMAL,
+    EventType.STORAGE_LOADED: Priority.NORMAL,
 }
 
 
