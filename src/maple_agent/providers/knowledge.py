@@ -82,6 +82,26 @@ class KnowledgeProvider(BaseProvider):
             trace_id,
         )
 
+    def get_npcs_by_map(
+        self, map_id: int | str, *, trace_id: str | None = None
+    ) -> list[NpcInfo]:
+        return self._lookup(
+            "get_npcs_by_map",
+            lambda: [item for item in self._data.npcs if str(item.map_id) == str(map_id)],
+            trace_id,
+        )
+
+    def get_monsters_by_map(
+        self, map_id: int | str, *, trace_id: str | None = None
+    ) -> list[MonsterInfo]:
+        return self._lookup(
+            "get_monsters_by_map",
+            lambda: [
+                item for item in self._data.monsters if str(item.map_id) == str(map_id)
+            ],
+            trace_id,
+        )
+
     def get_quest_template(
         self, ref: int | str, *, trace_id: str | None = None
     ) -> QuestTemplate | None:
@@ -160,7 +180,9 @@ class MockKnowledgeProvider(KnowledgeProvider):
                 MapInfo(map_id=2, name="勇士部落", aliases=["Perion"], region="冒险岛世界"),
             ],
             npcs=[NpcInfo(npc_id=101, name="赫丽娜", map_id=1)],
-            monsters=[MonsterInfo(monster_id=100, name="绿水灵", level=1, hp=15)],
+            monsters=[
+                MonsterInfo(monster_id=100, name="绿水灵", level=1, hp=15, map_id=1)
+            ],
             quests=[
                 QuestTemplate(
                     quest_id=1,

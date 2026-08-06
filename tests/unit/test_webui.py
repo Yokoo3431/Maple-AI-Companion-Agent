@@ -6,6 +6,7 @@ import time
 from fastapi.testclient import TestClient
 
 from maple_agent.events import EventBus
+from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.providers import (
     MockKnowledgeProvider,
@@ -134,28 +135,41 @@ def test_vision_worker_publishes_frames_and_ocr_to_webui(tmp_path):
         height=600,
         sessions_dir=tmp_path / "sessions",
     )
+    knowledge = MockKnowledgeProvider()
+    knowledge.initialize()
+    fusion = FusionService(knowledge)
     worker = VisionWorker(
         capture,
         bus,
         interval=0.02,
         ocr=MockOCRProvider(text="射手村"),
+        fusion=fusion,
     )
     app = create_app(runtime=runtime, bus=bus, vision_worker=worker)
     with TestClient(app) as client:
         latest = None
         ocr_results = []
+        world = None
         for _ in range(150):
             resp = client.get("/api/vision/state")
             data = resp.json()
-            if data["enabled"] and data["latest_frame"] is not None and data["latest_ocr"]:
+            if (
+                data["enabled"]
+                and data["latest_frame"] is not None
+                and data["latest_ocr"]
+                and data["latest_world"] is not None
+            ):
                 latest = data["latest_frame"]
                 ocr_results = data["latest_ocr"]
+                world = data["latest_world"]
                 break
             time.sleep(0.02)
     assert latest is not None
     assert latest["width"] == 800
     assert latest["height"] == 600
     assert ocr_results and ocr_results[0]["text"] == "射手村"
+    assert world is not None
+    assert world["current_map"]["name"] == "射手村"
 
 
 def test_websocket_pushes_runtime_and_log_events():

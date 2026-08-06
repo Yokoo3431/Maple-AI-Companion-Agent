@@ -58,6 +58,9 @@ class VisionState(BaseModel):
     hp: int | None = None
     mp: int | None = None
     map_name: str | None = None
+    map_id: int | str | None = None
+    region: str = ""
+    map_confidence: float | None = None
     summary: str = ""
     observation_refs: list[ObservationRef] = Field(default_factory=list)
     overall_confidence: float | None = Field(default=None, ge=0, le=1)

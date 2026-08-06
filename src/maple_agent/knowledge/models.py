@@ -32,6 +32,7 @@ class MonsterInfo(BaseModel):
     name: str
     level: int | None = None
     hp: int | None = None
+    map_id: int | str | None = None
     version: str = ""
 
 

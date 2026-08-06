@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import uvicorn
 
 from maple_agent.events import EventBus
+from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.logging_setup import setup_logging
 from maple_agent.providers import (
@@ -58,11 +59,13 @@ def main() -> None:
             rect=WindowRect(left=0, top=0, width=800, height=600),
         ),
     )
+    fusion = FusionService(knowledge=providers["knowledge"])
     vision_worker = VisionWorker(
         vision_capture,
         bus,
         interval=0.5,
         ocr=MockOCRProvider(bus=bus, text="射手村"),
+        fusion=fusion,
     )
     app = create_app(
         runtime=runtime,

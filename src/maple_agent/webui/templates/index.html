@@ -57,6 +57,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">World State(只读)</div>
+        <div class="card-body">
+          <pre id="world-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -141,6 +149,19 @@
       `[${(r.confidence * 100).toFixed(0)}%] ${r.text} (${r.source})`
     );
     ocrEl.textContent = ocrLines.length ? ocrLines.join('\n') : '等待 OCR...';
+    const worldEl = document.getElementById('world-card-body');
+    const world = data.latest_world;
+    if (!world) {
+      worldEl.textContent = '等待 Fusion...';
+    } else {
+      const map = world.current_map;
+      worldEl.textContent = [
+        `地图: ${map ? `${map.name}${map.region ? `(${map.region})` : ''}` : '未知'}`,
+        `NPC: ${(world.known_npcs || []).map((n) => n.name).join(', ') || '-'}`,
+        `怪物: ${(world.known_monsters || []).map((m) => m.name).join(', ') || '-'}`,
+        `置信度: ${Math.round((world.confidence || 0) * 100)}%`,
+      ].join('\n');
+    }
     refreshKnowledge();
   }
 

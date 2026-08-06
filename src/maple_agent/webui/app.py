@@ -136,6 +136,11 @@ def create_app(
                 if vision_worker.latest_vision is not None
                 else None
             ),
+            "latest_world": (
+                vision_worker.latest_world.model_dump(mode="json")
+                if vision_worker.latest_world is not None
+                else None
+            ),
         }
 
     @app.get("/api/knowledge/state")

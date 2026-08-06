@@ -6,6 +6,7 @@ import asyncio
 import json
 import logging
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 from PIL import Image
 
@@ -19,6 +20,10 @@ from maple_agent.vision.models import (
     ScreenFrame,
     VisionState,
 )
+
+if TYPE_CHECKING:
+    from maple_agent.fusion import FusionService
+    from maple_agent.fusion.models import WorldState
 
 logger = logging.getLogger("maple_agent.vision.worker")
 
@@ -51,10 +56,12 @@ class VisionWorker:
         interval: float = 0.5,
         retry_delay: float = 1.0,
         ocr: OCRProvider | None = None,
+        fusion: FusionService | None = None,
     ) -> None:
         self.capture = capture
         self.bus = bus
         self.ocr = ocr
+        self.fusion = fusion
         self.interval = interval
         self.retry_delay = retry_delay
         self._state = VisionWorkerState.STOPPED
@@ -62,6 +69,7 @@ class VisionWorker:
         self.latest_frame: ScreenFrame | None = None
         self.latest_ocr: list[OCRResult] = []
         self.latest_vision: VisionState | None = None
+        self.latest_world: WorldState | None = None
         self.capture_count = 0
 
     @property
@@ -106,6 +114,7 @@ class VisionWorker:
             self.capture_count += 1
             observations: list[Observation] = []
             ocr_results: list[OCRResult] = []
+            world: WorldState | None = None
             if self.ocr is not None:
                 ocr_path = self._ensure_ocr_image(image, frame)
                 result = self.ocr.recognize(
@@ -124,9 +133,16 @@ class VisionWorker:
                         source=result.source,
                     )
                 ]
+            if self.fusion is not None and observations:
+                world = self.fusion.fuse(observations, trace_id=frame.trace_id)
+                self.latest_world = world
             state = VisionState(
                 frame_id=frame.frame_id,
                 trace_id=frame.trace_id,
+                map_name=world.current_map.name if world and world.current_map else None,
+                map_id=world.current_map.map_id if world and world.current_map else None,
+                region=world.current_map.region if world and world.current_map else "",
+                map_confidence=world.confidence if world else None,
                 summary="OCR " + (" | ".join(r.text for r in ocr_results))
                 if ocr_results
                 else f"frame captured {frame.width}x{frame.height}",
@@ -140,7 +156,7 @@ class VisionWorker:
                 ],
             )
             self.latest_vision = state
-            self._write_replay(frame, observations, state)
+            self._write_replay(frame, observations, state, world)
             self.bus.publish(
                 Event.create(
                     EventType.SCREEN_UPDATED,
@@ -166,6 +182,7 @@ class VisionWorker:
         frame: ScreenFrame,
         observations: list[Observation],
         state: VisionState,
+        world: WorldState | None,
     ) -> None:
         directory = self.capture.sessions_dir / frame.trace_id
         directory.mkdir(parents=True, exist_ok=True)
@@ -173,6 +190,7 @@ class VisionWorker:
             "frame": frame.model_dump(mode="json"),
             "observations": [item.model_dump(mode="json") for item in observations],
             "vision_state": state.model_dump(mode="json"),
+            "world_state": world.model_dump(mode="json") if world is not None else None,
         }
         (directory / "vision.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
