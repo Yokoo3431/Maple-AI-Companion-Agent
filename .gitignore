@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# 测试与工具
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# 环境与隐私
+.env
+
+# 运行时数据
+logs/
+sessions/
+data/database/
+knowledge/versions/*/
+
+# IDE
+.idea/
+.vscode/
+*.swp
