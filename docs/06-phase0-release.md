@@ -21,6 +21,7 @@
 | M7 | Integration + RC | 本里程碑 | python -m maple_agent、/api/health、CLI(start/doctor/test) |
 | M7.1 | Desktop Launcher | 本里程碑 | 双击启动:环境检查 / venv / 依赖 / 自动打开 WebUI / launcher.log |
 | M7.1.1 | Launcher 可用性 + 审核包 | 本里程碑 | 阶段日志 / Debug 模式 / ExecutionPolicy 检查 / External Review Package 生成器 |
+| M7.1.2 | 环境恢复 + Release 准备 | 本里程碑 | setup.ps1 一键恢复环境 + Windows 部署指南 |
 
 ## 2. 测试结果
 

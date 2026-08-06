@@ -42,6 +42,7 @@
 | M7 Integration + RC | python -m maple_agent 启动装配 / /api/health / CLI(start/doctor/test) / docs/06-phase0-release.md | 启动流程按 Config→Logging→EventBus→Providers→Runtime→WebUI;health 返回 runtime/provider/system;CLI 三命令可用 |
 | M7.1 Desktop Launcher | launcher/ 双击启动(bat + ps1):检查 Python / venv / 依赖 → 启动 → 自动打开 WebUI;launcher.log | 双击等价命令行启动;默认 READY,禁止自动 RUNNING;环境缺失输出中文提示 |
 | M7.1.1 Launcher 可用性 + 审核包 | 阶段日志输出、Debug bat(窗口保持)、ExecutionPolicy 检查、scripts/create_review_package.ps1 | 双击有明确窗口反馈;审核包 zip 生成与敏感内容校验通过 |
+| M7.1.2 环境恢复 + Release 准备 | scripts/setup.ps1 增强(Python≥3.11 / venv 创建 / 依赖 / 目录 / .env / doctor)+ docs/07-deployment-guide.md | 新电脑 clone 后一键恢复;Windows 集成测试通过 |
 | M7b Session 骨架 | session_xxx 目录(state/actions/decision/errors) | 顺延至 Phase 1 |
 | M8 WebUI 控制台 | FastAPI + Jinja2 + Bootstrap + WS;Dashboard 显示 Runtime / Provider / 窗口 / Event / 日志;START/PAUSE/STOP 仅调 Runtime API | 浏览器可访问;按钮驱动状态机且不产生输入;WS 推送事件与日志 |
 | M9 测试与文档 | 全部单测通过 + docs 齐备 | pytest 0 失败;README 快速开始可复现 |

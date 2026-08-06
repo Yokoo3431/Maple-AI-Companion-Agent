@@ -17,21 +17,26 @@
 
 需要 Python 3.11+。
 
+**第一次使用(换电脑 / 新环境,一键恢复):**
+
 ```powershell
 git clone <repo-url> Maple-Agent
 cd Maple-Agent
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-pip install -r requirements-dev.txt      # 开发环境
-Copy-Item .env.example .env
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
+```
+
+setup.ps1 会自动完成:检查 Python ≥ 3.11 → 创建/复用 .venv → 安装依赖 → 创建 logs/ sessions/ knowledge/ config/ 目录 → 从 .env.example 生成 .env → 运行 doctor 自检。然后双击 `launcher\Maple Agent 启动.bat` 即可启动。
+
+**日常使用:**直接双击 `launcher\Maple Agent 启动.bat`。
+
+**开发模式(可选):**
+
+```powershell
 python -m pytest                          # 运行测试
 python -m maple_agent doctor              # 环境自检
 python -m maple_agent start               # 启动 WebUI 控制台(http://127.0.0.1:8080)
 python -m maple_agent test                # 运行测试套件
 ```
-
-也可以直接运行 `scripts/setup.ps1` 一键安装。
 
 Phase 0 Release 说明见 [docs/06-phase0-release.md](docs/06-phase0-release.md)。
 
