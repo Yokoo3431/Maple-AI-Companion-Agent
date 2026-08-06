@@ -1,0 +1,27 @@
+# Maple AI Companion Agent 默认配置
+# 覆盖优先级:环境变量 > .env > 本文件 > 字段默认值
+
+app:
+  log_level: INFO
+  webui_host: 127.0.0.1
+  webui_port: 8080
+  emergency_hotkey: ctrl+alt+pause
+
+llm:
+  provider: deepseek
+  api_key: ""
+  base_url: https://api.deepseek.com
+  model: deepseek-v4-flash
+  timeout_sec: 30
+
+game:
+  process: MapleStory.exe
+  title: MapleStory
+
+knowledge:
+  game_profile: ""
+
+vision:
+  capture_fps: 5
+  ocr_provider: tesseract
+  scale_mode: auto

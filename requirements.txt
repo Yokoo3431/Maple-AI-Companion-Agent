@@ -7,4 +7,5 @@ websockets>=12.0
 pydantic>=2.7
 pydantic-settings>=2.3
 python-dotenv>=1.0
+pyyaml>=6.0
 structlog>=24.1
