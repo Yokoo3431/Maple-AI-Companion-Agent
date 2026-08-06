@@ -17,7 +17,10 @@ Maple-Agent/
 ├── src/
 │   └── maple_agent/             # 主包,核心代码全部在此
 │       ├── __init__.py
-│       ├── main.py              # 入口:装配配置→日志→DB→Runtime→WebUI
+│       ├── __main__.py          #   python -m maple_agent 入口
+│       ├── main.py              #   入口:CLI 委托
+│       ├── bootstrap.py         #   装配:Config→Logging→EventBus→Providers→Runtime→WebUI
+│       ├── cli.py               #   CLI:start / doctor / test
 │       ├── config/              # 配置系统(pydantic-settings)
 │       │   ├── settings.py      #   Settings 模型与加载
 │       │   └── defaults.yaml    #   默认值
@@ -65,7 +68,7 @@ Maple-Agent/
 │       ├── database/            # SQLite:sessions、decisions、tasks、knowledge_versions
 │       ├── sessions/            # Session Replay 骨架
 │       └── webui/               # FastAPI 应用
-│           ├── app.py           #   FastAPI 实例与路由(Dashboard + Runtime API)
+│           ├── app.py           #   FastAPI 实例与路由(Dashboard + Runtime API + /api/health)
 │           ├── ws.py            #   WebSocket 推送(runtime / error / log 事件)
 │           ├── templates/       #   Jinja2 模板(index.html)
 │           └── static/          #   Bootstrap 本地 vendor(无 Node 构建)
@@ -125,6 +128,8 @@ Maple-Agent/
 | `src/maple_agent/knowledge/` | 知识包加载、档案检测、增量更新与报告(Phase 0:schema + 框架) |
 | `src/maple_agent/sessions/` | 每次运行生成 Session Replay 数据 |
 | `src/maple_agent/webui/` | FastAPI + Jinja2 + Bootstrap + WebSocket;Dashboard 展示 Runtime / Provider / 窗口 / Event / 日志,按钮仅调 Runtime API |
+| `src/maple_agent/cli.py` | CLI:start / doctor / test |
+| `src/maple_agent/bootstrap.py` | 启动装配:Config→Logging→EventBus→Providers→Runtime→WebUI |
 | `knowledge/schema/` | JSON Schema,Phase 0 不导入具体游戏数据 |
 | `knowledge/versions/<game_profile>/` | 运行时导入的游戏档案数据,不入库 |
 

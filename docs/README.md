@@ -1,6 +1,6 @@
 # Maple AI Companion Agent — 设计文档
 
-本目录包含 Phase 0 启动前的系统设计文档。当前为**设计草案**,等待审核通过后再进入编码阶段。
+本目录包含 Maple AI Companion Agent 的设计与发布文档。
 
 | 文档 | 内容 |
 | --- | --- |
@@ -9,8 +9,9 @@
 | [03-repo-structure.md](03-repo-structure.md) | GitHub 目录结构、文件职责、配置模板、忽略规则 |
 | [04-phase0-plan.md](04-phase0-plan.md) | Phase 0 开发计划:里程碑、测试策略、验收标准 |
 | [05-risks.md](05-risks.md) | 风险列表与缓解措施 |
+| [06-phase0-release.md](06-phase0-release.md) | Phase 0 Release:已完成模块、测试结果、限制、Phase 1 计划 |
 
-状态:⏳ 待审核(2026-08-06)
+状态:✅ Phase 0 开发完成,Release Candidate 待审核(2026-08-06)
 
 ## 变更记录
 

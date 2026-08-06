@@ -26,9 +26,14 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt      # 开发环境
 Copy-Item .env.example .env
 python -m pytest                          # 运行测试
+python -m maple_agent doctor              # 环境自检
+python -m maple_agent start               # 启动 WebUI 控制台(http://127.0.0.1:8080)
+python -m maple_agent test                # 运行测试套件
 ```
 
 也可以直接运行 `scripts/setup.ps1` 一键安装。
+
+Phase 0 Release 说明见 [docs/06-phase0-release.md](docs/06-phase0-release.md)。
 
 ## 架构
 

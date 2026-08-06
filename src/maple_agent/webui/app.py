@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import platform
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from dataclasses import asdict
@@ -15,9 +16,9 @@ from fastapi.templating import Jinja2Templates
 
 from maple_agent import __version__
 from maple_agent.events import EventBus
-from maple_agent.game.window import GameWindowDetector
+from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
 from maple_agent.providers import BaseProvider
-from maple_agent.runtime import IllegalTransitionError, RuntimeManager
+from maple_agent.runtime import IllegalTransitionError, RuntimeManager, RuntimeState
 from maple_agent.webui.ws import WebSocketManager
 
 BASE_DIR = Path(__file__).parent
@@ -83,6 +84,24 @@ def create_app(
             "window": _window_snapshot(detector),
             "events": [event.model_dump(mode="json") for event in ws_manager.recent_events],
             "logs": list(ws_manager.recent_logs),
+        }
+
+    @app.get("/api/health")
+    async def api_health():
+        detector_kind = "none"
+        if detector is not None:
+            detector_kind = "mock" if isinstance(detector, MockGameWindowDetector) else "real"
+        return {
+            "status": "ok" if runtime.state is not RuntimeState.ERROR else "degraded",
+            "runtime": {"state": runtime.state.value},
+            "providers": {name: provider.status.value for name, provider in providers.items()},
+            "system": {
+                "status": "ok",
+                "version": __version__,
+                "python": platform.python_version(),
+                "platform": platform.platform(),
+                "detector": detector_kind,
+            },
         }
 
     @app.post("/api/runtime/start")

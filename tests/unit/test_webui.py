@@ -75,6 +75,19 @@ def test_api_state_snapshot():
     assert "logs" in data
 
 
+def test_health_endpoint():
+    app, _, _ = _build_app()
+    with TestClient(app) as client:
+        resp = client.get("/api/health")
+    data = resp.json()
+    assert resp.status_code == 200
+    assert data["runtime"]["state"] == "OFFLINE"
+    assert data["providers"] == {"llm": "CREATED", "vision": "CREATED"}
+    assert data["system"]["status"] == "ok"
+    assert data["system"]["detector"] == "mock"
+    assert data["system"]["version"]
+
+
 def test_websocket_pushes_runtime_and_log_events():
     app, _, _ = _build_app()
     with TestClient(app) as client:
