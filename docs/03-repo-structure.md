@@ -105,6 +105,14 @@ Maple-Agent/
 │
 ├── docs/                        # 本目录(设计文档)
 ├── scripts/                     # setup.ps1 / run.ps1 / test.ps1 / update_knowledge.py
+│   └── create_review_package.ps1 #   External Review Package 生成器
+├── launcher/                    # Windows 桌面启动器(普通用户双击)
+│   ├── Maple Agent 启动.bat     #   双击入口
+│   ├── Maple Agent 启动 Debug.bat # 调试模式(窗口保持,Press Enter to exit)
+│   ├── Maple Agent 启动.ps1     #   环境检查 + 启动 + 自动打开 WebUI
+│   └── launcher.log             #   启动日志(运行时生成,gitignore)
+├── review_package/              # 外部审核包(脚本生成,gitignore)
+├── Maple_AI_Companion_Agent_review_*.zip # 审核压缩包(生成物,gitignore)
 └── .github/
     └── workflows/ci.yml         # lint + pytest(不触碰游戏与网络)
 ```

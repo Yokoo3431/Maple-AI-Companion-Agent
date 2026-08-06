@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 from maple_agent import __version__
-from maple_agent.bootstrap import bootstrap
+from maple_agent.bootstrap import BootstrapResult, bootstrap
 from maple_agent.config import build_settings
 from maple_agent.events import EventBus
 from maple_agent.logging_setup import setup_logging
@@ -45,12 +45,18 @@ def cmd_start(args: argparse.Namespace) -> int:
     import uvicorn
 
     result = bootstrap()
+    prepare_for_start(result)
     print(
         f"Maple AI Companion Agent v{__version__} 控制台: "
         f"http://{args.host}:{args.port}"
     )
     uvicorn.run(result.app, host=args.host, port=args.port, log_level="info")
     return 0
+
+
+def prepare_for_start(result: BootstrapResult) -> None:
+    """启动流程收尾:Runtime 进入 READY;禁止自动进入 RUNNING。"""
+    result.runtime.start()
 
 
 def _check(

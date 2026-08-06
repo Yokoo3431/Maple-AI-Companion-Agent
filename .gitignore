@@ -22,6 +22,9 @@ logs/
 sessions/
 data/database/
 knowledge/versions/*/
+launcher/launcher.log
+review_package/
+Maple_AI_Companion_Agent_review_*.zip
 
 # IDE
 .idea/

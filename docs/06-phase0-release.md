@@ -19,6 +19,8 @@
 | M5 | Provider 接口层 | 7dfec02 | LLM / OCR / Vision / Storage + Mock,统一生命周期/trace/日志/Event |
 | M6 | WebUI 控制台 | 49c4247 | FastAPI + Jinja2 + Bootstrap + WebSocket,只读 Dashboard + Runtime API |
 | M7 | Integration + RC | 本里程碑 | python -m maple_agent、/api/health、CLI(start/doctor/test) |
+| M7.1 | Desktop Launcher | 本里程碑 | 双击启动:环境检查 / venv / 依赖 / 自动打开 WebUI / launcher.log |
+| M7.1.1 | Launcher 可用性 + 审核包 | 本里程碑 | 阶段日志 / Debug 模式 / ExecutionPolicy 检查 / External Review Package 生成器 |
 
 ## 2. 测试结果
 

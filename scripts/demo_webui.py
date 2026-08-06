@@ -41,6 +41,7 @@ def main() -> None:
     for provider in providers.values():
         provider.initialize()
     app = create_app(runtime=runtime, bus=bus, providers=providers, detector=detector)
+    runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 
 

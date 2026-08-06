@@ -35,6 +35,38 @@ python -m maple_agent test                # 运行测试套件
 
 Phase 0 Release 说明见 [docs/06-phase0-release.md](docs/06-phase0-release.md)。
 
+## 普通用户启动方式(Windows,无需命令行)
+
+1. 双击 `launcher\Maple Agent 启动.bat`;
+2. 启动器自动检查 Python 与项目 venv,缺失时弹出中文提示;
+3. 服务就绪后自动打开浏览器 http://127.0.0.1:8080(默认 READY 状态,不会自动进入 RUNNING);
+4. 启动记录保存在 `launcher\launcher.log`。
+
+排查启动问题:双击 `launcher\Maple Agent 启动 Debug.bat`,窗口会保持打开(显示完整检查过程),便于查看错误。
+
+## 外部审核包生成流程(External Review Package)
+
+用于把当前项目打包,提交给其他 AI 模型做架构审核、安全审核与代码质量审核。
+
+```powershell
+# 方式一:命令行(在项目根目录执行)
+powershell -ExecutionPolicy Bypass -File scripts\create_review_package.ps1
+
+# 方式二:右键 scripts\create_review_package.ps1 -> 使用 PowerShell 运行
+```
+
+生成结果:
+
+- `review_package/`:README_REVIEW.md、PROJECT_STATUS.md、ARCHITECTURE_SUMMARY.md、CHANGELOG.md、docs/、src/、tests/、requirements.txt、pyproject.toml;
+- `Maple_AI_Companion_Agent_review_v0.1.0.zip`:可直接上传给外部 AI 审核。
+
+排除内容(脚本自动校验,不进入包内):
+
+- .venv、__pycache__、*.pyc、logs/、launcher.log、.env、review_package 自身、本地绝对路径;
+- API Key 与用户配置不在包内(它们只存在于本机 .env)。
+
+注意事项:每次运行会重新生成并覆盖 `review_package/` 与 zip;`PROJECT_STATUS.md` 会自动写入实测 pytest 数量。
+
 ## 架构
 
 四层结构 + 横切基础设施:
