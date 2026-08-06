@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $Root    = Split-Path -Parent $PSScriptRoot
 $OutDir  = Join-Path $Root "review_package"
-$Version = "0.1.0"
+$Version = "0.1.0-phase0"
 $ZipPath = Join-Path $Root "Maple_AI_Companion_Agent_review_v$Version.zip"
 
 # 清理旧生成物(仅限 review_package 与 zip,均为脚本生成)
@@ -71,7 +71,7 @@ $readmeReview = @'
 Maple AI Companion Agent
 
 ## 当前版本
-0.1.0 Phase 0 RC
+0.1.0 Phase 0 (Release Freeze)
 
 ## 审核目标
 
@@ -83,7 +83,7 @@ Maple AI Companion Agent
 
 ## 当前完成
 
-M0 - M7.1
+M0 - M7.1.2
 
 ## 当前未实现
 
@@ -184,6 +184,44 @@ $changelog = @'
 - M7.1.1: Launcher 可用性修复 + External Review Package
 '@
 Set-Content -LiteralPath (Join-Path $OutDir "CHANGELOG.md") -Value $changelog -Encoding UTF8
+
+$aiReviewPrompt = @'
+# AI Review Prompt - Maple AI Companion Agent (Phase 0 Freeze)
+
+请以架构审核专家身份审核本仓库(review_package/ 目录,或 GitHub:
+https://github.com/Yokoo3431/Maple-AI-Companion-Agent)。
+
+## 审核重点
+
+1. Agent 架构
+   - Agent Loop(Observe → Reason → Plan → Execute → Reflect → Memory Update)设计是否合理;
+   - L1 Reflex(本地实时,毫秒级)与 L2 Planner(LLM,秒级)的双层决策边界是否清晰;
+   - AI 是否被禁止直接控制键鼠(应仅经 Input Interface 与运行门控)。
+
+2. Runtime 设计
+   - 7 状态(OFFLINE / STARTING / READY / RUNNING / PAUSED / STOPPING / ERROR)严格迁移表;
+   - 状态变化是否一致地发布事件 + 写 runtime.log + 携带 trace_id;
+   - 门控(窗口存在 + 用户确认 + RUNNING)是否充分。
+
+3. Event Bus
+   - 强类型 Event(禁止裸 dict)、EventType / Priority 枚举;
+   - 优先级排序与同优先级 FIFO 是否正确;订阅者异常隔离是否完善。
+
+4. Provider 抽象
+   - BaseProvider 生命周期(门控 + trace + 日志 + 事件)契约是否清晰;
+   - LLM / OCR / Vision / Storage 的接口与 Mock 分离是否便于未来替换真实实现。
+
+5. Phase 1 风险
+   - Vision / OCR 选型(Windows OCR / PaddleOCR / Tesseract)风险;
+   - DPI / 多显示器 / 分辨率适配;
+   - Input 实现(后台模拟 / 驱动级)与权限、杀软冲突;
+   - 反作弊 / 账号合规风险与缓解。
+
+## 输出建议
+
+请给出:问题清单(按严重程度)、具体改进建议(引用文件 / 行)、以及 Phase 1 启动前的关键决策点。
+'@
+Set-Content -LiteralPath (Join-Path $OutDir "AI_REVIEW_PROMPT.md") -Value $aiReviewPrompt -Encoding UTF8
 
 # ---- 生成 zip ----
 Compress-Archive -Path (Join-Path $OutDir "*") -DestinationPath $ZipPath -Force

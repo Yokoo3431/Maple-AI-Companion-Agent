@@ -2,9 +2,10 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 版本 | 0.1.0(Phase 0 Release Candidate) |
+| 版本 | 0.1.0-phase0(Phase 0 Release Freeze) |
+| Tag | v0.1.0-phase0 |
 | 日期 | 2026-08-06 |
-| 状态 | 待最终审核 |
+| 状态 | 已冻结(不再新增功能) |
 
 ## 1. 已完成模块
 
@@ -18,18 +19,27 @@
 | M4.5 | 只读窗口检测 | 92fbd4c | GameWindowDetector 接口 + Mock(禁止内存读取/注入/Hook) |
 | M5 | Provider 接口层 | 7dfec02 | LLM / OCR / Vision / Storage + Mock,统一生命周期/trace/日志/Event |
 | M6 | WebUI 控制台 | 49c4247 | FastAPI + Jinja2 + Bootstrap + WebSocket,只读 Dashboard + Runtime API |
-| M7 | Integration + RC | 本里程碑 | python -m maple_agent、/api/health、CLI(start/doctor/test) |
-| M7.1 | Desktop Launcher | 本里程碑 | 双击启动:环境检查 / venv / 依赖 / 自动打开 WebUI / launcher.log |
-| M7.1.1 | Launcher 可用性 + 审核包 | 本里程碑 | 阶段日志 / Debug 模式 / ExecutionPolicy 检查 / External Review Package 生成器 |
-| M7.1.2 | 环境恢复 + Release 准备 | 本里程碑 | setup.ps1 一键恢复环境 + Windows 部署指南 |
+| M7 | Integration + RC | aceca59 | python -m maple_agent、/api/health、CLI(start/doctor/test) |
+| M7.1 | Desktop Launcher | 26b52f4 | 双击启动:环境检查 / venv / 依赖 / 自动打开 WebUI / launcher.log |
+| M7.1.1 | Launcher 可用性 + 审核包 | 26b52f4 | 阶段日志 / Debug 模式 / ExecutionPolicy 检查 / External Review Package 生成器 |
+| M7.1.2 | 环境恢复 + Release 准备 | b359b49 | setup.ps1 一键恢复环境 + Windows 部署指南 |
 
 ## 2. 测试结果
 
-- pytest:全量通过(含配置、日志、事件、状态机、窗口、Provider、WebUI、CLI、装配);
+- pytest:**71 passed**(配置/日志/事件/状态机/窗口/Provider/WebUI/CLI/装配/setup 集成);
 - ruff:`All checks passed!`;
-- CI:GitHub Actions 在 Python 3.11 / 3.12 上运行 lint + pytest。
+- CI:GitHub Actions 在 Python 3.11 / 3.12 上运行 lint + pytest;
+- 审核包:`Maple_AI_Companion_Agent_review_v0.1.0-phase0.zip`(含 AI_REVIEW_PROMPT.md)。
 
-## 3. 架构说明
+## 3. 部署方式
+
+- 一键恢复:`git clone <repo>` → `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`;
+- setup.ps1 自动完成:Python ≥ 3.11 检查、.venv 创建/复用、依赖安装、目录创建、.env 生成、doctor 自检;
+- 启动:双击 `launcher\Maple Agent 启动.bat`,浏览器自动打开 http://127.0.0.1:8080;
+- 审核:将 GitHub 仓库链接或审核包 zip 交给外部 AI,审核提示见 `review_package/AI_REVIEW_PROMPT.md`;
+- 详细部署说明见 [07-deployment-guide.md](07-deployment-guide.md)。
+
+## 4. 架构说明
 
 四层结构 + 横切基础设施:
 
@@ -48,7 +58,7 @@
 - Runtime 每次状态变化:发布 Event + 写 runtime.log + 携带 trace_id,非法跳转被严格迁移表拒绝;
 - Provider 调用统一:生命周期门控 + trace + 日志 + 成功/失败事件。
 
-## 4. 当前限制(Phase 0)
+## 5. 已知限制(Phase 0 Freeze)
 
 - 所有 Provider 均为 Mock:无真实 DeepSeek API、无 Tesseract / Windows OCR / PaddleOCR、无截图分析;
 - 窗口检测为 Mock,未接入真实 win32;
@@ -56,9 +66,10 @@
 - WebUI 仅绑定 127.0.0.1,无鉴权,定位为本地控制台;
 - 知识库仅 schema 框架,未导入具体游戏数据;
 - Session Replay 落盘骨架顺延至 Phase 1;
-- 尚未配置 `MAPLE_KB_GAME_PROFILE`,知识库默认不加载。
+- 尚未配置 `MAPLE_KB_GAME_PROFILE`,知识库默认不加载;
+- **冻结声明:Phase 0 冻结后不再新增功能;后续功能(OCR / Vision / Input / 游戏逻辑 / 自动任务)在 Phase 1 起按新阶段规划开发。**
 
-## 5. Phase 1 计划
+## 6. Phase 1 路线
 
 - Vision:窗口截图(DPI-Aware)、OpenCV 模板/颜色检测、OCR Provider 实测选型(Windows OCR / PaddleOCR / Tesseract);
 - Input:Provider 选型与实现(先后台模拟,再按测试结果定);
