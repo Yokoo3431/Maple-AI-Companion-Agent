@@ -17,6 +17,11 @@ from maple_agent.providers import (
     MockVisionProvider,
 )
 from maple_agent.runtime import RuntimeManager
+from maple_agent.vision import (
+    MockCaptureProvider,
+    ScreenshotPolicy,
+    VisionWorker,
+)
 from maple_agent.webui.app import create_app
 
 
@@ -40,7 +45,25 @@ def main() -> None:
     }
     for provider in providers.values():
         provider.initialize()
-    app = create_app(runtime=runtime, bus=bus, providers=providers, detector=detector)
+    vision_capture = MockCaptureProvider(
+        bus=bus,
+        policy=ScreenshotPolicy(save_enabled=True, max_images=20),
+        sessions_dir="sessions",
+        window=WindowInfo(
+            handle=1,
+            title="MapleStory",
+            process_name="MapleStory.exe",
+            rect=WindowRect(left=0, top=0, width=800, height=600),
+        ),
+    )
+    vision_worker = VisionWorker(vision_capture, bus, interval=0.5)
+    app = create_app(
+        runtime=runtime,
+        bus=bus,
+        providers=providers,
+        detector=detector,
+        vision_worker=vision_worker,
+    )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 

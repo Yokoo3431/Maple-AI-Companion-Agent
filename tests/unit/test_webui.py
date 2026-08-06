@@ -1,12 +1,19 @@
 """WebUI 单测:Dashboard 渲染 / Runtime API / 状态快照 / WebSocket 推送。"""
 
+import logging
+import time
+
 from fastapi.testclient import TestClient
 
 from maple_agent.events import EventBus
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.providers import MockLLMProvider, MockVisionProvider
 from maple_agent.runtime import RuntimeManager
+from maple_agent.vision import MockCaptureProvider, VisionWorker
 from maple_agent.webui.app import create_app
+
+# 保证 INFO 级日志可流入 WebSocket(避免依赖其他测试先设置级别)
+logging.getLogger().setLevel(logging.INFO)
 
 
 def _build_app():
@@ -86,6 +93,36 @@ def test_health_endpoint():
     assert data["system"]["status"] == "ok"
     assert data["system"]["detector"] == "mock"
     assert data["system"]["version"]
+
+
+def test_vision_state_endpoint_disabled():
+    app, _, _ = _build_app()
+    with TestClient(app) as client:
+        resp = client.get("/api/vision/state")
+    data = resp.json()
+    assert resp.status_code == 200
+    assert data["enabled"] is False
+    assert data["latest_frame"] is None
+
+
+def test_vision_worker_publishes_frames_to_webui():
+    bus = EventBus()
+    runtime = RuntimeManager(bus=bus)
+    capture = MockCaptureProvider(width=800, height=600)
+    worker = VisionWorker(capture, bus, interval=0.02)
+    app = create_app(runtime=runtime, bus=bus, vision_worker=worker)
+    with TestClient(app) as client:
+        latest = None
+        for _ in range(100):
+            resp = client.get("/api/vision/state")
+            data = resp.json()
+            if data["enabled"] and data["latest_frame"] is not None:
+                latest = data["latest_frame"]
+                break
+            time.sleep(0.02)
+    assert latest is not None
+    assert latest["width"] == 800
+    assert latest["height"] == 600
 
 
 def test_websocket_pushes_runtime_and_log_events():

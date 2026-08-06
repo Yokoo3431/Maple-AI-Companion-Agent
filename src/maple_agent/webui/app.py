@@ -19,6 +19,7 @@ from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
 from maple_agent.providers import BaseProvider
 from maple_agent.runtime import IllegalTransitionError, RuntimeManager, RuntimeState
+from maple_agent.vision.worker import VisionWorker
 from maple_agent.webui.ws import WebSocketManager
 
 BASE_DIR = Path(__file__).parent
@@ -41,6 +42,7 @@ def create_app(
     bus: EventBus,
     providers: dict[str, BaseProvider] | None = None,
     detector: GameWindowDetector | None = None,
+    vision_worker: VisionWorker | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -51,7 +53,13 @@ def create_app(
         runtime.attach()
         ws_manager.attach()
         await bus.start()
+        if vision_worker is not None:
+            vision_worker.capture.initialize()
+            vision_worker.start()
         yield
+        if vision_worker is not None:
+            await vision_worker.stop()
+            vision_worker.capture.shutdown()
         await bus.stop()
         ws_manager.detach()
 
@@ -102,6 +110,18 @@ def create_app(
                 "platform": platform.platform(),
                 "detector": detector_kind,
             },
+        }
+
+    @app.get("/api/vision/state")
+    async def api_vision_state():
+        if vision_worker is None:
+            return {"enabled": False, "worker_state": None, "fps": None, "latest_frame": None}
+        frame = vision_worker.latest_frame
+        return {
+            "enabled": True,
+            "worker_state": vision_worker.state.value,
+            "fps": vision_worker.fps,
+            "latest_frame": frame.model_dump(mode="json") if frame is not None else None,
         }
 
     @app.post("/api/runtime/start")

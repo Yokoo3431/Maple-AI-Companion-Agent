@@ -11,25 +11,33 @@
   <h1>Maple AI Companion Agent <small class="text-secondary">Phase 0 控制台</small></h1>
 
   <div class="row g-3 mt-2">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card bg-secondary text-white h-100">
         <div class="card-header">Runtime State</div>
         <div class="card-body"><h2 id="runtime-state" class="mb-0">-</h2></div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card bg-secondary text-white h-100">
         <div class="card-header">Game Window</div>
         <div class="card-body"><div id="window-info" class="mb-0">-</div></div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card bg-secondary text-white h-100">
         <div class="card-header">Providers</div>
         <div class="card-body">
           <table class="table table-sm table-dark mb-0">
             <tbody id="provider-table"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Vision(只读)</div>
+        <div class="card-body">
+          <pre id="vision-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
         </div>
       </div>
     </div>
@@ -92,6 +100,26 @@
     for (const ev of data.events.slice(-30)) addLine(eventFlow, formatEvent(ev));
     logView.textContent = '';
     for (const line of data.logs.slice(-50)) addLine(logView, line);
+    refreshVision();
+  }
+
+  async function refreshVision() {
+    const res = await fetch('/api/vision/state');
+    const data = await res.json();
+    const el = document.getElementById('vision-card-body');
+    if (!data.enabled) {
+      el.textContent = '未启用(Vision Worker 未启动)';
+      return;
+    }
+    const f = data.latest_frame;
+    const lines = [
+      `Worker: ${data.worker_state} | FPS: ${data.fps}`,
+      f ? `Frame: ${f.frame_id}` : 'Frame: 等待中...',
+      f ? `时间: ${f.captured_at}` : '',
+      f ? `分辨率: ${f.width}×${f.height}` : '',
+      f ? `dpi_scale: ${f.dpi_scale}` : '',
+    ];
+    el.textContent = lines.filter(Boolean).join('\n');
   }
 
   async function runtimeCmd(cmd) {
@@ -110,6 +138,9 @@
         addLine(eventFlow, formatEvent(data.event));
         if (data.event.event_type.includes('error')) {
           addLine(logView, `ERROR EVENT: ${data.event.event_type}`);
+        }
+        if (data.event.event_type.startsWith('vision.')) {
+          refreshVision();
         }
       } else if (data.type === 'log') {
         addLine(logView, data.line);

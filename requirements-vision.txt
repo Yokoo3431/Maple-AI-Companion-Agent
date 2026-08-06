@@ -1,6 +1,5 @@
 # 视觉依赖(Phase 1 按需安装)
 opencv-python>=4.9
 numpy>=1.26
-pillow>=10.0
 pytesseract>=0.3.10
 # paddleocr>=2.7   # 可选,体积大,按需安装

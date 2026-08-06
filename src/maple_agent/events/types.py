@@ -23,6 +23,7 @@ class EventType(StrEnum):
     STOPPED = "runtime.stopped"
 
     # Vision
+    SCREEN_CAPTURED = "vision.screen_captured"
     SCREEN_UPDATED = "vision.screen_updated"
     HP_LOW = "vision.hp_low"
     GAME_WINDOW_LOST = "vision.game_window_lost"
@@ -69,6 +70,7 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.STOPPING: Priority.NORMAL,
     EventType.STOPPED: Priority.NORMAL,
     EventType.SCREEN_UPDATED: Priority.LOW,
+    EventType.SCREEN_CAPTURED: Priority.LOW,
     EventType.PLAN_CREATED: Priority.NORMAL,
     EventType.STORAGE_SAVED: Priority.NORMAL,
     EventType.STORAGE_LOADED: Priority.NORMAL,

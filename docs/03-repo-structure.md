@@ -45,14 +45,11 @@ Maple-Agent/
 │       │   ├── planner/         #   L2 规划层
 │       │   │   └── llm/         #     LLM Provider 抽象 + 适配器(不绑定 DeepSeek)
 │       │   └── memory/          #   短期/长期记忆,Session 上下文
-│       ├── vision/              # 视觉适配层
-│       │   ├── interface.py     #   Vision Provider 抽象契约
-│       │   ├── capture.py       #   窗口截图(DPI-Aware)
-│       │   ├── coord.py         #   窗口 Rect 相对坐标换算
-│       │   ├── matchers/        #   模板匹配 / 颜色检测(Phase 1)
-│       │   └── ocr/             #   OCR Provider 抽象(不锁死引擎)
-│       │       ├── base.py      #     OCR Provider 接口
-│       │       └── providers/   #     tesseract / windows_ocr / paddleocr(Phase 1)
+│       ├── vision/              # 视觉感知层(Phase 1.1 仅感知)
+│       │   ├── models.py        #   ScreenFrame / Observation / VisionState
+│       │   ├── policy.py        #   ScreenshotPolicy 容量控制
+│       │   ├── capture.py       #   CaptureProvider + Mock + Windows
+│       │   └── worker.py        #   VisionWorker 采集状态机
 │       ├── input/               # 输入适配层
 │       │   ├── interface.py     #   Input Interface(抽象契约)
 │       │   ├── actions.py       #   动作模型(移动/技能/购买/药水)
