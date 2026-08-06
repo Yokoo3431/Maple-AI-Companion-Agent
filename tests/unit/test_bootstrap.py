@@ -11,7 +11,7 @@ def test_bootstrap_assembles_app(tmp_path):
     assert isinstance(result.bus, EventBus)
     assert isinstance(result.runtime, RuntimeManager)
     assert result.runtime.state is RuntimeState.OFFLINE
-    assert set(result.providers) == {"llm", "vision", "ocr", "storage"}
+    assert set(result.providers) == {"llm", "vision", "ocr", "storage", "knowledge"}
     assert all(provider.status.value == "INITIALIZED" for provider in result.providers.values())
     assert isinstance(result.detector, MockGameWindowDetector)
     assert result.app.title == "Maple AI Companion Agent"

@@ -11,6 +11,7 @@ from maple_agent.events import EventBus
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.logging_setup import setup_logging
 from maple_agent.providers import (
+    MockKnowledgeProvider,
     MockLLMProvider,
     MockOCRProvider,
     MockStorageProvider,
@@ -42,6 +43,7 @@ def main() -> None:
         "vision": MockVisionProvider(),
         "ocr": MockOCRProvider(),
         "storage": MockStorageProvider(),
+        "knowledge": MockKnowledgeProvider(),
     }
     for provider in providers.values():
         provider.initialize()
@@ -68,6 +70,7 @@ def main() -> None:
         providers=providers,
         detector=detector,
         vision_worker=vision_worker,
+        knowledge=providers.get("knowledge"),
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")

@@ -13,6 +13,7 @@ from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
 from maple_agent.logging_setup import setup_logging
 from maple_agent.providers import (
     BaseProvider,
+    JsonKnowledgeProvider,
     MockLLMProvider,
     MockOCRProvider,
     MockStorageProvider,
@@ -36,13 +37,15 @@ class BootstrapResult:
     app: Any  # FastAPI 应用
 
 
-def _build_providers() -> dict[str, BaseProvider]:
-    return {
+def _build_providers(game_profile: str) -> dict[str, BaseProvider]:
+    providers: dict[str, BaseProvider] = {
         "llm": MockLLMProvider(),
         "vision": MockVisionProvider(),
         "ocr": MockOCRProvider(),
         "storage": MockStorageProvider(),
+        "knowledge": JsonKnowledgeProvider(game_profile=game_profile),
     }
+    return providers
 
 
 def bootstrap(
@@ -60,16 +63,22 @@ def bootstrap(
     bus = EventBus()
     logger.info("startup 3/6: event bus ready")
 
-    providers = _build_providers()
+    providers = _build_providers(settings.knowledge.game_profile)
     for provider in providers.values():
         provider.initialize()
-    logger.info("startup 4/6: providers initialized (Phase 0 Mock)")
+    logger.info("startup 4/6: providers initialized (Mock + Knowledge)")
 
     runtime = RuntimeManager(bus=bus)
     detector = MockGameWindowDetector(None)
     logger.warning("startup 5/6: runtime ready; 窗口检测为 Mock(未接入真实 win32)")
 
-    app = create_app(runtime=runtime, bus=bus, providers=providers, detector=detector)
+    app = create_app(
+        runtime=runtime,
+        bus=bus,
+        providers=providers,
+        detector=detector,
+        knowledge=providers.get("knowledge"),
+    )
     logger.info("startup 6/6: webui built")
     return BootstrapResult(
         settings=settings,

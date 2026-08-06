@@ -7,7 +7,12 @@ from fastapi.testclient import TestClient
 
 from maple_agent.events import EventBus
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
-from maple_agent.providers import MockLLMProvider, MockOCRProvider, MockVisionProvider
+from maple_agent.providers import (
+    MockKnowledgeProvider,
+    MockLLMProvider,
+    MockOCRProvider,
+    MockVisionProvider,
+)
 from maple_agent.runtime import RuntimeManager
 from maple_agent.vision import MockCaptureProvider, VisionWorker
 from maple_agent.webui.app import create_app
@@ -93,6 +98,22 @@ def test_health_endpoint():
     assert data["system"]["status"] == "ok"
     assert data["system"]["detector"] == "mock"
     assert data["system"]["version"]
+
+
+def test_knowledge_state_endpoint():
+    bus = EventBus()
+    runtime = RuntimeManager(bus=bus)
+    knowledge = MockKnowledgeProvider()
+    knowledge.initialize()
+    app = create_app(runtime=runtime, bus=bus, knowledge=knowledge)
+    with TestClient(app) as client:
+        resp = client.get("/api/knowledge/state")
+    data = resp.json()
+    assert resp.status_code == 200
+    assert data["enabled"] is True
+    assert data["game_profile"] == "maple-v113"
+    assert data["version"] == "v113"
+    assert data["counts"]["maps"] == 2
 
 
 def test_vision_state_endpoint_disabled():

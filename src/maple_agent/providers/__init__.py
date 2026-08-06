@@ -7,6 +7,11 @@ from maple_agent.providers.base import (
     ProviderProtocol,
     ProviderStatus,
 )
+from maple_agent.providers.knowledge import (
+    JsonKnowledgeProvider,
+    KnowledgeProvider,
+    MockKnowledgeProvider,
+)
 from maple_agent.providers.llm import (
     LLMProvider,
     LLMProviderProtocol,
@@ -43,7 +48,10 @@ __all__ = [
     "LLMProviderProtocol",
     "LLMRequest",
     "LLMResult",
+    "JsonKnowledgeProvider",
+    "KnowledgeProvider",
     "MockLLMProvider",
+    "MockKnowledgeProvider",
     "MockOCRProvider",
     "MockStorageProvider",
     "MockVisionProvider",

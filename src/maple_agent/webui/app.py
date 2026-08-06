@@ -18,6 +18,7 @@ from maple_agent import __version__
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
 from maple_agent.providers import BaseProvider
+from maple_agent.providers.knowledge import KnowledgeProvider
 from maple_agent.runtime import IllegalTransitionError, RuntimeManager, RuntimeState
 from maple_agent.vision.worker import VisionWorker
 from maple_agent.webui.ws import WebSocketManager
@@ -43,6 +44,7 @@ def create_app(
     providers: dict[str, BaseProvider] | None = None,
     detector: GameWindowDetector | None = None,
     vision_worker: VisionWorker | None = None,
+    knowledge: KnowledgeProvider | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -134,6 +136,18 @@ def create_app(
                 if vision_worker.latest_vision is not None
                 else None
             ),
+        }
+
+    @app.get("/api/knowledge/state")
+    async def api_knowledge_state():
+        if knowledge is None:
+            return {"enabled": False}
+        return {
+            "enabled": True,
+            "status": knowledge.profile_status,
+            "game_profile": knowledge.game_profile,
+            "version": knowledge.version,
+            "counts": knowledge.counts,
         }
 
     @app.post("/api/runtime/start")

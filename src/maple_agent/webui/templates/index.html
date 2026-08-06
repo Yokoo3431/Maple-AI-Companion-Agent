@@ -49,6 +49,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Knowledge(只读)</div>
+        <div class="card-body">
+          <pre id="knowledge-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -133,6 +141,23 @@
       `[${(r.confidence * 100).toFixed(0)}%] ${r.text} (${r.source})`
     );
     ocrEl.textContent = ocrLines.length ? ocrLines.join('\n') : '等待 OCR...';
+    refreshKnowledge();
+  }
+
+  async function refreshKnowledge() {
+    const res = await fetch('/api/knowledge/state');
+    const data = await res.json();
+    const el = document.getElementById('knowledge-card-body');
+    if (!data.enabled) {
+      el.textContent = '未启用';
+      return;
+    }
+    const counts = data.counts || {};
+    el.textContent = [
+      `Profile: ${data.game_profile || '-'}`,
+      `版本: ${data.version || '-'} | 状态: ${data.status}`,
+      `数据: 地图 ${counts.maps || 0} / NPC ${counts.npcs || 0} / 怪物 ${counts.monsters || 0} / 任务 ${counts.quests || 0}`,
+    ].join('\n');
   }
 
   async function runtimeCmd(cmd) {
