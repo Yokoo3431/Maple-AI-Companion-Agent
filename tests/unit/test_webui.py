@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from maple_agent.events import EventBus
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
-from maple_agent.providers import MockLLMProvider, MockVisionProvider
+from maple_agent.providers import MockLLMProvider, MockOCRProvider, MockVisionProvider
 from maple_agent.runtime import RuntimeManager
 from maple_agent.vision import MockCaptureProvider, VisionWorker
 from maple_agent.webui.app import create_app
@@ -105,24 +105,36 @@ def test_vision_state_endpoint_disabled():
     assert data["latest_frame"] is None
 
 
-def test_vision_worker_publishes_frames_to_webui():
+def test_vision_worker_publishes_frames_and_ocr_to_webui(tmp_path):
     bus = EventBus()
     runtime = RuntimeManager(bus=bus)
-    capture = MockCaptureProvider(width=800, height=600)
-    worker = VisionWorker(capture, bus, interval=0.02)
+    capture = MockCaptureProvider(
+        width=800,
+        height=600,
+        sessions_dir=tmp_path / "sessions",
+    )
+    worker = VisionWorker(
+        capture,
+        bus,
+        interval=0.02,
+        ocr=MockOCRProvider(text="射手村"),
+    )
     app = create_app(runtime=runtime, bus=bus, vision_worker=worker)
     with TestClient(app) as client:
         latest = None
-        for _ in range(100):
+        ocr_results = []
+        for _ in range(150):
             resp = client.get("/api/vision/state")
             data = resp.json()
-            if data["enabled"] and data["latest_frame"] is not None:
+            if data["enabled"] and data["latest_frame"] is not None and data["latest_ocr"]:
                 latest = data["latest_frame"]
+                ocr_results = data["latest_ocr"]
                 break
             time.sleep(0.02)
     assert latest is not None
     assert latest["width"] == 800
     assert latest["height"] == 600
+    assert ocr_results and ocr_results[0]["text"] == "射手村"
 
 
 def test_websocket_pushes_runtime_and_log_events():

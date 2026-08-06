@@ -39,6 +39,17 @@ class CaptureProvider(BaseProvider):
             trace_id,
             success_event=EventType.SCREEN_CAPTURED,
             failure_event=EventType.ERROR_OCCURRED,
+            fn=lambda tid: self._do_capture(tid)[0],
+        )
+
+    def capture_with_image(
+        self, *, trace_id: str | None = None
+    ) -> tuple[ScreenFrame, Image.Image]:
+        """捕获一帧并返回 (ScreenFrame, 图像)(OCR 等下游使用)。"""
+        return self._run_call(
+            trace_id,
+            success_event=EventType.SCREEN_CAPTURED,
+            failure_event=EventType.ERROR_OCCURRED,
             fn=lambda tid: self._do_capture(tid),
         )
 
@@ -46,7 +57,7 @@ class CaptureProvider(BaseProvider):
     def _capture_image(self, tid: str) -> tuple[Image.Image, dict[str, Any]]:
         """返回 (图像, 元信息)。"""
 
-    def _do_capture(self, tid: str) -> ScreenFrame:
+    def _do_capture(self, tid: str) -> tuple[ScreenFrame, Image.Image]:
         image, meta = self._capture_image(tid)
         width, height = image.size
         frame = ScreenFrame(
@@ -61,7 +72,7 @@ class CaptureProvider(BaseProvider):
         )
         if self.policy.save_enabled:
             frame.image_path = self._save_image(image, tid)
-        return frame
+        return frame, image
 
     def _save_image(self, image: Image.Image, trace_id: str) -> str:
         directory = self.sessions_dir / trace_id

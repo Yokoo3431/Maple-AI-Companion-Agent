@@ -56,7 +56,12 @@ def main() -> None:
             rect=WindowRect(left=0, top=0, width=800, height=600),
         ),
     )
-    vision_worker = VisionWorker(vision_capture, bus, interval=0.5)
+    vision_worker = VisionWorker(
+        vision_capture,
+        bus,
+        interval=0.5,
+        ocr=MockOCRProvider(bus=bus, text="射手村"),
+    )
     app = create_app(
         runtime=runtime,
         bus=bus,

@@ -1,4 +1,4 @@
-"""Provider 抽象层:Interface + Protocol + Mock(Phase 0,无真实调用)。"""
+"""Provider 抽象层:Interface + Protocol + Mock + 真实适配器(OCR 等)。"""
 
 from maple_agent.providers.base import (
     BaseProvider,
@@ -16,10 +16,13 @@ from maple_agent.providers.llm import (
 )
 from maple_agent.providers.ocr import (
     MockOCRProvider,
+    OCRBBox,
     OCRProvider,
     OCRProviderProtocol,
     OCRRequest,
     OCRResult,
+    TesseractOCRProvider,
+    WindowsOCRProvider,
 )
 from maple_agent.providers.storage import (
     MockStorageProvider,
@@ -46,8 +49,11 @@ __all__ = [
     "MockVisionProvider",
     "OCRProvider",
     "OCRProviderProtocol",
+    "OCRBBox",
     "OCRRequest",
     "OCRResult",
+    "TesseractOCRProvider",
+    "WindowsOCRProvider",
     "ProviderError",
     "ProviderProtocol",
     "ProviderStatus",

@@ -55,10 +55,14 @@ def create_app(
         await bus.start()
         if vision_worker is not None:
             vision_worker.capture.initialize()
+            if vision_worker.ocr is not None:
+                vision_worker.ocr.initialize()
             vision_worker.start()
         yield
         if vision_worker is not None:
             await vision_worker.stop()
+            if vision_worker.ocr is not None:
+                vision_worker.ocr.shutdown()
             vision_worker.capture.shutdown()
         await bus.stop()
         ws_manager.detach()
@@ -122,6 +126,14 @@ def create_app(
             "worker_state": vision_worker.state.value,
             "fps": vision_worker.fps,
             "latest_frame": frame.model_dump(mode="json") if frame is not None else None,
+            "latest_ocr": [
+                item.model_dump(mode="json") for item in vision_worker.latest_ocr
+            ],
+            "latest_vision": (
+                vision_worker.latest_vision.model_dump(mode="json")
+                if vision_worker.latest_vision is not None
+                else None
+            ),
         }
 
     @app.post("/api/runtime/start")
