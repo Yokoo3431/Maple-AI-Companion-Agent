@@ -167,10 +167,12 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 
 ### 4.17 Event Bus 事件总线(基础设施,被多模块依赖)
 
-- 进程内异步事件队列,负责模块间解耦通信;
-- 事件类型:L1 Reflex 事件(紧急中断)、Runtime 事件(状态迁移/命令)、Error 事件(异常上报)、Agent 事件(循环状态);
-- 支持优先级:紧急事件优先于普通事件;
-- 发布/订阅模型,核心层与适配层均可使用。
+- 进程内异步优先级队列,负责模块间解耦通信;
+- **强类型事件模型**:Event 含 event_id / event_type / timestamp / priority / trace_id / source / payload,payload 必须是 Pydantic 模型,禁止裸 dict;
+- EventType 枚举:Runtime(START/READY/PAUSE/STOP)、Vision(SCREEN_UPDATED/HP_LOW/GAME_WINDOW_LOST)、Agent(PLAN_CREATED/PLAN_FAILED)、Error(ERROR_OCCURRED);
+- Priority:CRITICAL / HIGH / NORMAL / LOW,紧急事件优先处理,同优先级 FIFO;
+- 与日志 trace 机制集成:Event 创建时自动取当前 trace_id,发布/分发时恢复该 trace 上下文;
+- 发布/订阅模型,核心层与适配层均可使用;Phase 0 仅 Mock 测试,不连接真实模块。
 
 ## 5. 模块依赖关系
 

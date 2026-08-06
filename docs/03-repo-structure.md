@@ -24,8 +24,8 @@ Maple-Agent/
 │       ├── logging_setup.py     # 日志基础设施:分模块文件 + trace_id/correlation_id + 轮转
 │       ├── models/              # 领域模型(Pydantic): GameState、Action、Plan、Event
 │       ├── events/              # 进程内事件总线
-│       │   ├── bus.py           #   异步队列 + 优先级
-│       │   └── types.py         #   Runtime / Reflex / Error 事件
+│       │   ├── bus.py           #   异步优先级队列 + 发布/订阅
+│       │   └── types.py         #   强类型 Event / EventType / Priority
 │       ├── runtime/             # Runtime Manager + 状态机
 │       ├── agent/
 │       │   ├── controller.py    #   Agent Controller(Agent Loop)
