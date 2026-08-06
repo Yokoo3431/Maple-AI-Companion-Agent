@@ -21,7 +21,7 @@ Maple-Agent/
 │       ├── config/              # 配置系统(pydantic-settings)
 │       │   ├── settings.py      #   Settings 模型与加载
 │       │   └── defaults.yaml    #   默认值
-│       ├── logging_setup.py     # 分模块日志、轮转、结构化字段
+│       ├── logging_setup.py     # 日志基础设施:分模块文件 + trace_id/correlation_id + 轮转
 │       ├── models/              # 领域模型(Pydantic): GameState、Action、Plan、Event
 │       ├── events/              # 进程内事件总线
 │       │   ├── bus.py           #   异步队列 + 优先级
@@ -77,7 +77,7 @@ Maple-Agent/
 ├── data/
 │   └── database/                # maple.db(运行时生成,gitignore)
 │
-├── logs/                        # startup/agent/vision/input/task/error(gitignore)
+├── logs/                        # startup/runtime/agent/vision/input/task/error(gitignore)
 │
 ├── sessions/                    # 会话回放(gitignore)
 │   └── session_xxx/
@@ -103,6 +103,7 @@ Maple-Agent/
 | 文件/目录 | 职责 |
 | --- | --- |
 | `src/maple_agent/main.py` | 程序入口:加载配置 → 初始化日志/DB → 启动 Runtime → 拉起 WebUI |
+| `src/maple_agent/logging_setup.py` | 日志基础设施:分模块文件 + error.log + trace_id/correlation_id + 轮转 |
 | `src/maple_agent/runtime/` | Runtime 状态机与子系统生命周期(OFFLINE/READY/RUNNING/PAUSED/STOPPING/ERROR) |
 | `src/maple_agent/agent/controller.py` | Agent Loop 编排与执行门控 |
 | `src/maple_agent/agent/planner/llm/` | LLM Provider 抽象,不绑定 DeepSeek |

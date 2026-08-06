@@ -152,8 +152,11 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 
 ### 4.15 日志系统
 
-- 分模块日志文件:startup.log / agent.log / vision.log / input.log / task.log / error.log;
-- 结构化字段:时间、级别、模块、session_id、上下文;
+- 分模块日志文件:startup.log / runtime.log / agent.log / vision.log / input.log / task.log / error.log;
+- 固定等级:DEBUG / INFO / WARNING / ERROR / CRITICAL;
+- 统一 trace_id / correlation_id:一次 Agent 行为链内的记录携带相同 trace_id,可跨 runtime.log / agent.log / vision.log / task.log 关联;
+- runtime.log 专门记录 OFFLINE / READY / RUNNING / PAUSE / STOP 状态变化;
+- 结构化字段:时间、级别、模块、trace_id、correlation_id、上下文;
 - Agent 记录状态/输入/决策/原因;Vision 记录截图路径/OCR 结果/置信度;Input 记录动作/时间/来源;Error 记录堆栈/当前状态/最近动作;
 - 文件轮转 + 保留策略。
 

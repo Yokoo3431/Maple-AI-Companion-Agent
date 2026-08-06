@@ -32,7 +32,7 @@
 | --- | --- | --- |
 | M0 仓库骨架 | README / LICENSE / .gitignore / .env.example / requirements / pyproject | 按文档可完成 `git clone` 与依赖安装 |
 | M1 配置系统 | settings.py + defaults.yaml + .env 加载 | 单测:默认值、环境变量覆盖、非法值报错 |
-| M2 日志系统 | logging_setup.py,6 个分模块文件 + 轮转 | 启动即生成 startup.log/error.log,结构化字段正确 |
+| M2 日志系统 | logging_setup.py:7 个分模块文件(startup/runtime/agent/vision/input/task/error)+ trace_id/correlation_id + 轮转 | 启动即生成 startup.log/error.log;同一 trace_id 可跨文件关联;轮转生效 |
 | M3 事件总线 | events/ 异步队列 + 紧急事件优先级 | 单测:普通事件 FIFO、紧急事件优先处理 |
 | M4 Runtime + 状态机 | OFFLINE/READY/RUNNING/PAUSED/STOPPING/ERROR 迁移与门控 | 单测覆盖合法/非法迁移;READY 下禁止输入 |
 | M4.5 只读窗口检测 | game/window.py:窗口存在检测 + Rect 获取(禁止内存读取) | 单测用 Mock 窗口对象;READY 状态展示检测结果 |
@@ -46,6 +46,7 @@
 
 - 全部测试离线可跑,不依赖游戏进程、不调用真实 API;
 - 使用 Mock:Vision Provider(固定 GameState)、Input Provider(记录动作)、LLM Provider(固定 Plan)、窗口对象(固定 Rect);
+- 日志:分模块落盘、等级过滤、trace_id 跨文件关联、文件轮转;
 - 覆盖范围:配置、日志、状态机、事件总线、知识库加载/版本检测、Agent Loop(正常 + 紧急打断 + 异常路径)。
 
 ## 5. 每次开发提交要求(对齐 V1.2 第 23 节)
