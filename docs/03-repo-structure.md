@@ -65,10 +65,10 @@ Maple-Agent/
 │       ├── database/            # SQLite:sessions、decisions、tasks、knowledge_versions
 │       ├── sessions/            # Session Replay 骨架
 │       └── webui/               # FastAPI 应用
-│           ├── app.py           #   FastAPI 实例与路由
-│           ├── ws.py            #   WebSocket 状态/日志推送
-│           ├── templates/       #   Jinja2 模板
-│           └── static/          #   Bootstrap + 自定义 css/js
+│           ├── app.py           #   FastAPI 实例与路由(Dashboard + Runtime API)
+│           ├── ws.py            #   WebSocket 推送(runtime / error / log 事件)
+│           ├── templates/       #   Jinja2 模板(index.html)
+│           └── static/          #   Bootstrap 本地 vendor(无 Node 构建)
 │
 ├── knowledge/                   # 外部知识库框架
 │   ├── README.md                # 知识包格式与导入说明
@@ -124,7 +124,7 @@ Maple-Agent/
 | `src/maple_agent/game/window.py` | 只读窗口检测(存在检测 + Rect),禁止内存读取 |
 | `src/maple_agent/knowledge/` | 知识包加载、档案检测、增量更新与报告(Phase 0:schema + 框架) |
 | `src/maple_agent/sessions/` | 每次运行生成 Session Replay 数据 |
-| `src/maple_agent/webui/` | FastAPI + Jinja2 + Bootstrap + WebSocket |
+| `src/maple_agent/webui/` | FastAPI + Jinja2 + Bootstrap + WebSocket;Dashboard 展示 Runtime / Provider / 窗口 / Event / 日志,按钮仅调 Runtime API |
 | `knowledge/schema/` | JSON Schema,Phase 0 不导入具体游戏数据 |
 | `knowledge/versions/<game_profile>/` | 运行时导入的游戏档案数据,不入库 |
 

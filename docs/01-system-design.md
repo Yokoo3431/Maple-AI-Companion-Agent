@@ -142,11 +142,13 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 - 长期记忆:SQLite 持久化(任务模板、路线、统计数据);
 - Session Replay:每次运行生成 `sessions/session_xxx/`,含 screenshots/、state.json、actions.json、decision.json、errors.log,用于复盘。
 
-### 4.13 Web UI
+### 4.13 Web UI(Phase 0 可观测性控制台)
 
-- 技术锁定:FastAPI + Jinja2 + Bootstrap + WebSocket(禁止复杂 Node.js 构建);
-- 展示:角色状态、任务状态、Agent 状态、实时日志;
-- 提供 START / PAUSE / STOP。
+- 技术锁定:FastAPI + Jinja2 + Bootstrap + WebSocket(禁止 Node / npm);
+- 展示:Runtime State、Provider 状态、Game Window 检测状态、Event 流、实时日志;
+- WebSocket 实时推送:runtime 事件、error 事件、log 事件;
+- START / PAUSE / STOP 按钮只调用 Runtime 状态接口(`/api/runtime/*`),禁止触发真实输入;
+- Phase 0 禁止:游戏 UI 解析、HP 显示、OCR、任务页面。
 
 ### 4.14 配置系统
 

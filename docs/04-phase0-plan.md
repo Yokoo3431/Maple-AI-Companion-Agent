@@ -40,7 +40,7 @@
 | M5b Agent 框架 | Controller + Agent Loop + Reflex/Planner/Executor 接口 + Mock | Mock 环境跑通完整 Loop;Reflex 紧急事件可打断 |
 | M6 知识库框架 | loader / versioning / update 报告骨架 + schema/(JSON Schema),不导入具体数据 | 加载 schema、档案不匹配提示、生成更新报告 |
 | M7 Session 骨架 | session_xxx 目录,state/actions/decision/errors 落盘 | 一次运行生成完整会话文件 |
-| M8 WebUI 骨架 | 状态页 / 日志页 / START / PAUSE / STOP(仅状态切换) | 浏览器可访问,按钮驱动状态机且不产生输入 |
+| M8 WebUI 控制台 | FastAPI + Jinja2 + Bootstrap + WS;Dashboard 显示 Runtime / Provider / 窗口 / Event / 日志;START/PAUSE/STOP 仅调 Runtime API | 浏览器可访问;按钮驱动状态机且不产生输入;WS 推送事件与日志 |
 | M9 测试与文档 | 全部单测通过 + docs 齐备 | pytest 0 失败;README 快速开始可复现 |
 
 ## 4. 测试策略
