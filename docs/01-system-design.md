@@ -62,7 +62,10 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 
 ### 4.1 Runtime Manager
 
-- 状态机:OFFLINE → READY → RUNNING ⇄ PAUSED → STOPPING → OFFLINE,另含 ERROR 兜底;
+- 完整状态:OFFLINE → STARTING → READY → RUNNING ⇄ PAUSED → STOPPING → OFFLINE,另含 ERROR 兜底;
+- 严格状态迁移表:非法跳转直接拒绝(IllegalTransitionError),状态保持不变;
+- Runtime 作为 Event Bus 消费者:订阅 START / PAUSE / STOP 命令与 GAME_WINDOW_LOST(窗口丢失自动暂停),忽略自身发布的事件避免自循环;
+- 每次状态变化:发布对应 Event + 写入 runtime.log + 携带 trace_id;
 - READY 允许:检测游戏窗口、展示状态;禁止:输入控制;
 - RUNNING 需要同时满足:目标窗口存在 + 用户确认 + 状态门控;
 - 提供 START / PAUSE / STOP 命令(WebUI 与全局热键均可触发)。
@@ -102,9 +105,10 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 
 ### 4.7 Game Window 绑定
 
-- 按标题/进程查找窗口,获取窗口 Rect;
-- **Phase 0 范围为只读检测**:窗口存在检测 + 窗口 Rect 获取;
-- **禁止**:任何内存读取、句柄写入、窗口内容操作;
+- **GameWindowDetector 抽象接口(Phase 0:接口 + Mock,不接真实 win32)**;
+- WindowInfo 字段:handle(仅标识)/ title / process_name / WindowRect(left/top/width/height);
+- 允许:窗口存在检测、窗口标题、进程名、窗口 Rect;
+- **禁止**:任何内存读取、注入、Hook、句柄写入、窗口内容操作;
 - 运行前校验:窗口存在 + 用户确认 + RUNNING;
 - 窗口丢失/最小化 → 自动暂停并记录日志。
 
@@ -169,7 +173,7 @@ Maple AI Companion Agent 是一个针对《冒险岛怀旧服》的桌面 AI 辅
 
 - 进程内异步优先级队列,负责模块间解耦通信;
 - **强类型事件模型**:Event 含 event_id / event_type / timestamp / priority / trace_id / source / payload,payload 必须是 Pydantic 模型,禁止裸 dict;
-- EventType 枚举:Runtime(START/READY/PAUSE/STOP)、Vision(SCREEN_UPDATED/HP_LOW/GAME_WINDOW_LOST)、Agent(PLAN_CREATED/PLAN_FAILED)、Error(ERROR_OCCURRED);
+- EventType 枚举:Runtime(START/STARTING/READY/RUNNING/PAUSE/STOP/STOPPING/STOPPED)、Vision(SCREEN_UPDATED/HP_LOW/GAME_WINDOW_LOST)、Agent(PLAN_CREATED/PLAN_FAILED)、Error(ERROR_OCCURRED);
 - Priority:CRITICAL / HIGH / NORMAL / LOW,紧急事件优先处理,同优先级 FIFO;
 - 与日志 trace 机制集成:Event 创建时自动取当前 trace_id,发布/分发时恢复该 trace 上下文;
 - 发布/订阅模型,核心层与适配层均可使用;Phase 0 仅 Mock 测试,不连接真实模块。

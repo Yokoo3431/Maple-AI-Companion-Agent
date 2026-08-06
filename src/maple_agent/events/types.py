@@ -14,9 +14,13 @@ class EventType(StrEnum):
 
     # Runtime
     START = "runtime.start"
+    STARTING = "runtime.starting"
     READY = "runtime.ready"
+    RUNNING = "runtime.running"
     PAUSE = "runtime.pause"
     STOP = "runtime.stop"
+    STOPPING = "runtime.stopping"
+    STOPPED = "runtime.stopped"
 
     # Vision
     SCREEN_UPDATED = "vision.screen_updated"
@@ -53,9 +57,13 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.HP_LOW: Priority.HIGH,
     EventType.PLAN_FAILED: Priority.HIGH,
     EventType.START: Priority.NORMAL,
+    EventType.STARTING: Priority.NORMAL,
     EventType.READY: Priority.NORMAL,
+    EventType.RUNNING: Priority.NORMAL,
     EventType.PAUSE: Priority.NORMAL,
     EventType.STOP: Priority.NORMAL,
+    EventType.STOPPING: Priority.NORMAL,
+    EventType.STOPPED: Priority.NORMAL,
     EventType.SCREEN_UPDATED: Priority.LOW,
     EventType.PLAN_CREATED: Priority.NORMAL,
 }

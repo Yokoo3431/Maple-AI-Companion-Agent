@@ -56,6 +56,7 @@ flowchart TB
     RX -.紧急事件.-> EB
     RM -.状态事件.-> EB
     EB --> AC
+    EB --> RM
     AC --> VIS
     AC --> INP
     VIS --> GW
@@ -98,16 +99,21 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> OFFLINE
-    OFFLINE --> READY: 启动(加载配置 / 日志 / 数据库)
-    READY --> RUNNING: 窗口存在 + 用户确认 + START
+    OFFLINE --> STARTING: start()
+    STARTING --> READY: 启动完成
+    STARTING --> STOPPING: 取消启动
+    STARTING --> ERROR: 启动失败
+    READY --> RUNNING: 窗口存在 + 用户确认 + start_agent()
+    READY --> STOPPING: stop()
+    READY --> ERROR: 未处理异常
     RUNNING --> PAUSED: PAUSE / 窗口丢失 / 紧急暂停
     PAUSED --> RUNNING: 恢复(重新校验门控)
     RUNNING --> STOPPING: STOP / Emergency Stop
     PAUSED --> STOPPING: STOP / Emergency Stop
-    STOPPING --> OFFLINE: 停止完成(保存会话)
-    READY --> OFFLINE: 退出
     RUNNING --> ERROR: 未处理异常
     PAUSED --> ERROR: 未处理异常
+    STOPPING --> OFFLINE: 停止完成(保存会话)
+    STOPPING --> ERROR: 停止异常
     ERROR --> OFFLINE: 用户确认 / 恢复
 ```
 
@@ -144,6 +150,7 @@ flowchart LR
     RX -.紧急事件.-> EB["Event Bus"]
     RM -.状态事件.-> EB
     EB --> AC
+    EB --> RM
 ```
 
 ## 7. 图例说明

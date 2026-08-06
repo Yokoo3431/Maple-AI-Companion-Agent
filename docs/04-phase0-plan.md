@@ -34,8 +34,8 @@
 | M1 配置系统 | settings.py + defaults.yaml + .env 加载 | 单测:默认值、环境变量覆盖、非法值报错 |
 | M2 日志系统 | logging_setup.py:7 个分模块文件(startup/runtime/agent/vision/input/task/error)+ trace_id/correlation_id + 轮转 | 启动即生成 startup.log/error.log;同一 trace_id 可跨文件关联;轮转生效 |
 | M3 事件总线 | events/:强类型 Event + EventType/Priority 枚举 + 异步优先级队列 + trace 集成 | 单测:强类型校验、优先级排序、同优先级 FIFO、trace 跨订阅者关联 |
-| M4 Runtime + 状态机 | OFFLINE/READY/RUNNING/PAUSED/STOPPING/ERROR 迁移与门控 | 单测覆盖合法/非法迁移;READY 下禁止输入 |
-| M4.5 只读窗口检测 | game/window.py:窗口存在检测 + Rect 获取(禁止内存读取) | 单测用 Mock 窗口对象;READY 状态展示检测结果 |
+| M4 Runtime + 状态机 | OFFLINE/STARTING/READY/RUNNING/PAUSED/STOPPING/ERROR 严格迁移表;状态变化发布事件 + runtime.log + trace_id | 单测覆盖合法/非法迁移、Bus 命令消费、事件发布;READY 下禁止输入 |
+| M4.5 只读窗口检测 | game/window.py:GameWindowDetector 接口 + Mock(存在检测 / Title / Process / Rect) | 单测用 Mock 窗口对象;READY 状态展示检测结果 |
 | M5 Agent 框架 | Controller + Agent Loop + Reflex/Planner/Executor 接口 + Mock | Mock 环境跑通完整 Loop;Reflex 紧急事件可打断 |
 | M6 知识库框架 | loader / versioning / update 报告骨架 + schema/(JSON Schema),不导入具体数据 | 加载 schema、档案不匹配提示、生成更新报告 |
 | M7 Session 骨架 | session_xxx 目录,state/actions/decision/errors 落盘 | 一次运行生成完整会话文件 |

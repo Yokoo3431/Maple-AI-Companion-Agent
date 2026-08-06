@@ -26,7 +26,9 @@ Maple-Agent/
 │       ├── events/              # 进程内事件总线
 │       │   ├── bus.py           #   异步优先级队列 + 发布/订阅
 │       │   └── types.py         #   强类型 Event / EventType / Priority
-│       ├── runtime/             # Runtime Manager + 状态机
+│       ├── runtime/             # Runtime 状态机 + 生命周期管理
+│       │   ├── states.py        #   RuntimeState 枚举 + 严格迁移表
+│       │   └── manager.py       #   RuntimeManager(Event Bus 消费者)
 │       ├── agent/
 │       │   ├── controller.py    #   Agent Controller(Agent Loop)
 │       │   ├── states.py        #   Agent 状态定义
@@ -47,7 +49,7 @@ Maple-Agent/
 │       │   ├── actions.py       #   动作模型(移动/技能/购买/药水)
 │       │   └── providers/       #   mock.py(Phase 0);后续 win32 等
 │       ├── game/                # 游戏客户端
-│       │   ├── window.py        #   只读窗口检测:存在检测 + Rect(禁止内存读取)
+│       │   ├── window.py        #   只读 GameWindowDetector 接口 + Mock
 │       │   └── state.py         #   游戏状态聚合
 │       ├── task/                # 任务系统 + 补给 + Human Teaching(骨架)
 │       ├── knowledge/           # 知识库框架
@@ -104,7 +106,8 @@ Maple-Agent/
 | --- | --- |
 | `src/maple_agent/main.py` | 程序入口:加载配置 → 初始化日志/DB → 启动 Runtime → 拉起 WebUI |
 | `src/maple_agent/logging_setup.py` | 日志基础设施:分模块文件 + error.log + trace_id/correlation_id + 轮转 |
-| `src/maple_agent/runtime/` | Runtime 状态机与子系统生命周期(OFFLINE/READY/RUNNING/PAUSED/STOPPING/ERROR) |
+| `src/maple_agent/runtime/` | Runtime 状态机(含 STARTING)与严格迁移表,状态变化发布事件 + runtime.log + trace_id |
+| `src/maple_agent/game/window.py` | 只读窗口检测接口(存在检测 / Title / Process / Rect),禁止内存读取 / 注入 / Hook |
 | `src/maple_agent/agent/controller.py` | Agent Loop 编排与执行门控 |
 | `src/maple_agent/agent/planner/llm/` | LLM Provider 抽象,不绑定 DeepSeek |
 | `src/maple_agent/events/` | Event Bus:Reflex / Runtime / Error 事件,支持优先级 |
