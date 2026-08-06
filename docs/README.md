@@ -11,6 +11,7 @@
 | [05-risks.md](05-risks.md) | 风险列表与缓解措施 |
 | [06-phase0-release.md](06-phase0-release.md) | Phase 0 Release:已完成模块、测试结果、限制、Phase 1 计划 |
 | [07-deployment-guide.md](07-deployment-guide.md) | Windows 部署指南:环境恢复、常见错误、Debug、Launcher 使用 |
+| [08-phase1-design.md](08-phase1-design.md) | Phase 1 Vision Foundation 设计:截图 / 数据模型 / OCR / 知识库 / WebUI / 安全边界 / 测试策略 |
 
 状态:✅ Phase 0 开发完成,Release Candidate 待审核(2026-08-06)
 
