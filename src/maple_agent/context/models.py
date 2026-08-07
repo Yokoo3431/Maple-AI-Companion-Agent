@@ -47,6 +47,15 @@ class MatchedEntity(BaseModel):
     confidence: float = Field(default=0.0, ge=0, le=1)
 
 
+class RetrievalMetrics(BaseModel):
+    """检索指标。"""
+
+    candidate_count: int = 0
+    best_score: float = Field(default=0.0, ge=0, le=1)
+    confidence_level: str = "LOW"
+    ranking_method: str = ""
+
+
 class KnowledgeState(BaseModel):
     """知识理解状态(与 WorldState 分离,记录匹配来源)。"""
 
@@ -55,6 +64,7 @@ class KnowledgeState(BaseModel):
     confidence: float = Field(default=0.0, ge=0, le=1)
     source: str = ""
     selection_reason: str = ""
+    retrieval_metrics: RetrievalMetrics | None = None
 
 
 class AgentContext(BaseModel):

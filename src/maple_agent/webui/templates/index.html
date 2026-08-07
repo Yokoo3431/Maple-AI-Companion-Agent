@@ -161,6 +161,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Knowledge Evaluation(只读)</div>
+        <div class="card-body">
+          <pre id="eval-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -233,6 +241,26 @@
     refreshCapture();
     refreshPipeline();
     refreshRetrieval();
+    refreshEvaluation();
+  }
+
+  async function refreshEvaluation() {
+    const res = await fetch('/api/knowledge/state');
+    const data = await res.json();
+    const el = document.getElementById('eval-card-body');
+    const ev = data.evaluation;
+    if (!data.enabled || !ev) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `DATASET VERSION: ${ev.dataset_version || '-'}`,
+      `ENTITY COUNT: ${ev.entity_count || 0}`,
+      `BENCHMARK CASES: ${ev.benchmark_cases || 0}`,
+      `TOP1 ACCURACY: ${Math.round((ev.top1 || 0) * 100)}%`,
+      `TOP3 RECALL: ${Math.round((ev.top3 || 0) * 100)}%`,
+      `AVG QUERY TIME: ${ev.avg_ms || 0}ms`,
+    ].join('\n');
   }
 
   async function refreshRetrieval() {

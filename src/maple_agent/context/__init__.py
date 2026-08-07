@@ -8,6 +8,7 @@ from maple_agent.context.models import (
     KnowledgeState,
     MatchedEntity,
     QuestPlanContext,
+    RetrievalMetrics,
 )
 
 __all__ = [
@@ -18,4 +19,5 @@ __all__ = [
     "KnowledgeState",
     "MatchedEntity",
     "QuestPlanContext",
+    "RetrievalMetrics",
 ]

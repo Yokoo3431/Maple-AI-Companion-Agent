@@ -14,6 +14,12 @@ from maple_agent.executor import MockExecutorProvider
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
+from maple_agent.knowledge.evaluation import (
+    EvaluationRunner,
+    RetrievalBenchmark,
+    load_retrieval_cases,
+)
+from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
 from maple_agent.planner import LLMPlannerProvider
@@ -76,6 +82,20 @@ def main() -> None:
     for provider in providers.values():
         provider.initialize()
     providers["knowledge"].load_dataset()
+    eval_cases = load_retrieval_cases()
+    graph = build_graph(providers["knowledge"])
+    eval_result = EvaluationRunner.from_graph(graph).run(eval_cases)
+    benchmark = RetrievalBenchmark(AliasIndex.from_graph(graph)).run(
+        [case.query_text for case in eval_cases]
+    )
+    knowledge_eval = {
+        "dataset_version": providers["knowledge"].dataset_version(),
+        "entity_count": len(graph.maps) + len(graph.npcs) + len(graph.monsters) + len(graph.items),
+        "benchmark_cases": eval_result.total_cases,
+        "top1": eval_result.top1_accuracy,
+        "top3": eval_result.top3_recall,
+        "avg_ms": benchmark["avg_ms"],
+    }
     vision_capture = MockCaptureProvider(
         bus=bus,
         policy=ScreenshotPolicy(save_enabled=True, max_images=20),
@@ -160,6 +180,7 @@ def main() -> None:
         agent_loop=agent_loop,
         goal_provider=goal_provider,
         pipeline_validator=pipeline_validator,
+        knowledge_eval=knowledge_eval,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

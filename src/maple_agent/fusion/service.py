@@ -283,6 +283,22 @@ class FusionService:
                 if self._last_match
                 else ""
             ),
+            "evaluation_context": {
+                "index_version": (
+                    self._index.index_version if self._index is not None else "v1"
+                ),
+                "dataset_version": (
+                    self._last_match.get("dataset_version")
+                    if self._last_match
+                    else self.knowledge.dataset_version()
+                ),
+                "retrieval_strategy": "exact_alias_prefix_fuzzy",
+                "candidate_count": (
+                    len(self._last_match.get("candidate_scores", []))
+                    if self._last_match
+                    else 0
+                ),
+            },
         }
         (directory / "knowledge_match.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),

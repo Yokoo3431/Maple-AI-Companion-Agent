@@ -9,6 +9,7 @@ from maple_agent.context.models import (
     GoalContext,
     KnowledgeState,
     MatchedEntity,
+    RetrievalMetrics,
 )
 from maple_agent.fusion.models import WorldState
 from maple_agent.logging_setup import TraceContext
@@ -92,6 +93,19 @@ class ContextBuilder:
                     confidence=world_state.confidence,
                 )
             )
+        metrics = None
+        if entities:
+            level = (
+                "HIGH"
+                if world_state.confidence >= 0.8
+                else ("MEDIUM" if world_state.confidence >= 0.6 else "LOW")
+            )
+            metrics = RetrievalMetrics(
+                candidate_count=len(entities),
+                best_score=round(world_state.confidence, 4),
+                confidence_level=level,
+                ranking_method="knowledge_graph",
+            )
         return KnowledgeState(
             matched_entities=entities,
             top_candidates=entities,
@@ -102,4 +116,5 @@ class ContextBuilder:
                 if world_state.current_map is not None
                 else ""
             ),
+            retrieval_metrics=metrics,
         )

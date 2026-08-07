@@ -3,14 +3,28 @@
 from __future__ import annotations
 
 import difflib
+from typing import Protocol, runtime_checkable
 
 from maple_agent.knowledge.retrieval.models import CandidateEntity
+
+
+@runtime_checkable
+class RetrievalStrategy(Protocol):
+    """检索策略接口:未来可替换 Trie / BKTree / Embedding,保持结果兼容。"""
+
+    def search(
+        self,
+        query: str,
+        *,
+        entity_type: str | None = None,
+    ) -> list[CandidateEntity]: ...
 
 
 class AliasIndex:
     """按实体 id/name/alias 建立索引,返回按可信度排序的候选。"""
 
     def __init__(self) -> None:
+        self.index_version = "v1"
         self._entities: dict[tuple[str, str], CandidateEntity] = {}
         self._names: dict[str, CandidateEntity] = {}
         self._aliases: dict[str, CandidateEntity] = {}
