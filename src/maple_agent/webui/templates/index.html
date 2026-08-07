@@ -177,6 +177,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Decision Intelligence(只读)</div>
+        <div class="card-body">
+          <pre id="decision-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -251,6 +259,34 @@
     refreshRetrieval();
     refreshEvaluation();
     refreshImport();
+    refreshDecision();
+  }
+
+  async function refreshDecision() {
+    const res = await fetch('/api/decision/state');
+    const data = await res.json();
+    const el = document.getElementById('decision-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const result = data.result;
+    if (!result || !result.selected_option) {
+      el.textContent = '无有效决策';
+      return;
+    }
+    const goal = data.goal;
+    const selected = result.selected_option;
+    const optionLines = (result.alternatives || []).map(
+      (o, i) => `${i + 1}. ${o.action} → ${o.target || '-'} (${Math.round((o.confidence || 0) * 100)}%)`
+    );
+    el.textContent = [
+      `GOAL: ${goal ? goal.title : '-'}`,
+      `OPTIONS: ${optionLines.join('\n') || '-'}`,
+      `SELECTED: ${selected.action} → ${selected.target || '-'}`,
+      `CONFIDENCE: ${Math.round((selected.confidence || 0) * 100)}%`,
+      `REASON: ${result.explanation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshImport() {

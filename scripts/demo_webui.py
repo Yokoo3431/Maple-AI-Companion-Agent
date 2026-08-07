@@ -9,6 +9,11 @@ import uvicorn
 
 from maple_agent.agent import AgentLoop
 from maple_agent.context import ContextBuilder
+from maple_agent.decision import (
+    DecisionContext,
+    DecisionEngine,
+    DecisionOption,
+)
 from maple_agent.events import EventBus
 from maple_agent.executor import MockExecutorProvider
 from maple_agent.fusion import FusionService
@@ -214,6 +219,52 @@ def main() -> None:
     pipeline_validator.capture.initialize()
     pipeline_validator.ocr.initialize()
     pipeline_validator.validate_once(trace_id=new_id())
+    agent_loop.run_once(
+        vision_state=None,
+        world_state=None,
+        runtime_state=runtime.state.value,
+        trace_id=new_id(),
+    )  # 演示:执行一轮只读循环(仅 Mock LLM,不执行动作)
+    goal = goal_provider.get_active_goal()
+    quest_plan = agent_loop.last_quest_plan
+    last_context = agent_loop.last_context
+    decision_options: list[DecisionOption] = []
+    if quest_plan is not None:
+        for index, step in enumerate(quest_plan.steps):
+            decision_options.append(
+                DecisionOption(
+                    decision_id=f"decision-{index + 1}",
+                    action=step.action.value,
+                    target=step.target or step.description,
+                    expected_result=step.expected_result,
+                    confidence=(
+                        0.9 if index == 0 else max(0.5, 0.9 - index * 0.15)
+                    ),
+                    risk=(
+                        0.2
+                        if step.action.value in ("TALK", "ANALYZE", "MOVE_HINT")
+                        else 0.4
+                    ),
+                    reason=f"来自任务计划步骤 {index + 1}: {step.description}",
+                )
+            )
+    decision_engine = DecisionEngine(sessions_dir="sessions")
+    decision_result = decision_engine.decide(
+        DecisionContext(
+            world_state=last_context.world_state if last_context else None,
+            knowledge_state=(
+                last_context.knowledge_state if last_context else None
+            ),
+            goal=goal,
+            quest_plan=quest_plan,
+            options=decision_options,
+        ),
+        trace_id=new_id(),
+    )
+    decision = {
+        "goal": goal.model_dump(mode="json") if goal is not None else None,
+        "result": decision_result.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -228,6 +279,7 @@ def main() -> None:
         pipeline_validator=pipeline_validator,
         knowledge_eval=knowledge_eval,
         knowledge_import=knowledge_import,
+        decision=decision,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
@@ -238,12 +290,6 @@ def main() -> None:
         bound=bound,
     )
     vision_worker.coordinate_mapper = VisionCoordinateMapper(coordinate, bound)
-    agent_loop.run_once(
-        vision_state=None,
-        world_state=None,
-        runtime_state=runtime.state.value,
-        trace_id=new_id(),
-    )  # 演示:执行一轮只读循环(仅 Mock LLM,不执行动作)
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 
 
