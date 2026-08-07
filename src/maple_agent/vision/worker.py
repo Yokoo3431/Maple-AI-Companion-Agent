@@ -64,6 +64,7 @@ class VisionWorker:
         context_builder: ContextBuilder | None = None,
         runtime_state_fn: Callable[[], str] | None = None,
         coordinate_mapper: VisionCoordinateMapper | None = None,
+        capture_mode: str = "MOCK",
     ) -> None:
         self.capture = capture
         self.bus = bus
@@ -72,6 +73,7 @@ class VisionWorker:
         self.context_builder = context_builder
         self.runtime_state_fn = runtime_state_fn
         self.coordinate_mapper = coordinate_mapper
+        self.capture_mode = capture_mode
         self.interval = interval
         self.retry_delay = retry_delay
         self._state = VisionWorkerState.STOPPED
@@ -123,6 +125,8 @@ class VisionWorker:
                 raise
             self.latest_frame = frame
             self.capture_count += 1
+            if self.capture_mode == "WINDOW_REAL":
+                self._write_capture_context(frame)
             observations: list[Observation] = []
             ocr_results: list[OCRResult] = []
             world: WorldState | None = None
@@ -269,6 +273,35 @@ class VisionWorker:
             },
         }
         (directory / "vision_coordinate.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_capture_context(self, frame: ScreenFrame) -> None:
+        bound = getattr(self.capture, "bound", None)
+        window = (
+            bound.window.model_dump(mode="json")
+            if bound is not None and getattr(bound, "window", None) is not None
+            else {"hwnd": frame.window_hwnd}
+        )
+        coordinate_space = (
+            self.coordinate_mapper.coordinate.target_space.value
+            if self.coordinate_mapper is not None
+            else "CLIENT_SPACE"
+        )
+        method = getattr(self.capture, "last_capture_method", None) or "-"
+        directory = self.capture.sessions_dir / frame.trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "trace_id": frame.trace_id,
+            "window": window,
+            "hwnd": frame.window_hwnd,
+            "capture_method": method,
+            "frame_size": {"width": frame.width, "height": frame.height},
+            "dpi": frame.dpi_scale,
+            "coordinate_space": coordinate_space,
+        }
+        (directory / "capture_context.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )

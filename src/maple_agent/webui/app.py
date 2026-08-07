@@ -286,6 +286,26 @@ def create_app(
             "offset": {"x": coordinate.offset_x, "y": coordinate.offset_y},
         }
 
+    @app.get("/api/capture/state")
+    async def api_capture_state():
+        if vision_worker is None:
+            return {"enabled": False}
+        method = getattr(vision_worker.capture, "last_capture_method", None) or "-"
+        frame = vision_worker.latest_frame
+        if vision_worker.coordinate_mapper is not None:
+            dpi = vision_worker.coordinate_mapper.coordinate.dpi_scale
+        elif frame is not None:
+            dpi = frame.dpi_scale
+        else:
+            dpi = 1.0
+        return {
+            "enabled": True,
+            "mode": vision_worker.capture_mode,
+            "method": method,
+            "size": f"{frame.width}x{frame.height}" if frame is not None else "-",
+            "dpi": dpi,
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)

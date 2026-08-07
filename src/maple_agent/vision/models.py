@@ -31,6 +31,10 @@ class ScreenFrame(BaseModel):
     dpi_scale: float = Field(default=1.0, gt=0)
     image_path: str = ""
     source_provider: str = ""
+    window_hwnd: int | None = None
+    capture_space: str = ""
+    capture_width: int | None = None
+    capture_height: int | None = None
 
 
 class Observation(BaseModel):

@@ -40,9 +40,11 @@ from maple_agent.providers.vision import (
     VisionProviderProtocol,
     VisionResult,
 )
+from maple_agent.providers.windows_capture import CaptureError, WindowsCaptureProvider
 
 __all__ = [
     "BaseProvider",
+    "CaptureError",
     "ErrorPayload",
     "LLMProvider",
     "LLMProviderProtocol",
@@ -70,4 +72,5 @@ __all__ = [
     "VisionProvider",
     "VisionProviderProtocol",
     "VisionResult",
+    "WindowsCaptureProvider",
 ]

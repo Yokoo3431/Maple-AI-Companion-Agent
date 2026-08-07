@@ -69,6 +69,10 @@ class CaptureProvider(BaseProvider):
             height=height,
             dpi_scale=float(meta.get("dpi_scale", 1.0)),
             source_provider=self.name,
+            window_hwnd=meta.get("window_hwnd"),
+            capture_space=str(meta.get("capture_space", "")),
+            capture_width=width,
+            capture_height=height,
         )
         if self.policy.save_enabled:
             frame.image_path = self._save_image(image, tid)
