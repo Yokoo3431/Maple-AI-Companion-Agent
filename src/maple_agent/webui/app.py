@@ -174,10 +174,17 @@ def create_app(
     async def api_planner_state():
         if planner is None:
             return {"enabled": False}
+        last_result = getattr(planner, "last_result", None)
+        last_error = getattr(planner, "last_error", None)
+        status = "error" if last_error else ("ok" if last_result is not None else "idle")
         return {
             "enabled": True,
             "planner": type(planner).__name__,
-            "message": "契约就绪,未执行计划(Phase 1.7 不调用 LLM)",
+            "status": status,
+            "last_summary": last_result.summary if last_result else "",
+            "steps": len(last_result.steps) if last_result else 0,
+            "last_error": last_error or "",
+            "message": "Phase 1.8-A:仅生成计划,不执行动作",
         }
 
     @app.post("/api/runtime/start")

@@ -11,8 +11,8 @@ from maple_agent.context import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
-from maple_agent.logging_setup import setup_logging
-from maple_agent.planner import MockPlannerProvider
+from maple_agent.logging_setup import new_id, setup_logging
+from maple_agent.planner import LLMPlannerProvider, serialize_for_planner
 from maple_agent.providers import (
     MockKnowledgeProvider,
     MockLLMProvider,
@@ -71,6 +71,14 @@ def main() -> None:
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
         runtime_state_fn=lambda: runtime.state.value,
     )
+    llm = MockLLMProvider(
+        reply='{"plan_id":"p1","summary":"观察并分析当前状态","confidence":0.9,'
+        '"steps":[{"step_id":"s1","action":"observe","target":"window",'
+        '"expected_outcome":"screen frame"},{"step_id":"s2","action":"analyze",'
+        '"target":"context","expected_outcome":"world state"}]}'
+    )
+    llm.initialize()
+    planner = LLMPlannerProvider(llm=llm, sessions_dir="sessions")
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -79,9 +87,16 @@ def main() -> None:
         vision_worker=vision_worker,
         knowledge=providers.get("knowledge"),
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
-        planner=MockPlannerProvider(),
+        planner=planner,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
+    context = ContextBuilder(knowledge=providers["knowledge"]).build(
+        vision_state=None,
+        world_state=None,
+        runtime_state=runtime.state.value,
+        trace_id=new_id(),
+    )
+    planner.plan(serialize_for_planner(context))  # 演示:生成一次计划(仅 Mock LLM)
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 
 

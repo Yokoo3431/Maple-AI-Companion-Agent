@@ -155,6 +155,9 @@
     }
     el.textContent = [
       `Planner: ${data.planner}`,
+      `状态: ${data.status}`,
+      data.last_summary ? `最近计划: ${data.last_summary}(${data.steps} 步)` : '',
+      data.last_error ? `错误: ${data.last_error}` : '',
       data.message || '',
     ].filter(Boolean).join('\n');
   }

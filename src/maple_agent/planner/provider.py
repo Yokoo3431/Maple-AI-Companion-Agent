@@ -43,10 +43,14 @@ class MockPlannerProvider:
         ]
         self._raise_on_plan = raise_on_plan
         self.call_count = 0
+        self.last_result: PlanResult | None = None
+        self.last_error: str | None = None
 
     def plan(self, context: PlannerInput) -> PlanResult:
         self.call_count += 1
+        self.last_error = None
         if self._raise_on_plan:
+            self.last_error = "mock planner failure"
             raise RuntimeError("mock planner failure")
         with TraceContext(trace_id=context.trace_id):
             result = PlanResult(
@@ -62,4 +66,5 @@ class MockPlannerProvider:
                 result.goal_id,
                 len(result.steps),
             )
+            self.last_result = result
             return result
