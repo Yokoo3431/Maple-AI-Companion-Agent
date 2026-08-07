@@ -145,6 +145,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Pipeline(只读)</div>
+        <div class="card-body">
+          <pre id="pipeline-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -215,6 +223,24 @@
     refreshWindow();
     refreshVisionCoordinate();
     refreshCapture();
+    refreshPipeline();
+  }
+
+  async function refreshPipeline() {
+    const res = await fetch('/api/pipeline/state');
+    const data = await res.json();
+    const el = document.getElementById('pipeline-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `PIPELINE: ${data.overall}`,
+      `WINDOW: ${data.window}`,
+      `CAPTURE: ${data.capture}`,
+      `OCR: ${data.ocr}`,
+      `WORLD: ${data.world}`,
+    ].join('\n');
   }
 
   async function refreshCapture() {

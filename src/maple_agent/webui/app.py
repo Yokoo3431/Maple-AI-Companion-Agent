@@ -24,6 +24,7 @@ from maple_agent.planner.provider import PlannerProvider
 from maple_agent.providers import BaseProvider
 from maple_agent.providers.knowledge import KnowledgeProvider
 from maple_agent.runtime import IllegalTransitionError, RuntimeManager, RuntimeState
+from maple_agent.validation.pipeline import VisionPipelineValidator
 from maple_agent.vision.worker import VisionWorker
 from maple_agent.webui.ws import WebSocketManager
 
@@ -53,6 +54,7 @@ def create_app(
     planner: PlannerProvider | None = None,
     agent_loop: AgentLoop | None = None,
     goal_provider: GoalProvider | None = None,
+    pipeline_validator: VisionPipelineValidator | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -304,6 +306,17 @@ def create_app(
             "method": method,
             "size": f"{frame.width}x{frame.height}" if frame is not None else "-",
             "dpi": dpi,
+        }
+
+    @app.get("/api/pipeline/state")
+    async def api_pipeline_state():
+        if pipeline_validator is None or pipeline_validator.last_result is None:
+            return {"enabled": False}
+        result = pipeline_validator.last_result
+        return {
+            "enabled": True,
+            **result.status.model_dump(),
+            "trace_id": result.trace_id,
         }
 
     @app.post("/api/runtime/start")

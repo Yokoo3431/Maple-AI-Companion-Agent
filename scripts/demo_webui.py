@@ -29,6 +29,7 @@ from maple_agent.quest_planner import (
     QuestResolver,
 )
 from maple_agent.runtime import RuntimeManager
+from maple_agent.validation import VisionPipelineValidator
 from maple_agent.vision import (
     MockCaptureProvider,
     ScreenshotPolicy,
@@ -39,7 +40,7 @@ from maple_agent.vision.coordinate import (
     VisionCoordinateMapper,
 )
 from maple_agent.webui.app import create_app
-from maple_agent.window import WindowBindingService
+from maple_agent.window import MockWindowDetector, WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
 from maple_agent.window.models import WindowRect as BoundWindowRect
 
@@ -48,6 +49,14 @@ def main() -> None:
     setup_logging("logs")
     bus = EventBus()
     runtime = RuntimeManager(bus=bus)
+    bound_window = BoundWindowInfo(
+        title="MapleStory",
+        process_name="MapleStory.exe",
+        hwnd=12345,
+        screen_rect=BoundWindowRect(left=100, top=100, width=1024, height=768),
+        client_rect=BoundWindowRect(left=105, top=135, width=1016, height=735),
+        dpi_scale=1.25,
+    )
     detector = MockGameWindowDetector(
         WindowInfo(
             handle=1,
@@ -124,6 +133,15 @@ def main() -> None:
         quest_plan_validator=QuestPlanValidator(),
         executor=MockExecutorProvider(),
     )
+    pipeline_validator = VisionPipelineValidator(
+        detector=MockWindowDetector(bound_window),
+        capture=MockCaptureProvider(width=1016, height=735),
+        knowledge=providers["knowledge"],
+        ocr=MockOCRProvider(text="射手村"),
+    )
+    pipeline_validator.capture.initialize()
+    pipeline_validator.ocr.initialize()
+    pipeline_validator.validate_once(trace_id=new_id())
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -135,16 +153,9 @@ def main() -> None:
         planner=planner,
         agent_loop=agent_loop,
         goal_provider=goal_provider,
+        pipeline_validator=pipeline_validator,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
-    bound_window = BoundWindowInfo(
-        title="MapleStory",
-        process_name="MapleStory.exe",
-        hwnd=12345,
-        screen_rect=BoundWindowRect(left=100, top=100, width=1024, height=768),
-        client_rect=BoundWindowRect(left=105, top=135, width=1016, height=735),
-        dpi_scale=1.25,
-    )
     runtime.bind_window(bound_window, trace_id=new_id())
     bound = WindowBindingService().bind(bound_window, trace_id=new_id())
     coordinate = VisionAlignmentService().align(
