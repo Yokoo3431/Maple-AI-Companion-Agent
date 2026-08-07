@@ -34,6 +34,10 @@ from maple_agent.vision import (
     ScreenshotPolicy,
     VisionWorker,
 )
+from maple_agent.vision.coordinate import (
+    VisionAlignmentService,
+    VisionCoordinateMapper,
+)
 from maple_agent.webui.app import create_app
 from maple_agent.window import WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
@@ -142,7 +146,13 @@ def main() -> None:
         dpi_scale=1.25,
     )
     runtime.bind_window(bound_window, trace_id=new_id())
-    WindowBindingService().bind(bound_window, trace_id=new_id())
+    bound = WindowBindingService().bind(bound_window, trace_id=new_id())
+    coordinate = VisionAlignmentService().align(
+        frame_width=1280,
+        frame_height=720,
+        bound=bound,
+    )
+    vision_worker.coordinate_mapper = VisionCoordinateMapper(coordinate, bound)
     agent_loop.run_once(
         vision_state=None,
         world_state=None,

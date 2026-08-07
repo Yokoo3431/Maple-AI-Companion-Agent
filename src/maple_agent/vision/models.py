@@ -10,6 +10,15 @@ from pydantic import BaseModel, Field, field_validator
 from maple_agent.game.window import WindowInfo
 
 
+class MappedBBox(BaseModel):
+    """映射后的边界框(客户区逻辑坐标)。"""
+
+    left: float
+    top: float
+    width: float
+    height: float
+
+
 class ScreenFrame(BaseModel):
     """一次截图的元信息(不含像素;像素文件按 ScreenshotPolicy 落盘)。"""
 
@@ -33,6 +42,8 @@ class Observation(BaseModel):
     normalized_value: str | int | float | bool
     confidence: float = Field(default=0.0, ge=0, le=1)
     source: str = ""
+    coordinate_space: str = ""
+    mapped_bbox: MappedBBox | None = None
 
     @field_validator("normalized_value", mode="before")
     @classmethod

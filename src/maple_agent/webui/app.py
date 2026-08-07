@@ -268,6 +268,24 @@ def create_app(
             "mode": "READ ONLY",
         }
 
+    @app.get("/api/vision-coordinate/state")
+    async def api_vision_coordinate_state():
+        if vision_worker is None or vision_worker.coordinate_mapper is None:
+            return {"enabled": False}
+        coordinate = vision_worker.coordinate_mapper.coordinate
+        frame = vision_worker.latest_frame
+        return {
+            "enabled": True,
+            "frame": (
+                f"{frame.width}x{frame.height}"
+                if frame is not None
+                else f"{coordinate.frame_width}x{coordinate.frame_height}"
+            ),
+            "space": coordinate.target_space.value,
+            "dpi": coordinate.dpi_scale,
+            "offset": {"x": coordinate.offset_x, "y": coordinate.offset_y},
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)

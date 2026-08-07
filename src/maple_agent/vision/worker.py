@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from maple_agent.context.models import AgentContext
     from maple_agent.fusion import FusionService
     from maple_agent.fusion.models import WorldState
+    from maple_agent.vision.coordinate.mapper import VisionCoordinateMapper
 
 logger = logging.getLogger("maple_agent.vision.worker")
 
@@ -62,6 +63,7 @@ class VisionWorker:
         fusion: FusionService | None = None,
         context_builder: ContextBuilder | None = None,
         runtime_state_fn: Callable[[], str] | None = None,
+        coordinate_mapper: VisionCoordinateMapper | None = None,
     ) -> None:
         self.capture = capture
         self.bus = bus
@@ -69,6 +71,7 @@ class VisionWorker:
         self.fusion = fusion
         self.context_builder = context_builder
         self.runtime_state_fn = runtime_state_fn
+        self.coordinate_mapper = coordinate_mapper
         self.interval = interval
         self.retry_delay = retry_delay
         self._state = VisionWorkerState.STOPPED
@@ -139,8 +142,20 @@ class VisionWorker:
                         normalized_value=result.text,
                         confidence=result.confidence,
                         source=result.source,
+                        coordinate_space=(
+                            self.coordinate_mapper.coordinate.target_space.value
+                            if self.coordinate_mapper is not None
+                            else ""
+                        ),
+                        mapped_bbox=(
+                            self.coordinate_mapper.map_bbox(result.bbox)
+                            if self.coordinate_mapper is not None
+                            else None
+                        ),
                     )
                 ]
+                if self.coordinate_mapper is not None:
+                    self._write_vision_coordinate_replay(frame, result)
             if self.fusion is not None and observations:
                 world = self.fusion.fuse(observations, trace_id=frame.trace_id)
                 self.latest_world = world
@@ -223,6 +238,38 @@ class VisionWorker:
         directory.mkdir(parents=True, exist_ok=True)
         (directory / "context.json").write_text(
             json.dumps(context.model_dump(mode="json"), ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_vision_coordinate_replay(self, frame: ScreenFrame, ocr_result) -> None:
+        if self.coordinate_mapper is None:
+            return
+        coordinate = self.coordinate_mapper.coordinate
+        bound = self.coordinate_mapper.bound
+        mapped = self.coordinate_mapper.map_bbox(ocr_result.bbox)
+        directory = self.capture.sessions_dir / frame.trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "trace_id": frame.trace_id,
+            "frame_size": {"width": frame.width, "height": frame.height},
+            "window": bound.window.model_dump(mode="json"),
+            "dpi_scale": coordinate.dpi_scale,
+            "source_space": coordinate.source_space.value,
+            "target_space": coordinate.target_space.value,
+            "offset": {"x": coordinate.offset_x, "y": coordinate.offset_y},
+            "transform": {
+                "screen_to_client": {
+                    "dpi": bound.dpi_scale,
+                    "client_offset": list(bound.client_offset),
+                }
+            },
+            "bbox_mapping": {
+                "input": ocr_result.bbox.model_dump(),
+                "mapped": mapped.model_dump(),
+            },
+        }
+        (directory / "vision_coordinate.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
 
