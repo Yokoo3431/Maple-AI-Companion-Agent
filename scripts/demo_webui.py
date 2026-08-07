@@ -75,6 +75,7 @@ def main() -> None:
     }
     for provider in providers.values():
         provider.initialize()
+    providers["knowledge"].load_dataset()
     vision_capture = MockCaptureProvider(
         bus=bus,
         policy=ScreenshotPolicy(save_enabled=True, max_images=20),

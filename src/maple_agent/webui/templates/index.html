@@ -466,6 +466,7 @@
       return;
     }
     const counts = data.counts || {};
+    const ds = data.dataset || {};
     const ks = data.knowledge;
     if (ks && ks.matched_entities && ks.matched_entities.length) {
       const map = ks.matched_entities.find((e) => e.entity_type === 'map');
@@ -477,12 +478,14 @@
         `NPC: ${npcs.join(', ') || '-'}`,
         `MONSTER: ${monsters.join(', ') || '-'}`,
         `CONFIDENCE: ${Math.round((ks.confidence || 0) * 100)}%`,
+        `DATASET: v${ds.version || '-'} | MAP ${ds.maps || 0} / NPC ${ds.npcs || 0} / MONSTER ${ds.monsters || 0}`,
       ].join('\n');
     } else {
       el.textContent = [
         `Profile: ${data.game_profile || '-'}`,
         `版本: ${data.version || '-'} | 状态: ${data.status}`,
         `数据: 地图 ${counts.maps || 0} / NPC ${counts.npcs || 0} / 怪物 ${counts.monsters || 0} / 任务 ${counts.quests || 0}`,
+        `DATASET: v${ds.version || '-'} | MAP ${ds.maps || 0} / NPC ${ds.npcs || 0} / MONSTER ${ds.monsters || 0}`,
       ].join('\n');
     }
   }

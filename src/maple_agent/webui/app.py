@@ -166,6 +166,7 @@ def create_app(
             )
             if built.knowledge_state is not None:
                 knowledge_state = built.knowledge_state.model_dump(mode="json")
+        dataset = knowledge.dataset
         return {
             "enabled": True,
             "status": knowledge.profile_status,
@@ -173,6 +174,12 @@ def create_app(
             "version": knowledge.version,
             "counts": knowledge.counts,
             "knowledge": knowledge_state,
+            "dataset": {
+                "version": knowledge.dataset_version(),
+                "maps": len(dataset.maps) if dataset is not None else 0,
+                "npcs": len(dataset.npcs) if dataset is not None else 0,
+                "monsters": len(dataset.monsters) if dataset is not None else 0,
+            },
         }
 
     @app.get("/api/context/state")

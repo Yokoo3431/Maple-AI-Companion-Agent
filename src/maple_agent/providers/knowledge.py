@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from maple_agent.events import EventBus
+from maple_agent.knowledge.dataset import KnowledgeDataset, load_dataset
 from maple_agent.knowledge.loader import KnowledgeData, detect_profile, load_profile
 from maple_agent.knowledge.models import (
     MapDictionary,
@@ -31,6 +32,29 @@ class KnowledgeProvider(BaseProvider):
         self._profile_available = False
         self._data = KnowledgeData()
         self._quest_graph = QuestGraph([])
+        self._dataset: KnowledgeDataset | None = None
+        self._dataset_dir = (
+            Path(__file__).resolve().parents[1] / "knowledge" / "data"
+        )
+
+    @property
+    def dataset(self) -> KnowledgeDataset | None:
+        return self._dataset
+
+    def load_dataset(
+        self, directory: str | Path | None = None
+    ) -> KnowledgeDataset:
+        """启动时加载 JSON 数据集(失败安全降级)。"""
+        self._dataset = load_dataset(directory or self._dataset_dir)
+        return self._dataset
+
+    def reload(self, *, trace_id: str | None = None) -> None:
+        """重新加载数据集(profile 数据由子类覆盖处理)。"""
+        self._dataset = None
+        self.load_dataset()
+
+    def dataset_version(self) -> str:
+        return self._dataset.version if self._dataset is not None else ""
 
     @property
     def data(self) -> KnowledgeData:
@@ -69,41 +93,135 @@ class KnowledgeProvider(BaseProvider):
     def get_map(
         self, ref: int | str, *, trace_id: str | None = None
     ) -> MapInfo | None:
-        return self._lookup("get_map", lambda: self._find(self._data.maps, "map_id", ref), trace_id)
+        result = self._lookup(
+            "get_map",
+            lambda: self._find(self._data.maps, "map_id", ref),
+            trace_id,
+        )
+        if result is None:
+            node = self._dataset_map(ref)
+            if node is not None:
+                result = MapInfo(
+                    map_id=node.map_id,
+                    name=node.name,
+                    aliases=node.aliases,
+                    region=node.region,
+                    version=self.dataset_version(),
+                )
+        return result
 
     def get_npc(
         self, ref: int | str, *, trace_id: str | None = None
     ) -> NpcInfo | None:
-        return self._lookup("get_npc", lambda: self._find(self._data.npcs, "npc_id", ref), trace_id)
+        result = self._lookup(
+            "get_npc",
+            lambda: self._find(self._data.npcs, "npc_id", ref),
+            trace_id,
+        )
+        if result is None:
+            node = self._dataset_npc(ref)
+            if node is not None:
+                result = NpcInfo(
+                    npc_id=node.npc_id,
+                    name=node.name,
+                    aliases=node.aliases,
+                    map_id=node.location,
+                    version=self.dataset_version(),
+                )
+        return result
 
     def get_monster(
         self, ref: int | str, *, trace_id: str | None = None
     ) -> MonsterInfo | None:
-        return self._lookup(
+        result = self._lookup(
             "get_monster",
             lambda: self._find(self._data.monsters, "monster_id", ref),
             trace_id,
         )
+        if result is None:
+            node = self._dataset_monster(ref)
+            if node is not None:
+                result = MonsterInfo(
+                    monster_id=node.monster_id,
+                    name=node.name,
+                    level=node.level,
+                    map_id=node.location,
+                    version=self.dataset_version(),
+                )
+        return result
 
     def get_npcs_by_map(
         self, map_id: int | str, *, trace_id: str | None = None
     ) -> list[NpcInfo]:
-        return self._lookup(
+        result = self._lookup(
             "get_npcs_by_map",
             lambda: [item for item in self._data.npcs if str(item.map_id) == str(map_id)],
             trace_id,
         )
+        if not result and self._dataset is not None:
+            result = [
+                NpcInfo(
+                    npc_id=node.npc_id,
+                    name=node.name,
+                    aliases=node.aliases,
+                    map_id=node.location,
+                    version=self.dataset_version(),
+                )
+                for node in self._dataset.npcs
+                if str(node.location) == str(map_id)
+            ]
+        return result
 
     def get_monsters_by_map(
         self, map_id: int | str, *, trace_id: str | None = None
     ) -> list[MonsterInfo]:
-        return self._lookup(
+        result = self._lookup(
             "get_monsters_by_map",
             lambda: [
                 item for item in self._data.monsters if str(item.map_id) == str(map_id)
             ],
             trace_id,
         )
+        if not result and self._dataset is not None:
+            result = [
+                MonsterInfo(
+                    monster_id=node.monster_id,
+                    name=node.name,
+                    level=node.level,
+                    map_id=node.location,
+                    version=self.dataset_version(),
+                )
+                for node in self._dataset.monsters
+                if str(node.location) == str(map_id)
+            ]
+        return result
+
+    def _dataset_map(self, ref: int | str):
+        if self._dataset is None:
+            return None
+        key = str(ref)
+        for node in self._dataset.maps:
+            if str(node.map_id) == key or node.name == ref or ref in node.aliases:
+                return node
+        return None
+
+    def _dataset_npc(self, ref: int | str):
+        if self._dataset is None:
+            return None
+        key = str(ref)
+        for node in self._dataset.npcs:
+            if str(node.npc_id) == key or node.name == ref or ref in node.aliases:
+                return node
+        return None
+
+    def _dataset_monster(self, ref: int | str):
+        if self._dataset is None:
+            return None
+        key = str(ref)
+        for node in self._dataset.monsters:
+            if str(node.monster_id) == key or node.name == ref or ref in node.aliases:
+                return node
+        return None
 
     def get_quest_template(
         self, ref: int | str, *, trace_id: str | None = None
@@ -165,6 +283,7 @@ class JsonKnowledgeProvider(KnowledgeProvider):
 
     def initialize(self, *, trace_id: str | None = None) -> None:
         super().initialize(trace_id=trace_id)
+        self.load_dataset()
         with self._trace(trace_id):
             available, version = detect_profile(self.knowledge_root, self._configured_profile)
             if available:
@@ -189,6 +308,27 @@ class JsonKnowledgeProvider(KnowledgeProvider):
                     "knowledge profile missing: %s",
                     self._configured_profile or "(未配置)",
                 )
+
+    def reload(self, *, trace_id: str | None = None) -> None:
+        """重新加载 profile 与 dataset。"""
+        self._data = KnowledgeData()
+        self._quest_graph = QuestGraph([])
+        self._dataset = None
+        with self._trace(trace_id):
+            available, version = detect_profile(self.knowledge_root, self._configured_profile)
+            if available:
+                profile_dir = self.knowledge_root / "versions" / self._configured_profile
+                self._data = load_profile(profile_dir, self._configured_profile)
+                self._quest_graph = QuestGraph(self._data.quests_domain)
+                self._profile_available = True
+            else:
+                self._data = KnowledgeData(
+                    game_profile=self._configured_profile,
+                    version=version,
+                )
+                self._quest_graph = QuestGraph([])
+                self._profile_available = False
+            self.load_dataset()
 
 
 class MockKnowledgeProvider(KnowledgeProvider):

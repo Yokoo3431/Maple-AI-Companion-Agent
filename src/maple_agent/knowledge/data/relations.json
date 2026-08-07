@@ -1,0 +1,37 @@
+[
+  {
+    "source": "map",
+    "source_id": 1,
+    "target": "npc",
+    "target_id": 101,
+    "relation_type": "CONTAINS"
+  },
+  {
+    "source": "npc",
+    "source_id": 101,
+    "target": "map",
+    "target_id": 1,
+    "relation_type": "LOCATED_AT"
+  },
+  {
+    "source": "map",
+    "source_id": 1,
+    "target": "monster",
+    "target_id": 100,
+    "relation_type": "SPAWNS"
+  },
+  {
+    "source": "monster",
+    "source_id": 100,
+    "target": "item",
+    "target_id": 1,
+    "relation_type": "DROPS"
+  },
+  {
+    "source": "map",
+    "source_id": 1,
+    "target": "map",
+    "target_id": 2,
+    "relation_type": "CONNECTED_TO"
+  }
+]

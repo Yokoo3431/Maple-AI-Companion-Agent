@@ -15,6 +15,8 @@ class RelationType(StrEnum):
     SPAWNS = "SPAWNS"
     REQUIRES = "REQUIRES"
     REWARD = "REWARD"
+    DROPS = "DROPS"
+    CONNECTED_TO = "CONNECTED_TO"
 
 
 class MapNode(BaseModel):
@@ -23,6 +25,7 @@ class MapNode(BaseModel):
     map_id: int | str
     name: str
     aliases: list[str] = Field(default_factory=list)
+    region: str = ""
     parent_region: str = ""
     connections: list[int | str] = Field(default_factory=list)
 
@@ -34,6 +37,7 @@ class NPCNode(BaseModel):
     name: str
     aliases: list[str] = Field(default_factory=list)
     location: int | str | None = None
+    description: str = ""
 
 
 class MonsterNode(BaseModel):
@@ -44,6 +48,7 @@ class MonsterNode(BaseModel):
     aliases: list[str] = Field(default_factory=list)
     location: int | str | None = None
     level: int | None = None
+    drops: list[int | str] = Field(default_factory=list)
 
 
 class ItemNode(BaseModel):

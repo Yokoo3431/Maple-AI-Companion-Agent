@@ -1,0 +1,16 @@
+[
+  {
+    "npc_id": 101,
+    "name": "赫丽娜",
+    "aliases": ["Heena", "弓箭手教官"],
+    "map_id": 1,
+    "description": "射手村的弓箭手教官"
+  },
+  {
+    "npc_id": 102,
+    "name": "玛雅",
+    "aliases": ["Maya"],
+    "map_id": 1,
+    "description": "射手村居民"
+  }
+]

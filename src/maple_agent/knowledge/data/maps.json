@@ -1,0 +1,26 @@
+[
+  {
+    "map_id": 1,
+    "name": "射手村",
+    "aliases": ["射手", "Henesys"],
+    "region": "冒险岛世界",
+    "parent_region": "维多利亚岛",
+    "connections": [2, 3]
+  },
+  {
+    "map_id": 2,
+    "name": "勇士部落",
+    "aliases": ["Perion", "勇士"],
+    "region": "冒险岛世界",
+    "parent_region": "维多利亚岛",
+    "connections": [1]
+  },
+  {
+    "map_id": 3,
+    "name": "废弃都市",
+    "aliases": ["Kerning City", "废弃"],
+    "region": "冒险岛世界",
+    "parent_region": "维多利亚岛",
+    "connections": [1]
+  }
+]

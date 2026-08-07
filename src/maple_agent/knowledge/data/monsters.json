@@ -1,0 +1,16 @@
+[
+  {
+    "monster_id": 100,
+    "name": "绿水灵",
+    "aliases": ["Slime", "绿水"],
+    "map_id": 1,
+    "drops": [1]
+  },
+  {
+    "monster_id": 101,
+    "name": "蘑菇仔",
+    "aliases": ["蘑菇"],
+    "map_id": 2,
+    "drops": [2]
+  }
+]

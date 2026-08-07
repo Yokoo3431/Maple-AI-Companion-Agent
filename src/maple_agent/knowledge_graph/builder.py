@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from maple_agent.knowledge_graph.graph import KnowledgeGraph
 from maple_agent.knowledge_graph.models import (
     MapNode,
@@ -10,16 +12,28 @@ from maple_agent.knowledge_graph.models import (
     Relation,
     RelationType,
 )
-from maple_agent.providers.knowledge import KnowledgeProvider
+
+if TYPE_CHECKING:
+    from maple_agent.providers.knowledge import KnowledgeProvider
 
 
 def build_graph(knowledge: KnowledgeProvider) -> KnowledgeGraph:
     """把知识库数据转成图谱节点与关系。"""
+    dataset = knowledge.dataset
+    if dataset is not None and (dataset.maps or dataset.relations):
+        return KnowledgeGraph(
+            maps=dataset.maps,
+            npcs=dataset.npcs,
+            monsters=dataset.monsters,
+            items=dataset.items,
+            relations=dataset.relations,
+        )
     maps = [
         MapNode(
             map_id=item.map_id,
             name=item.name,
             aliases=item.aliases,
+            region=item.region,
             parent_region=item.region,
         )
         for item in knowledge.data.maps

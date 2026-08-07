@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from pathlib import Path
 
 from maple_agent.fusion.models import WorldState
@@ -29,6 +30,7 @@ class FusionService:
         self.knowledge = knowledge
         self.graph = graph
         self.sessions_dir = Path(sessions_dir)
+        self._last_match: dict | None = None
 
     def fuse(
         self,
@@ -84,14 +86,51 @@ class FusionService:
             if obs.type == "text" and obs.normalized_value:
                 text = str(obs.normalized_value)
                 if self.graph is not None:
-                    node = self.graph.find_map(text)
-                    if node is not None:
-                        return node.name, obs.confidence, text
+                    for candidate, score in self._candidates(text):
+                        node = self.graph.find_map(candidate)
+                        if node is not None:
+                            candidates = self._candidates(text)
+                            self._last_match = {
+                                "ocr_text": text,
+                                "candidate_list": [
+                                    {"text": item, "score": s}
+                                    for item, s in candidates
+                                ],
+                                "ranking": [
+                                    item
+                                    for item, _ in candidates
+                                    if self.graph.find_map(item) is not None
+                                ],
+                                "matched": node.name,
+                                "confidence": round(obs.confidence * score, 4),
+                                "dataset_version": self.knowledge.dataset_version(),
+                            }
+                            return (
+                                node.name,
+                                self._last_match["confidence"],
+                                text,
+                            )
                 else:
                     resolved = self.knowledge.resolve_alias(text, trace_id=tid)
                     if resolved:
                         return resolved, obs.confidence, text
         return None, 0.0, ""
+
+    @staticmethod
+    def _candidates(text: str) -> list[tuple[str, float]]:
+        """OCR 纠错候选:原文(1.0)、去尾部数字/符号(0.9)、全去数字/符号(0.8)。"""
+        cleaned = re.sub(r"[\d\W_]+$", "", text)
+        cleaned_all = re.sub(r"[\d\W_]+", "", text)
+        result: list[tuple[str, float]] = [(text, 1.0)]
+        if cleaned and cleaned != text:
+            result.append((cleaned, 0.9))
+        if (
+            cleaned_all
+            and cleaned_all != text
+            and cleaned_all != cleaned
+        ):
+            result.append((cleaned_all, 0.8))
+        return result
 
     def _entities(
         self,
@@ -158,6 +197,21 @@ class FusionService:
             "candidate": ocr_text,
             "matched": matched,
             "confidence": confidence,
+            "dataset_version": (
+                self._last_match.get("dataset_version")
+                if self._last_match
+                else self.knowledge.dataset_version()
+            ),
+            "candidate_list": (
+                self._last_match.get("candidate_list")
+                if self._last_match
+                else [{"text": ocr_text, "score": 1.0}]
+            ),
+            "ranking": (
+                self._last_match.get("ranking")
+                if self._last_match
+                else [matched]
+            ),
         }
         (directory / "knowledge_match.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),

@@ -1,0 +1,12 @@
+[
+  {
+    "item_id": 1,
+    "name": "树液",
+    "aliases": ["Tree Sap"]
+  },
+  {
+    "item_id": 2,
+    "name": "蘑菇孢子",
+    "aliases": ["蘑菇孢子"]
+  }
+]
