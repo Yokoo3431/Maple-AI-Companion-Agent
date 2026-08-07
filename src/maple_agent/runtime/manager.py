@@ -10,6 +10,7 @@ from maple_agent.events.types import Priority
 from maple_agent.game.window import GameWindowDetector
 from maple_agent.logging_setup import TraceContext
 from maple_agent.runtime.states import RuntimeState, validate_transition
+from maple_agent.window.models import WindowBindingStatus, WindowInfo
 
 logger = logging.getLogger("maple_agent.runtime.manager")
 
@@ -39,10 +40,18 @@ class RuntimeManager:
     source: str = "runtime.manager"
     _state: RuntimeState = field(default=RuntimeState.OFFLINE, init=False)
     _user_confirmed: bool = field(default=False, init=False)
+    _binding_status: WindowBindingStatus = field(
+        default=WindowBindingStatus.UNBOUND, init=False
+    )
+    last_window_info: WindowInfo | None = field(default=None, init=False)
 
     @property
     def state(self) -> RuntimeState:
         return self._state
+
+    @property
+    def binding_status(self) -> WindowBindingStatus:
+        return self._binding_status
 
     def attach(self) -> None:
         """作为 Event Bus 消费者订阅命令与异常事件。"""
@@ -58,6 +67,33 @@ class RuntimeManager:
         """用户确认(进入 RUNNING 的门控之一)。"""
         self._user_confirmed = True
         logger.info("user confirmation accepted")
+
+    def bind_window(self, info: WindowInfo, *, trace_id: str | None = None) -> None:
+        """登记窗口(只读识别,不控制)。"""
+        self.last_window_info = info
+        self._binding_status = WindowBindingStatus.BOUND
+        with TraceContext(trace_id=trace_id):
+            logger.info(
+                "window binding: BOUND title=%s dpi=%s",
+                info.title,
+                info.dpi_scale,
+            )
+
+    def mark_window_lost(self, *, trace_id: str | None = None) -> None:
+        """窗口丢失:发布 WINDOW_BIND_LOST(仅状态,不执行)。"""
+        if self._binding_status is not WindowBindingStatus.BOUND:
+            logger.info("window binding: 非 BOUND,忽略 lost")
+            return
+        self._binding_status = WindowBindingStatus.LOST
+        event = Event.create(
+            EventType.WINDOW_BIND_LOST,
+            source=self.source,
+            payload=None,
+            trace_id=trace_id,
+        )
+        with TraceContext(trace_id=event.trace_id):
+            logger.info("window binding: BOUND -> LOST")
+        self.bus.publish(event)
 
     def start(self, *, trace_id: str | None = None) -> None:
         """OFFLINE -> STARTING -> READY(Phase 0 同步完成启动装配)。"""

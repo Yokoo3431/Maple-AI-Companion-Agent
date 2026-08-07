@@ -121,6 +121,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Window Binding(只读)</div>
+        <div class="card-body">
+          <pre id="window-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -188,6 +196,21 @@
     refreshGoal();
     refreshQuestPlan();
     refreshExecution();
+    refreshWindow();
+  }
+
+  async function refreshWindow() {
+    const res = await fetch('/api/window/state');
+    const data = await res.json();
+    const el = document.getElementById('window-card-body');
+    const w = data.window;
+    el.textContent = [
+      `状态: ${data.status}`,
+      w ? `WINDOW: ${w.title}` : 'WINDOW: -',
+      w ? `PROCESS: ${w.process_name}` : '',
+      w ? `DPI: ${Math.round(w.dpi_scale * 100)}%` : '',
+      `MODE: ${data.mode}`,
+    ].filter(Boolean).join('\n');
   }
 
   async function refreshExecution() {

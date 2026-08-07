@@ -35,6 +35,9 @@ from maple_agent.vision import (
     VisionWorker,
 )
 from maple_agent.webui.app import create_app
+from maple_agent.window import WindowBindingService
+from maple_agent.window.models import WindowInfo as BoundWindowInfo
+from maple_agent.window.models import WindowRect as BoundWindowRect
 
 
 def main() -> None:
@@ -130,6 +133,16 @@ def main() -> None:
         goal_provider=goal_provider,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
+    bound_window = BoundWindowInfo(
+        title="MapleStory",
+        process_name="MapleStory.exe",
+        hwnd=12345,
+        screen_rect=BoundWindowRect(left=100, top=100, width=1024, height=768),
+        client_rect=BoundWindowRect(left=105, top=135, width=1016, height=735),
+        dpi_scale=1.25,
+    )
+    runtime.bind_window(bound_window, trace_id=new_id())
+    WindowBindingService().bind(bound_window, trace_id=new_id())
     agent_loop.run_once(
         vision_state=None,
         world_state=None,

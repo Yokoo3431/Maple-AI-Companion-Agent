@@ -45,6 +45,7 @@ class EventType(StrEnum):
     EXECUTION_BLOCKED = "agent.execution.blocked"
     EXECUTION_COMPLETED = "agent.execution.completed"
     EXECUTION_FAILED = "agent.execution.failed"
+    WINDOW_BIND_LOST = "window.bind_lost"
     PLAN_CREATED = "agent.plan_created"
     PLAN_FAILED = "agent.plan_failed"
 
@@ -106,6 +107,7 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.EXECUTION_BLOCKED: Priority.HIGH,
     EventType.EXECUTION_COMPLETED: Priority.NORMAL,
     EventType.EXECUTION_FAILED: Priority.HIGH,
+    EventType.WINDOW_BIND_LOST: Priority.HIGH,
 }
 
 

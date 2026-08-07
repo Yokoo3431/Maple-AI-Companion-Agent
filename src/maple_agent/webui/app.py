@@ -258,6 +258,16 @@ def create_app(
             "history_count": len(agent_loop.execution_history),
         }
 
+    @app.get("/api/window/state")
+    async def api_window_state():
+        info = runtime.last_window_info
+        return {
+            "enabled": True,
+            "status": runtime.binding_status.value,
+            "window": info.model_dump(mode="json") if info is not None else None,
+            "mode": "READ ONLY",
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)
