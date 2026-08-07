@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from maple_agent import __version__
+from maple_agent.agent.loop import AgentLoop
 from maple_agent.context.builder import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
@@ -49,6 +50,7 @@ def create_app(
     knowledge: KnowledgeProvider | None = None,
     context_builder: ContextBuilder | None = None,
     planner: PlannerProvider | None = None,
+    agent_loop: AgentLoop | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -185,6 +187,20 @@ def create_app(
             "steps": len(last_result.steps) if last_result else 0,
             "last_error": last_error or "",
             "message": "Phase 1.8-A:仅生成计划,不执行动作",
+        }
+
+    @app.get("/api/loop/state")
+    async def api_loop_state():
+        if agent_loop is None:
+            return {"enabled": False}
+        return {
+            "enabled": True,
+            "state": agent_loop.state.value,
+            "last_summary": (
+                agent_loop.last_plan.summary if agent_loop.last_plan is not None else ""
+            ),
+            "steps": len(agent_loop.last_plan.steps) if agent_loop.last_plan is not None else 0,
+            "last_error": agent_loop.last_error or "",
         }
 
     @app.post("/api/runtime/start")

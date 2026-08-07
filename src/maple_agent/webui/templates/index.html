@@ -81,6 +81,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Agent Loop(只读)</div>
+        <div class="card-body">
+          <pre id="loop-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -143,6 +151,22 @@
     refreshVision();
     refreshContext();
     refreshPlanner();
+    refreshLoop();
+  }
+
+  async function refreshLoop() {
+    const res = await fetch('/api/loop/state');
+    const data = await res.json();
+    const el = document.getElementById('loop-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `状态: ${data.state}`,
+      data.last_summary ? `最近计划: ${data.last_summary}(${data.steps} 步)` : '',
+      data.last_error ? `错误: ${data.last_error}` : '',
+    ].filter(Boolean).join('\n');
   }
 
   async function refreshPlanner() {

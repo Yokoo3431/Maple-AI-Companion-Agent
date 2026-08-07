@@ -30,6 +30,11 @@ class EventType(StrEnum):
     GAME_WINDOW_LOST = "vision.game_window_lost"
 
     # Agent
+    OBSERVE_STARTED = "agent.observe.started"
+    CONTEXT_READY = "agent.context.ready"
+    LOOP_PLAN_CREATED = "agent.plan.created"
+    PLAN_VALIDATED = "agent.plan.validated"
+    LOOP_ERROR = "agent.loop.error"
     PLAN_CREATED = "agent.plan_created"
     PLAN_FAILED = "agent.plan_failed"
 
@@ -76,6 +81,11 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.PLAN_CREATED: Priority.NORMAL,
     EventType.STORAGE_SAVED: Priority.NORMAL,
     EventType.STORAGE_LOADED: Priority.NORMAL,
+    EventType.OBSERVE_STARTED: Priority.NORMAL,
+    EventType.CONTEXT_READY: Priority.NORMAL,
+    EventType.LOOP_PLAN_CREATED: Priority.NORMAL,
+    EventType.PLAN_VALIDATED: Priority.NORMAL,
+    EventType.LOOP_ERROR: Priority.HIGH,
 }
 
 

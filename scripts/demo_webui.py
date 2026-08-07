@@ -7,12 +7,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import uvicorn
 
+from maple_agent.agent import AgentLoop
 from maple_agent.context import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.logging_setup import new_id, setup_logging
-from maple_agent.planner import LLMPlannerProvider, serialize_for_planner
+from maple_agent.planner import LLMPlannerProvider
 from maple_agent.providers import (
     MockKnowledgeProvider,
     MockLLMProvider,
@@ -79,6 +80,12 @@ def main() -> None:
     )
     llm.initialize()
     planner = LLMPlannerProvider(llm=llm, sessions_dir="sessions")
+    agent_loop = AgentLoop(
+        bus=bus,
+        context_builder=ContextBuilder(knowledge=providers["knowledge"]),
+        planner=planner,
+        sessions_dir="sessions",
+    )
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -88,15 +95,15 @@ def main() -> None:
         knowledge=providers.get("knowledge"),
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
         planner=planner,
+        agent_loop=agent_loop,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
-    context = ContextBuilder(knowledge=providers["knowledge"]).build(
+    agent_loop.run_once(
         vision_state=None,
         world_state=None,
         runtime_state=runtime.state.value,
         trace_id=new_id(),
-    )
-    planner.plan(serialize_for_planner(context))  # 演示:生成一次计划(仅 Mock LLM)
+    )  # 演示:执行一轮只读循环(仅 Mock LLM,不执行动作)
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
 
 
