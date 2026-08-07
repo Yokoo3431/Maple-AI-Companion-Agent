@@ -9,13 +9,21 @@ from enum import StrEnum
 from pathlib import Path
 
 from maple_agent.context.builder import ContextBuilder
-from maple_agent.context.models import AgentContext, GoalContext, QuestPlanContext
+from maple_agent.context.models import (
+    AgentContext,
+    ExecutionContext,
+    GoalContext,
+    QuestPlanContext,
+)
 from maple_agent.events import Event, EventBus, EventType
+from maple_agent.executor.models import ExecutionResult, ExecutionStatus, ExecutionTask
+from maple_agent.executor.provider import ExecutorProvider
+from maple_agent.executor.safety import SafetyGate
 from maple_agent.fusion.models import WorldState
 from maple_agent.goal import GoalStateMachine, GoalStatus, GoalTransitionError
 from maple_agent.goal.provider import GoalProvider
 from maple_agent.goal.selector import RuleBasedGoalSelector
-from maple_agent.logging_setup import TraceContext
+from maple_agent.logging_setup import TraceContext, new_id
 from maple_agent.planner.adapter import serialize_for_planner
 from maple_agent.planner.models import PlannerInput, PlanResult
 from maple_agent.planner.provider import PlannerProvider
@@ -93,6 +101,8 @@ class AgentLoop:
         quest_resolver: QuestResolver | None = None,
         quest_planner: QuestPlanner | None = None,
         quest_plan_validator: QuestPlanValidator | None = None,
+        executor: ExecutorProvider | None = None,
+        safety_gate: SafetyGate | None = None,
     ) -> None:
         self.bus = bus
         self.context_builder = context_builder
@@ -104,6 +114,8 @@ class AgentLoop:
         self.quest_resolver = quest_resolver
         self.quest_planner = quest_planner
         self.quest_plan_validator = quest_plan_validator or QuestPlanValidator()
+        self.executor = executor
+        self.safety_gate = safety_gate or SafetyGate()
         self._state = AgentLoopState.IDLE
         self._transitions: list[dict] = []
         self._last_trace_id = ""
@@ -113,6 +125,8 @@ class AgentLoop:
         self.last_quest_plan: QuestPlan | None = None
         self.quest_plan_validation: str | None = None
         self.last_quest_plan_error: str | None = None
+        self.last_execution: ExecutionResult | None = None
+        self.execution_history: list[ExecutionResult] = []
 
     @property
     def state(self) -> AgentLoopState:
@@ -195,6 +209,9 @@ class AgentLoop:
                 self._transition(AgentLoopState.VALIDATING)
                 self._publish(EventType.PLAN_VALIDATED, plan, tid)
 
+                if self.executor is not None:
+                    context = self._run_execution(plan, context, tid)
+
                 self._transition(AgentLoopState.WAITING)
                 self._transition(AgentLoopState.REFLECTING)
                 logger.info("reflect: plan=%s steps=%d", plan.plan_id, len(plan.steps))
@@ -214,6 +231,75 @@ class AgentLoop:
                 self._write_replay(self.last_context, None, str(exc))
                 logger.error("agent loop failed: %s", exc)
                 raise
+
+    def _run_execution(
+        self,
+        plan: PlanResult,
+        context: AgentContext,
+        tid: str,
+    ) -> AgentContext:
+        """Execution Validation + Mock Execution(仅记录,不真实执行)。"""
+        entries: list[tuple[ExecutionTask, object, ExecutionResult]] = []
+        results: list[ExecutionResult] = []
+        for step in plan.steps:
+            task = ExecutionTask(
+                execution_id=new_id(),
+                plan_id=plan.plan_id,
+                step_id=step.step_id,
+                action=step.action,
+                target=step.target,
+                trace_id=tid,
+            )
+            self._publish(EventType.EXECUTION_CREATED, task, tid)
+            safety = self.safety_gate.check(task, trace_id=tid)
+            if not safety.allowed:
+                blocked = ExecutionResult(
+                    execution_id=task.execution_id,
+                    status=ExecutionStatus.BLOCKED,
+                    message=safety.reason,
+                    trace_id=tid,
+                )
+                self._publish(EventType.EXECUTION_BLOCKED, blocked, tid)
+                entries.append((task, safety, blocked))
+                results.append(blocked)
+                continue
+            ready = task.model_copy(update={"status": ExecutionStatus.READY})
+            try:
+                result = self.executor.execute(ready)
+            except Exception as exc:
+                result = ExecutionResult(
+                    execution_id=task.execution_id,
+                    status=ExecutionStatus.FAILED,
+                    message=str(exc),
+                    trace_id=tid,
+                )
+                self._publish(EventType.EXECUTION_FAILED, result, tid)
+            else:
+                if result.status is ExecutionStatus.FAILED:
+                    self._publish(EventType.EXECUTION_FAILED, result, tid)
+                else:
+                    self._publish(EventType.EXECUTION_COMPLETED, result, tid)
+            entries.append((task, safety, result))
+            results.append(result)
+        self.last_execution = results[-1] if results else None
+        self.execution_history.extend(results)
+        self._write_execution_replay(tid, entries)
+        previous = context.execution_context
+        history = (
+            list(previous.execution_history) + results
+            if previous is not None
+            else list(results)
+        )
+        updated = context.model_copy(
+            update={
+                "execution_context": ExecutionContext(
+                    last_execution=self.last_execution,
+                    execution_history=history,
+                )
+            }
+        )
+        self.last_context = updated
+        return updated
 
     def _run_quest_planning(self, context: AgentContext, tid: str) -> AgentContext:
         """Goal → Quest → QuestPlan(仅计划,不执行);失败发布 FAILED 事件并继续。"""
@@ -409,6 +495,34 @@ class AgentLoop:
             "validation_result": validation_result,
         }
         (directory / "quest_plan.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_execution_replay(
+        self,
+        trace_id: str,
+        entries: list[tuple[ExecutionTask, object, ExecutionResult]],
+    ) -> None:
+        directory = self.sessions_dir / trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "trace_id": trace_id,
+            "executions": [
+                {
+                    "task": task.model_dump(mode="json"),
+                    "safety_result": {
+                        "allowed": safety.allowed,
+                        "reason": safety.reason,
+                        "mode": safety.mode,
+                    },
+                    "status": result.status.value,
+                    "message": result.message,
+                }
+                for task, safety, result in entries
+            ],
+        }
+        (directory / "execution.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )

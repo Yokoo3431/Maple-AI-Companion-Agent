@@ -10,6 +10,7 @@ import uvicorn
 from maple_agent.agent import AgentLoop
 from maple_agent.context import ContextBuilder
 from maple_agent.events import EventBus
+from maple_agent.executor import MockExecutorProvider
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
@@ -114,6 +115,7 @@ def main() -> None:
         quest_resolver=QuestResolver(providers["knowledge"]),
         quest_planner=QuestPlanner(providers["knowledge"]),
         quest_plan_validator=QuestPlanValidator(),
+        executor=MockExecutorProvider(),
     )
     app = create_app(
         runtime=runtime,

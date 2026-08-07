@@ -41,6 +41,10 @@ class EventType(StrEnum):
     QUEST_PLAN_CREATED = "agent.quest_plan.created"
     QUEST_PLAN_VALIDATED = "agent.quest_plan.validated"
     QUEST_PLAN_FAILED = "agent.quest_plan.failed"
+    EXECUTION_CREATED = "agent.execution.created"
+    EXECUTION_BLOCKED = "agent.execution.blocked"
+    EXECUTION_COMPLETED = "agent.execution.completed"
+    EXECUTION_FAILED = "agent.execution.failed"
     PLAN_CREATED = "agent.plan_created"
     PLAN_FAILED = "agent.plan_failed"
 
@@ -98,6 +102,10 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.QUEST_PLAN_CREATED: Priority.NORMAL,
     EventType.QUEST_PLAN_VALIDATED: Priority.NORMAL,
     EventType.QUEST_PLAN_FAILED: Priority.HIGH,
+    EventType.EXECUTION_CREATED: Priority.NORMAL,
+    EventType.EXECUTION_BLOCKED: Priority.HIGH,
+    EventType.EXECUTION_COMPLETED: Priority.NORMAL,
+    EventType.EXECUTION_FAILED: Priority.HIGH,
 }
 
 

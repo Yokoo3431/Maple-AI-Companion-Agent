@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from maple_agent.executor.models import ExecutionResult
 from maple_agent.fusion.models import WorldState
 from maple_agent.goal.models import Goal
 from maple_agent.quest.models import Quest
@@ -30,6 +31,13 @@ class QuestPlanContext(BaseModel):
     plan_history: list[QuestPlan] = Field(default_factory=list)
 
 
+class ExecutionContext(BaseModel):
+    """执行上下文(仅记录 Mock 执行结果,WorldState 不变)。"""
+
+    last_execution: ExecutionResult | None = None
+    execution_history: list[ExecutionResult] = Field(default_factory=list)
+
+
 class AgentContext(BaseModel):
     """Planner 前统一上下文(Vision + Knowledge + Runtime)。"""
 
@@ -39,4 +47,5 @@ class AgentContext(BaseModel):
     knowledge_profile: str = ""
     goal_context: GoalContext | None = None
     quest_plan_context: QuestPlanContext | None = None
+    execution_context: ExecutionContext | None = None
     trace_id: str = ""

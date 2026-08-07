@@ -245,6 +245,19 @@ def create_app(
             "error": agent_loop.last_quest_plan_error or "",
         }
 
+    @app.get("/api/execution/state")
+    async def api_execution_state():
+        if agent_loop is None:
+            return {"enabled": False}
+        last = agent_loop.last_execution
+        return {
+            "enabled": True,
+            "mode": "MOCK ONLY",
+            "status": last.status.value if last is not None else "IDLE",
+            "message": last.message if last is not None else "",
+            "history_count": len(agent_loop.execution_history),
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)
