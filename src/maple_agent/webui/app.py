@@ -58,6 +58,7 @@ def create_app(
     knowledge_eval: dict | None = None,
     knowledge_import: dict | None = None,
     decision: dict | None = None,
+    action_plan: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -216,6 +217,12 @@ def create_app(
         if decision is None:
             return {"enabled": False}
         return {"enabled": True, **decision}
+
+    @app.get("/api/action-plan/state")
+    async def api_action_plan_state():
+        if action_plan is None:
+            return {"enabled": False}
+        return {"enabled": True, **action_plan}
 
     @app.get("/api/context/state")
     async def api_context_state():

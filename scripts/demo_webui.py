@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import uvicorn
 
+from maple_agent.action_plan import ActionPlanner
 from maple_agent.agent import AgentLoop
 from maple_agent.context import ContextBuilder
 from maple_agent.decision import (
@@ -45,6 +46,7 @@ from maple_agent.runtime import RuntimeManager
 from maple_agent.validation import VisionPipelineValidator
 from maple_agent.vision import (
     MockCaptureProvider,
+    Observation,
     ScreenshotPolicy,
     VisionWorker,
 )
@@ -227,7 +229,27 @@ def main() -> None:
     )  # 演示:执行一轮只读循环(仅 Mock LLM,不执行动作)
     goal = goal_provider.get_active_goal()
     quest_plan = agent_loop.last_quest_plan
-    last_context = agent_loop.last_context
+    world_state = fusion.fuse(
+        [
+            Observation(
+                element="ocr_text",
+                type="text",
+                raw_value="射手村",
+                normalized_value="射手村",
+                confidence=0.95,
+                source="mock",
+            )
+        ],
+        trace_id=new_id(),
+    )
+    knowledge_state = ContextBuilder(
+        knowledge=providers["knowledge"]
+    ).build(
+        vision_state=vision_worker.latest_vision,
+        world_state=world_state,
+        runtime_state=runtime.state.value,
+        trace_id=new_id(),
+    ).knowledge_state
     decision_options: list[DecisionOption] = []
     if quest_plan is not None:
         for index, step in enumerate(quest_plan.steps):
@@ -251,19 +273,28 @@ def main() -> None:
     decision_engine = DecisionEngine(sessions_dir="sessions")
     decision_result = decision_engine.decide(
         DecisionContext(
-            world_state=last_context.world_state if last_context else None,
-            knowledge_state=(
-                last_context.knowledge_state if last_context else None
-            ),
+            world_state=world_state,
+            knowledge_state=knowledge_state,
             goal=goal,
             quest_plan=quest_plan,
             options=decision_options,
         ),
         trace_id=new_id(),
     )
+    action_planner = ActionPlanner(sessions_dir="sessions")
+    action_plan = action_planner.plan(
+        decision_result,
+        world_state=world_state,
+        knowledge_state=knowledge_state,
+        goal_id=goal.goal_id if goal is not None else None,
+        trace_id=new_id(),
+    )
     decision = {
         "goal": goal.model_dump(mode="json") if goal is not None else None,
         "result": decision_result.model_dump(mode="json"),
+    }
+    action_plan_data = {
+        "plan": action_plan.model_dump(mode="json"),
     }
     app = create_app(
         runtime=runtime,
@@ -280,6 +311,7 @@ def main() -> None:
         knowledge_eval=knowledge_eval,
         knowledge_import=knowledge_import,
         decision=decision,
+        action_plan=action_plan_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

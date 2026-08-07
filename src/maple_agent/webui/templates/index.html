@@ -185,6 +185,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Action Plan(只读)</div>
+        <div class="card-body">
+          <pre id="action-plan-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -260,6 +268,32 @@
     refreshEvaluation();
     refreshImport();
     refreshDecision();
+    refreshActionPlan();
+  }
+
+  async function refreshActionPlan() {
+    const res = await fetch('/api/action-plan/state');
+    const data = await res.json();
+    const el = document.getElementById('action-plan-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const plan = data.plan;
+    if (!plan) {
+      el.textContent = '无动作计划';
+      return;
+    }
+    const stepLines = (plan.steps || []).map(
+      (s, i) => `${i + 1}. ${s.description}`
+    );
+    el.textContent = [
+      `ACTION: ${plan.action || '-'}`,
+      `TARGET: ${plan.target || '-'}`,
+      `STEPS: ${stepLines.join('\n') || '-'}`,
+      `PREREQUISITES: ${(plan.prerequisites || []).join('; ') || '-'}`,
+      `STATUS: ${plan.status}`,
+    ].join('\n');
   }
 
   async function refreshDecision() {
