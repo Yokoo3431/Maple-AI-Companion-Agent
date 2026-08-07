@@ -65,6 +65,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Agent Context(只读)</div>
+        <div class="card-body">
+          <pre id="context-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -125,6 +133,25 @@
     logView.textContent = '';
     for (const line of data.logs.slice(-50)) addLine(logView, line);
     refreshVision();
+    refreshContext();
+  }
+
+  async function refreshContext() {
+    const res = await fetch('/api/context/state');
+    const data = await res.json();
+    const el = document.getElementById('context-card-body');
+    if (!data.enabled) {
+      el.textContent = '未启用';
+      return;
+    }
+    const w = data.world_state;
+    el.textContent = [
+      `Runtime: ${data.runtime_state}`,
+      `地图: ${w && w.current_map ? w.current_map.name : '未知'}`,
+      `Vision: ${data.vision_summary || '-'}`,
+      `Knowledge: ${data.knowledge_profile || '-'}`,
+      `trace: ${data.trace_id}`,
+    ].join('\n');
   }
 
   async function refreshVision() {
@@ -163,6 +190,7 @@
       ].join('\n');
     }
     refreshKnowledge();
+    refreshContext();
   }
 
   async function refreshKnowledge() {

@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import uvicorn
 
+from maple_agent.context import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
@@ -66,6 +67,8 @@ def main() -> None:
         interval=0.5,
         ocr=MockOCRProvider(bus=bus, text="射手村"),
         fusion=fusion,
+        context_builder=ContextBuilder(knowledge=providers["knowledge"]),
+        runtime_state_fn=lambda: runtime.state.value,
     )
     app = create_app(
         runtime=runtime,
@@ -74,6 +77,7 @@ def main() -> None:
         detector=detector,
         vision_worker=vision_worker,
         knowledge=providers.get("knowledge"),
+        context_builder=ContextBuilder(knowledge=providers["knowledge"]),
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")

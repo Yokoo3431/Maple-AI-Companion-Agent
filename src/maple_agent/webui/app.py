@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from maple_agent import __version__
+from maple_agent.context.builder import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
 from maple_agent.providers import BaseProvider
@@ -45,6 +46,7 @@ def create_app(
     detector: GameWindowDetector | None = None,
     vision_worker: VisionWorker | None = None,
     knowledge: KnowledgeProvider | None = None,
+    context_builder: ContextBuilder | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -154,6 +156,17 @@ def create_app(
             "version": knowledge.version,
             "counts": knowledge.counts,
         }
+
+    @app.get("/api/context/state")
+    async def api_context_state():
+        if context_builder is None or vision_worker is None:
+            return {"enabled": False}
+        context = context_builder.build(
+            vision_state=vision_worker.latest_vision,
+            world_state=vision_worker.latest_world,
+            runtime_state=runtime.state.value,
+        )
+        return {"enabled": True, **context.model_dump(mode="json")}
 
     @app.post("/api/runtime/start")
     async def api_runtime_start():

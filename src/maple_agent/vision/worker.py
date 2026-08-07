@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+from collections.abc import Callable
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
@@ -22,6 +23,8 @@ from maple_agent.vision.models import (
 )
 
 if TYPE_CHECKING:
+    from maple_agent.context.builder import ContextBuilder
+    from maple_agent.context.models import AgentContext
     from maple_agent.fusion import FusionService
     from maple_agent.fusion.models import WorldState
 
@@ -57,11 +60,15 @@ class VisionWorker:
         retry_delay: float = 1.0,
         ocr: OCRProvider | None = None,
         fusion: FusionService | None = None,
+        context_builder: ContextBuilder | None = None,
+        runtime_state_fn: Callable[[], str] | None = None,
     ) -> None:
         self.capture = capture
         self.bus = bus
         self.ocr = ocr
         self.fusion = fusion
+        self.context_builder = context_builder
+        self.runtime_state_fn = runtime_state_fn
         self.interval = interval
         self.retry_delay = retry_delay
         self._state = VisionWorkerState.STOPPED
@@ -70,6 +77,7 @@ class VisionWorker:
         self.latest_ocr: list[OCRResult] = []
         self.latest_vision: VisionState | None = None
         self.latest_world: WorldState | None = None
+        self.latest_context: AgentContext | None = None
         self.capture_count = 0
 
     @property
@@ -157,6 +165,17 @@ class VisionWorker:
             )
             self.latest_vision = state
             self._write_replay(frame, observations, state, world)
+            if self.context_builder is not None:
+                context = self.context_builder.build(
+                    vision_state=state,
+                    world_state=world,
+                    runtime_state=(
+                        self.runtime_state_fn() if self.runtime_state_fn else "UNKNOWN"
+                    ),
+                    trace_id=frame.trace_id,
+                )
+                self.latest_context = context
+                self._write_context(context)
             self.bus.publish(
                 Event.create(
                     EventType.SCREEN_UPDATED,
@@ -194,6 +213,16 @@ class VisionWorker:
         }
         (directory / "vision.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_context(self, context: AgentContext) -> None:
+        if self.latest_frame is None:
+            return
+        directory = self.capture.sessions_dir / self.latest_frame.trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / "context.json").write_text(
+            json.dumps(context.model_dump(mode="json"), ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
 
