@@ -18,6 +18,7 @@ from maple_agent import __version__
 from maple_agent.context.builder import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
+from maple_agent.planner.provider import PlannerProvider
 from maple_agent.providers import BaseProvider
 from maple_agent.providers.knowledge import KnowledgeProvider
 from maple_agent.runtime import IllegalTransitionError, RuntimeManager, RuntimeState
@@ -47,6 +48,7 @@ def create_app(
     vision_worker: VisionWorker | None = None,
     knowledge: KnowledgeProvider | None = None,
     context_builder: ContextBuilder | None = None,
+    planner: PlannerProvider | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -167,6 +169,16 @@ def create_app(
             runtime_state=runtime.state.value,
         )
         return {"enabled": True, **context.model_dump(mode="json")}
+
+    @app.get("/api/planner/state")
+    async def api_planner_state():
+        if planner is None:
+            return {"enabled": False}
+        return {
+            "enabled": True,
+            "planner": type(planner).__name__,
+            "message": "契约就绪,未执行计划(Phase 1.7 不调用 LLM)",
+        }
 
     @app.post("/api/runtime/start")
     async def api_runtime_start():

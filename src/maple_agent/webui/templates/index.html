@@ -73,6 +73,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Planner(只读)</div>
+        <div class="card-body">
+          <pre id="planner-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -134,6 +142,21 @@
     for (const line of data.logs.slice(-50)) addLine(logView, line);
     refreshVision();
     refreshContext();
+    refreshPlanner();
+  }
+
+  async function refreshPlanner() {
+    const res = await fetch('/api/planner/state');
+    const data = await res.json();
+    const el = document.getElementById('planner-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `Planner: ${data.planner}`,
+      data.message || '',
+    ].filter(Boolean).join('\n');
   }
 
   async function refreshContext() {

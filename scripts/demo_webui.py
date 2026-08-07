@@ -12,6 +12,7 @@ from maple_agent.events import EventBus
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.logging_setup import setup_logging
+from maple_agent.planner import MockPlannerProvider
 from maple_agent.providers import (
     MockKnowledgeProvider,
     MockLLMProvider,
@@ -78,6 +79,7 @@ def main() -> None:
         vision_worker=vision_worker,
         knowledge=providers.get("knowledge"),
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
+        planner=MockPlannerProvider(),
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     uvicorn.run(app, host="127.0.0.1", port=8080, log_level="info")
