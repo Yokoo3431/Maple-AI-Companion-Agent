@@ -9,9 +9,12 @@ from enum import StrEnum
 from pathlib import Path
 
 from maple_agent.context.builder import ContextBuilder
-from maple_agent.context.models import AgentContext
+from maple_agent.context.models import AgentContext, GoalContext
 from maple_agent.events import Event, EventBus, EventType
 from maple_agent.fusion.models import WorldState
+from maple_agent.goal import GoalStateMachine, GoalStatus, GoalTransitionError
+from maple_agent.goal.provider import GoalProvider
+from maple_agent.goal.selector import RuleBasedGoalSelector
 from maple_agent.logging_setup import TraceContext
 from maple_agent.planner.adapter import serialize_for_planner
 from maple_agent.planner.models import PlannerInput, PlanResult
@@ -81,12 +84,16 @@ class AgentLoop:
         *,
         sessions_dir: str | Path = "sessions",
         retry_max: int = 1,
+        goal_provider: GoalProvider | None = None,
+        goal_selector: RuleBasedGoalSelector | None = None,
     ) -> None:
         self.bus = bus
         self.context_builder = context_builder
         self.planner = planner
         self.sessions_dir = Path(sessions_dir)
         self.retry_max = retry_max
+        self.goal_provider = goal_provider
+        self.goal_selector = goal_selector
         self._state = AgentLoopState.IDLE
         self._transitions: list[dict] = []
         self._last_trace_id = ""
@@ -132,6 +139,38 @@ class AgentLoop:
                 self.last_context = context
                 self._publish(EventType.CONTEXT_READY, context, tid)
 
+                if self.goal_provider is not None and self.goal_selector is not None:
+                    candidates = self.goal_provider.get_candidate_goals(trace_id=tid)
+                    previous = self.goal_provider.get_active_goal(trace_id=tid)
+                    selected = self.goal_selector.select(
+                        context, candidates, trace_id=tid
+                    )
+                    if selected is not None:
+                        if selected.status is GoalStatus.CREATED:
+                            selected = GoalStateMachine().transition(
+                                selected, GoalStatus.ACTIVE
+                            )
+                        self.goal_provider.activate(selected, trace_id=tid)
+                        self._publish(EventType.GOAL_SELECTED, selected, tid)
+                        if previous is None or previous.goal_id != selected.goal_id:
+                            self._publish(EventType.GOAL_CHANGED, selected, tid)
+                    goal_ctx = context.goal_context
+                    if goal_ctx is None:
+                        goal_ctx = GoalContext(trace_id=tid)
+                    context = context.model_copy(
+                        update={
+                            "goal_context": goal_ctx.model_copy(
+                                update={
+                                    "active_goal": selected,
+                                    "candidate_goals": candidates,
+                                    "goal_history": list(goal_ctx.goal_history),
+                                }
+                            )
+                        }
+                    )
+                    self.last_context = context
+                    self._write_goal_replay(tid, candidates, selected, None)
+
                 planner_input = serialize_for_planner(context)
                 self._transition(AgentLoopState.PLANNING)
                 plan = self._plan_with_retry(planner_input, tid)
@@ -159,6 +198,30 @@ class AgentLoop:
                 self._write_replay(self.last_context, None, str(exc))
                 logger.error("agent loop failed: %s", exc)
                 raise
+
+    def mark_goal_completed(
+        self,
+        goal_id: str,
+        *,
+        trace_id: str | None = None,
+    ) -> None:
+        """ACTIVE -> COMPLETED,发布 GOAL_COMPLETED(仅状态管理,不执行)。"""
+        if self.goal_provider is None:
+            raise GoalTransitionError("未配置 goal_provider")
+        active = self.goal_provider.get_active_goal(trace_id=trace_id)
+        if active is None or active.goal_id != goal_id:
+            raise GoalTransitionError(f"目标 {goal_id} 非当前激活目标")
+        completed = GoalStateMachine().transition(active, GoalStatus.COMPLETED)
+        self.goal_provider.save_goal_status(completed, trace_id=trace_id)
+        resolved_trace = trace_id or self._last_trace_id
+        self._publish(EventType.GOAL_COMPLETED, completed, resolved_trace)
+        candidates = self.goal_provider.get_candidate_goals(trace_id=trace_id)
+        self._write_goal_replay(
+            resolved_trace,
+            candidates,
+            completed,
+            {"goal_id": goal_id, "to": GoalStatus.COMPLETED.value},
+        )
 
     def _plan_with_retry(self, planner_input: PlannerInput, tid: str) -> PlanResult:
         attempt = 0
@@ -229,3 +292,28 @@ class AgentLoop:
                 ),
                 encoding="utf-8",
             )
+
+    def _write_goal_replay(
+        self,
+        trace_id: str,
+        candidates: list,
+        selected,
+        status_change: dict | None,
+    ) -> None:
+        directory = self.sessions_dir / trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "trace_id": trace_id,
+            "candidates": [
+                item.model_dump(mode="json") if hasattr(item, "model_dump") else item
+                for item in candidates
+            ],
+            "selected": (
+                selected.model_dump(mode="json") if selected is not None else None
+            ),
+            "status_change": status_change,
+        }
+        (directory / "goal_context.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )

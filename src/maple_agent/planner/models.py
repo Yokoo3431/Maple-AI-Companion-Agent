@@ -5,6 +5,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from maple_agent.context.models import AgentContext
+from maple_agent.goal.models import Goal as SystemGoal
 
 
 class Goal(BaseModel):
@@ -29,6 +30,7 @@ class PlannerInput(BaseModel):
     context: AgentContext
     goals: list[Goal] = Field(default_factory=list)
     constraints: list[Constraint] = Field(default_factory=list)
+    current_goal: SystemGoal | None = None
     trace_id: str = ""
 
 

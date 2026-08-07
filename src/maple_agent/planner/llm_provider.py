@@ -58,6 +58,12 @@ class LLMPlannerProvider:
         ctx = context.context
         world = ctx.world_state
         current_map = world.current_map.name if world and world.current_map else "未知"
+        current_goal = context.current_goal
+        current_goal_text = (
+            f"{current_goal.goal_type.value}:{current_goal.title}"
+            if current_goal
+            else "-"
+        )
         goals = " | ".join(goal.description for goal in context.goals) or "-"
         constraints = (
             " | ".join(f"{item.kind}={item.value}" for item in context.constraints) or "-"
@@ -70,6 +76,7 @@ class LLMPlannerProvider:
                 f"知识档案: {ctx.knowledge_profile or '-'}",
                 f"画面摘要: {ctx.vision_summary or '-'}",
                 f"当前地图: {current_map}",
+                f"当前目标: {current_goal_text}",
                 f"目标: {goals}",
                 f"约束: {constraints}",
                 '输出 JSON: {"plan_id":"","summary":"","confidence":0.0,'

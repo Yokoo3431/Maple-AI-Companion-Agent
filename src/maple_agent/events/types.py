@@ -35,6 +35,9 @@ class EventType(StrEnum):
     LOOP_PLAN_CREATED = "agent.plan.created"
     PLAN_VALIDATED = "agent.plan.validated"
     LOOP_ERROR = "agent.loop.error"
+    GOAL_SELECTED = "agent.goal.selected"
+    GOAL_CHANGED = "agent.goal.changed"
+    GOAL_COMPLETED = "agent.goal.completed"
     PLAN_CREATED = "agent.plan_created"
     PLAN_FAILED = "agent.plan_failed"
 
@@ -86,6 +89,9 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.LOOP_PLAN_CREATED: Priority.NORMAL,
     EventType.PLAN_VALIDATED: Priority.NORMAL,
     EventType.LOOP_ERROR: Priority.HIGH,
+    EventType.GOAL_SELECTED: Priority.NORMAL,
+    EventType.GOAL_CHANGED: Priority.NORMAL,
+    EventType.GOAL_COMPLETED: Priority.NORMAL,
 }
 
 

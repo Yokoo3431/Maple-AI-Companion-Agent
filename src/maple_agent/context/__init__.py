@@ -1,6 +1,6 @@
 """Agent Context Foundation(Phase 1.5):Planner 前统一上下文。"""
 
 from maple_agent.context.builder import ContextBuilder
-from maple_agent.context.models import AgentContext
+from maple_agent.context.models import AgentContext, GoalContext
 
-__all__ = ["AgentContext", "ContextBuilder"]
+__all__ = ["AgentContext", "ContextBuilder", "GoalContext"]

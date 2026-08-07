@@ -12,6 +12,7 @@ from maple_agent.context import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
+from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
 from maple_agent.logging_setup import new_id, setup_logging
 from maple_agent.planner import LLMPlannerProvider
 from maple_agent.providers import (
@@ -80,11 +81,31 @@ def main() -> None:
     )
     llm.initialize()
     planner = LLMPlannerProvider(llm=llm, sessions_dir="sessions")
+    goal_provider = MockGoalProvider(
+        goals=[
+            Goal(
+                goal_id="goal-quest-1",
+                goal_type="QUEST",
+                title="新手教学",
+                priority=10,
+                source="quest:1",
+            ),
+            Goal(
+                goal_id="goal-level-1",
+                goal_type="LEVELING",
+                title="提升到 5 级",
+                priority=5,
+                source="user",
+            ),
+        ]
+    )
     agent_loop = AgentLoop(
         bus=bus,
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
         planner=planner,
         sessions_dir="sessions",
+        goal_provider=goal_provider,
+        goal_selector=RuleBasedGoalSelector(),
     )
     app = create_app(
         runtime=runtime,
@@ -96,6 +117,7 @@ def main() -> None:
         context_builder=ContextBuilder(knowledge=providers["knowledge"]),
         planner=planner,
         agent_loop=agent_loop,
+        goal_provider=goal_provider,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     agent_loop.run_once(

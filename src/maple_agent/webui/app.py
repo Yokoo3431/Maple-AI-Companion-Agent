@@ -19,6 +19,7 @@ from maple_agent.agent.loop import AgentLoop
 from maple_agent.context.builder import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
+from maple_agent.goal.provider import GoalProvider
 from maple_agent.planner.provider import PlannerProvider
 from maple_agent.providers import BaseProvider
 from maple_agent.providers.knowledge import KnowledgeProvider
@@ -51,6 +52,7 @@ def create_app(
     context_builder: ContextBuilder | None = None,
     planner: PlannerProvider | None = None,
     agent_loop: AgentLoop | None = None,
+    goal_provider: GoalProvider | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -217,6 +219,18 @@ def create_app(
             "quest_total": len(knowledge.data.quests_domain),
             "available_total": len(available),
             "available_names": [quest.name for quest in available],
+        }
+
+    @app.get("/api/goal/state")
+    async def api_goal_state():
+        if goal_provider is None:
+            return {"enabled": False}
+        active = goal_provider.get_active_goal()
+        candidates = goal_provider.get_candidate_goals()
+        return {
+            "enabled": True,
+            "active_goal": active.model_dump(mode="json") if active is not None else None,
+            "candidate_count": len(candidates),
         }
 
     @app.post("/api/runtime/start")

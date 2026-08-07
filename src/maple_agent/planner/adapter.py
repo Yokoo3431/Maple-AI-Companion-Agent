@@ -21,5 +21,8 @@ def serialize_for_planner(
             Constraint(kind="safety", value="禁止自动输入 / 控制 / 任务执行"),
             Constraint(kind="execution", value="仅只读观察,不触发输入"),
         ],
+        current_goal=(
+            context.goal_context.active_goal if context.goal_context is not None else None
+        ),
         trace_id=context.trace_id,
     )
