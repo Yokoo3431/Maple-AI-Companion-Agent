@@ -169,6 +169,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Knowledge Import(只读)</div>
+        <div class="card-body">
+          <pre id="import-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -242,6 +250,27 @@
     refreshPipeline();
     refreshRetrieval();
     refreshEvaluation();
+    refreshImport();
+  }
+
+  async function refreshImport() {
+    const res = await fetch('/api/knowledge/import');
+    const data = await res.json();
+    const el = document.getElementById('import-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const warns = data.warnings || [];
+    el.textContent = [
+      `SOURCE: ${data.source || '-'}`,
+      `VERSION: ${data.version || '-'}`,
+      `MAPS: ${data.maps || 0}`,
+      `NPCS: ${data.npcs || 0}`,
+      `MONSTERS: ${data.monsters || 0}`,
+      `ITEMS: ${data.items || 0}`,
+      `WARNINGS: ${warns.length ? warns.join('; ') : '无'}`,
+    ].join('\n');
   }
 
   async function refreshEvaluation() {

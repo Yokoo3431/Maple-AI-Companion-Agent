@@ -56,6 +56,7 @@ def create_app(
     goal_provider: GoalProvider | None = None,
     pipeline_validator: VisionPipelineValidator | None = None,
     knowledge_eval: dict | None = None,
+    knowledge_import: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -202,6 +203,12 @@ def create_app(
             "retrieval": retrieval,
             "evaluation": knowledge_eval,
         }
+
+    @app.get("/api/knowledge/import")
+    async def api_knowledge_import():
+        if knowledge_import is None:
+            return {"enabled": False}
+        return {"enabled": True, **knowledge_import}
 
     @app.get("/api/context/state")
     async def api_context_state():

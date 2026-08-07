@@ -19,6 +19,7 @@ from maple_agent.knowledge.evaluation import (
     RetrievalBenchmark,
     load_retrieval_cases,
 )
+from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
@@ -95,6 +96,51 @@ def main() -> None:
         "top1": eval_result.top1_accuracy,
         "top3": eval_result.top3_recall,
         "avg_ms": benchmark["avg_ms"],
+    }
+    import_bundle = run_import(
+        {
+            "maps": [
+                {"map_id": 1, "name": "射手村", "aliases": ["Henesys"], "region": "维多利亚岛"},
+                {"map_id": 2, "name": "魔法密林", "aliases": ["Ellinia"]},
+            ],
+            "npcs": [
+                {"npc_id": 101, "name": "赫丽娜", "aliases": ["弓箭手教官"], "map_id": 1},
+            ],
+            "monsters": [
+                {"monster_id": 100, "name": "绿水灵", "map_id": 1, "level": 4},
+            ],
+            "items": [
+                {"item_id": 1, "name": "树液", "aliases": ["树液"]},
+            ],
+            "relations": [
+                {
+                    "source": "map",
+                    "source_id": 1,
+                    "target": "npc",
+                    "target_id": 101,
+                    "relation_type": "CONTAINS",
+                },
+                {
+                    "source": "map",
+                    "source_id": 1,
+                    "target": "monster",
+                    "target_id": 100,
+                    "relation_type": "SPAWNS",
+                },
+            ],
+        },
+        source=ImportSource(source_id="external-demo", version="v1.0"),
+        sessions_dir="sessions",
+    )
+    knowledge_import = {
+        "source": import_bundle.result.source,
+        "version": import_bundle.result.version,
+        "maps": import_bundle.result.imported_maps,
+        "npcs": import_bundle.result.imported_npcs,
+        "monsters": import_bundle.result.imported_monsters,
+        "items": import_bundle.result.imported_items,
+        "warnings": import_bundle.result.warnings,
+        "valid": import_bundle.validation.valid,
     }
     vision_capture = MockCaptureProvider(
         bus=bus,
@@ -181,6 +227,7 @@ def main() -> None:
         goal_provider=goal_provider,
         pipeline_validator=pipeline_validator,
         knowledge_eval=knowledge_eval,
+        knowledge_import=knowledge_import,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
