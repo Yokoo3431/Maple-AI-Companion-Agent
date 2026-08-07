@@ -24,5 +24,10 @@ def serialize_for_planner(
         current_goal=(
             context.goal_context.active_goal if context.goal_context is not None else None
         ),
+        quest_plan=(
+            context.quest_plan_context.active_quest_plan
+            if context.quest_plan_context is not None
+            else None
+        ),
         trace_id=context.trace_id,
     )

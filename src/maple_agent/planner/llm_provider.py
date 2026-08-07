@@ -64,6 +64,12 @@ class LLMPlannerProvider:
             if current_goal
             else "-"
         )
+        quest_plan = context.quest_plan
+        quest_plan_text = (
+            f"{quest_plan.title}({len(quest_plan.steps)} 步)"
+            if quest_plan
+            else "-"
+        )
         goals = " | ".join(goal.description for goal in context.goals) or "-"
         constraints = (
             " | ".join(f"{item.kind}={item.value}" for item in context.constraints) or "-"
@@ -77,6 +83,7 @@ class LLMPlannerProvider:
                 f"画面摘要: {ctx.vision_summary or '-'}",
                 f"当前地图: {current_map}",
                 f"当前目标: {current_goal_text}",
+                f"任务计划: {quest_plan_text}",
                 f"目标: {goals}",
                 f"约束: {constraints}",
                 '输出 JSON: {"plan_id":"","summary":"","confidence":0.0,'

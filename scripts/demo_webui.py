@@ -22,6 +22,11 @@ from maple_agent.providers import (
     MockStorageProvider,
     MockVisionProvider,
 )
+from maple_agent.quest_planner import (
+    QuestPlanner,
+    QuestPlanValidator,
+    QuestResolver,
+)
 from maple_agent.runtime import RuntimeManager
 from maple_agent.vision import (
     MockCaptureProvider,
@@ -106,6 +111,9 @@ def main() -> None:
         sessions_dir="sessions",
         goal_provider=goal_provider,
         goal_selector=RuleBasedGoalSelector(),
+        quest_resolver=QuestResolver(providers["knowledge"]),
+        quest_planner=QuestPlanner(providers["knowledge"]),
+        quest_plan_validator=QuestPlanValidator(),
     )
     app = create_app(
         runtime=runtime,

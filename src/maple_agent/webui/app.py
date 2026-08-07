@@ -233,6 +233,18 @@ def create_app(
             "candidate_count": len(candidates),
         }
 
+    @app.get("/api/quest-plan/state")
+    async def api_quest_plan_state():
+        if agent_loop is None:
+            return {"enabled": False}
+        plan = agent_loop.last_quest_plan
+        return {
+            "enabled": True,
+            "plan": plan.model_dump(mode="json") if plan is not None else None,
+            "validation": agent_loop.quest_plan_validation,
+            "error": agent_loop.last_quest_plan_error or "",
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)

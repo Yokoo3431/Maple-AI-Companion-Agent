@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 from maple_agent.context.models import AgentContext
 from maple_agent.goal.models import Goal as SystemGoal
+from maple_agent.quest_planner.models import QuestPlan
 
 
 class Goal(BaseModel):
@@ -31,6 +32,7 @@ class PlannerInput(BaseModel):
     goals: list[Goal] = Field(default_factory=list)
     constraints: list[Constraint] = Field(default_factory=list)
     current_goal: SystemGoal | None = None
+    quest_plan: QuestPlan | None = None
     trace_id: str = ""
 
 

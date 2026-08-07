@@ -38,6 +38,9 @@ class EventType(StrEnum):
     GOAL_SELECTED = "agent.goal.selected"
     GOAL_CHANGED = "agent.goal.changed"
     GOAL_COMPLETED = "agent.goal.completed"
+    QUEST_PLAN_CREATED = "agent.quest_plan.created"
+    QUEST_PLAN_VALIDATED = "agent.quest_plan.validated"
+    QUEST_PLAN_FAILED = "agent.quest_plan.failed"
     PLAN_CREATED = "agent.plan_created"
     PLAN_FAILED = "agent.plan_failed"
 
@@ -92,6 +95,9 @@ _DEFAULT_PRIORITY: dict[EventType, Priority] = {
     EventType.GOAL_SELECTED: Priority.NORMAL,
     EventType.GOAL_CHANGED: Priority.NORMAL,
     EventType.GOAL_COMPLETED: Priority.NORMAL,
+    EventType.QUEST_PLAN_CREATED: Priority.NORMAL,
+    EventType.QUEST_PLAN_VALIDATED: Priority.NORMAL,
+    EventType.QUEST_PLAN_FAILED: Priority.HIGH,
 }
 
 

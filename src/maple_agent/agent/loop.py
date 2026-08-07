@@ -9,7 +9,7 @@ from enum import StrEnum
 from pathlib import Path
 
 from maple_agent.context.builder import ContextBuilder
-from maple_agent.context.models import AgentContext, GoalContext
+from maple_agent.context.models import AgentContext, GoalContext, QuestPlanContext
 from maple_agent.events import Event, EventBus, EventType
 from maple_agent.fusion.models import WorldState
 from maple_agent.goal import GoalStateMachine, GoalStatus, GoalTransitionError
@@ -20,6 +20,10 @@ from maple_agent.planner.adapter import serialize_for_planner
 from maple_agent.planner.models import PlannerInput, PlanResult
 from maple_agent.planner.provider import PlannerProvider
 from maple_agent.providers.base import ErrorPayload
+from maple_agent.quest_planner.models import QuestPlan
+from maple_agent.quest_planner.planner import QuestPlanner
+from maple_agent.quest_planner.resolver import QuestResolver
+from maple_agent.quest_planner.validator import QuestPlanValidator
 from maple_agent.vision.models import VisionState
 
 logger = logging.getLogger("maple_agent.agent.loop")
@@ -86,6 +90,9 @@ class AgentLoop:
         retry_max: int = 1,
         goal_provider: GoalProvider | None = None,
         goal_selector: RuleBasedGoalSelector | None = None,
+        quest_resolver: QuestResolver | None = None,
+        quest_planner: QuestPlanner | None = None,
+        quest_plan_validator: QuestPlanValidator | None = None,
     ) -> None:
         self.bus = bus
         self.context_builder = context_builder
@@ -94,12 +101,18 @@ class AgentLoop:
         self.retry_max = retry_max
         self.goal_provider = goal_provider
         self.goal_selector = goal_selector
+        self.quest_resolver = quest_resolver
+        self.quest_planner = quest_planner
+        self.quest_plan_validator = quest_plan_validator or QuestPlanValidator()
         self._state = AgentLoopState.IDLE
         self._transitions: list[dict] = []
         self._last_trace_id = ""
         self.last_context: AgentContext | None = None
         self.last_plan: PlanResult | None = None
         self.last_error: str | None = None
+        self.last_quest_plan: QuestPlan | None = None
+        self.quest_plan_validation: str | None = None
+        self.last_quest_plan_error: str | None = None
 
     @property
     def state(self) -> AgentLoopState:
@@ -171,6 +184,9 @@ class AgentLoop:
                     self.last_context = context
                     self._write_goal_replay(tid, candidates, selected, None)
 
+                if self.quest_resolver is not None and self.quest_planner is not None:
+                    context = self._run_quest_planning(context, tid)
+
                 planner_input = serialize_for_planner(context)
                 self._transition(AgentLoopState.PLANNING)
                 plan = self._plan_with_retry(planner_input, tid)
@@ -198,6 +214,61 @@ class AgentLoop:
                 self._write_replay(self.last_context, None, str(exc))
                 logger.error("agent loop failed: %s", exc)
                 raise
+
+    def _run_quest_planning(self, context: AgentContext, tid: str) -> AgentContext:
+        """Goal → Quest → QuestPlan(仅计划,不执行);失败发布 FAILED 事件并继续。"""
+        self.quest_plan_validation = None
+        self.last_quest_plan_error = None
+        goal = (
+            context.goal_context.active_goal if context.goal_context is not None else None
+        )
+        quest = self.quest_resolver.resolve(goal, trace_id=tid)
+        if quest is None:
+            logger.info("quest planning skipped: 无 QUEST 目标或未找到任务")
+            return context
+        try:
+            quest_plan = self.quest_planner.plan(
+                quest,
+                world_state=context.world_state,
+                goal=goal,
+                trace_id=tid,
+            )
+            self.quest_plan_validator.validate(quest_plan, quest=quest)
+            self.last_quest_plan = quest_plan
+            self.quest_plan_validation = "ok"
+            self._publish(EventType.QUEST_PLAN_CREATED, quest_plan, tid)
+            self._publish(EventType.QUEST_PLAN_VALIDATED, quest_plan, tid)
+        except Exception as exc:
+            self.last_quest_plan = None
+            self.quest_plan_validation = "failed"
+            self.last_quest_plan_error = str(exc)
+            self._publish(
+                EventType.QUEST_PLAN_FAILED,
+                ErrorPayload(provider="quest_planner", message=str(exc)),
+                tid,
+            )
+            self._write_quest_plan_replay(tid, None, f"failed: {exc}")
+            logger.error("quest planning failed: %s", exc)
+            return context
+
+        previous = context.quest_plan_context
+        history = (
+            list(previous.plan_history) + [quest_plan]
+            if previous is not None
+            else [quest_plan]
+        )
+        updated = context.model_copy(
+            update={
+                "quest_plan_context": QuestPlanContext(
+                    active_quest_plan=quest_plan,
+                    current_step=0,
+                    plan_history=history,
+                )
+            }
+        )
+        self.last_context = updated
+        self._write_quest_plan_replay(tid, quest_plan, "ok")
+        return updated
 
     def mark_goal_completed(
         self,
@@ -314,6 +385,30 @@ class AgentLoop:
             "status_change": status_change,
         }
         (directory / "goal_context.json").write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_quest_plan_replay(
+        self,
+        trace_id: str,
+        plan: QuestPlan | None,
+        validation_result: str,
+    ) -> None:
+        directory = self.sessions_dir / trace_id
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "trace_id": trace_id,
+            "goal_id": plan.goal_id if plan is not None else "",
+            "quest_id": plan.quest_id if plan is not None else None,
+            "steps": (
+                [step.model_dump(mode="json") for step in plan.steps]
+                if plan is not None
+                else []
+            ),
+            "validation_result": validation_result,
+        }
+        (directory / "quest_plan.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
