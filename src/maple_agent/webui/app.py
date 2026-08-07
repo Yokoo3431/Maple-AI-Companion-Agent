@@ -157,12 +157,22 @@ def create_app(
     async def api_knowledge_state():
         if knowledge is None:
             return {"enabled": False}
+        knowledge_state = None
+        if vision_worker is not None and vision_worker.latest_world is not None:
+            built = ContextBuilder(knowledge).build(
+                vision_state=vision_worker.latest_vision,
+                world_state=vision_worker.latest_world,
+                runtime_state=runtime.state.value,
+            )
+            if built.knowledge_state is not None:
+                knowledge_state = built.knowledge_state.model_dump(mode="json")
         return {
             "enabled": True,
             "status": knowledge.profile_status,
             "game_profile": knowledge.game_profile,
             "version": knowledge.version,
             "counts": knowledge.counts,
+            "knowledge": knowledge_state,
         }
 
     @app.get("/api/context/state")

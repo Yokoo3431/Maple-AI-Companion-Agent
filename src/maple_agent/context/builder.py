@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import logging
 
-from maple_agent.context.models import AgentContext, GoalContext
+from maple_agent.context.models import (
+    AgentContext,
+    GoalContext,
+    KnowledgeState,
+    MatchedEntity,
+)
 from maple_agent.fusion.models import WorldState
 from maple_agent.logging_setup import TraceContext
 from maple_agent.providers.knowledge import KnowledgeProvider
@@ -45,6 +50,7 @@ class ContextBuilder:
                 vision_summary=vision_state.summary if vision_state else "",
                 knowledge_profile=self.knowledge.game_profile if self.knowledge else "",
                 goal_context=resolved_goal,
+                knowledge_state=self._build_knowledge_state(world_state),
                 trace_id=trace.trace_id,
             )
             logger.info(
@@ -54,3 +60,40 @@ class ContextBuilder:
                 context.knowledge_profile,
             )
             return context
+
+    def _build_knowledge_state(self, world_state) -> KnowledgeState | None:
+        if world_state is None:
+            return None
+        entities: list[MatchedEntity] = []
+        if world_state.current_map is not None:
+            entities.append(
+                MatchedEntity(
+                    entity_type="map",
+                    entity_id=world_state.current_map.map_id,
+                    name=world_state.current_map.name,
+                    confidence=world_state.confidence,
+                )
+            )
+        for npc in world_state.known_npcs:
+            entities.append(
+                MatchedEntity(
+                    entity_type="npc",
+                    entity_id=npc.npc_id,
+                    name=npc.name,
+                    confidence=world_state.confidence,
+                )
+            )
+        for monster in world_state.known_monsters:
+            entities.append(
+                MatchedEntity(
+                    entity_type="monster",
+                    entity_id=monster.monster_id,
+                    name=monster.name,
+                    confidence=world_state.confidence,
+                )
+            )
+        return KnowledgeState(
+            matched_entities=entities,
+            confidence=world_state.confidence,
+            source="knowledge_graph",
+        )

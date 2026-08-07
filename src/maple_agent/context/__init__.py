@@ -5,6 +5,8 @@ from maple_agent.context.models import (
     AgentContext,
     ExecutionContext,
     GoalContext,
+    KnowledgeState,
+    MatchedEntity,
     QuestPlanContext,
 )
 
@@ -13,5 +15,7 @@ __all__ = [
     "ContextBuilder",
     "ExecutionContext",
     "GoalContext",
+    "KnowledgeState",
+    "MatchedEntity",
     "QuestPlanContext",
 ]

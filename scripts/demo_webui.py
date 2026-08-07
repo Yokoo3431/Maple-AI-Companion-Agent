@@ -14,6 +14,7 @@ from maple_agent.executor import MockExecutorProvider
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
+from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
 from maple_agent.planner import LLMPlannerProvider
 from maple_agent.providers import (
@@ -85,7 +86,11 @@ def main() -> None:
             rect=WindowRect(left=0, top=0, width=800, height=600),
         ),
     )
-    fusion = FusionService(knowledge=providers["knowledge"])
+    fusion = FusionService(
+        knowledge=providers["knowledge"],
+        graph=build_graph(providers["knowledge"]),
+        sessions_dir="sessions",
+    )
     vision_worker = VisionWorker(
         vision_capture,
         bus,

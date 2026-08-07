@@ -38,6 +38,23 @@ class ExecutionContext(BaseModel):
     execution_history: list[ExecutionResult] = Field(default_factory=list)
 
 
+class MatchedEntity(BaseModel):
+    """知识图谱匹配到的实体。"""
+
+    entity_type: str
+    entity_id: int | str
+    name: str
+    confidence: float = Field(default=0.0, ge=0, le=1)
+
+
+class KnowledgeState(BaseModel):
+    """知识理解状态(与 WorldState 分离,记录匹配来源)。"""
+
+    matched_entities: list[MatchedEntity] = Field(default_factory=list)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    source: str = ""
+
+
 class AgentContext(BaseModel):
     """Planner 前统一上下文(Vision + Knowledge + Runtime)。"""
 
@@ -48,4 +65,5 @@ class AgentContext(BaseModel):
     goal_context: GoalContext | None = None
     quest_plan_context: QuestPlanContext | None = None
     execution_context: ExecutionContext | None = None
+    knowledge_state: KnowledgeState | None = None
     trace_id: str = ""
