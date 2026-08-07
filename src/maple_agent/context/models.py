@@ -51,8 +51,10 @@ class KnowledgeState(BaseModel):
     """知识理解状态(与 WorldState 分离,记录匹配来源)。"""
 
     matched_entities: list[MatchedEntity] = Field(default_factory=list)
+    top_candidates: list[MatchedEntity] = Field(default_factory=list)
     confidence: float = Field(default=0.0, ge=0, le=1)
     source: str = ""
+    selection_reason: str = ""
 
 
 class AgentContext(BaseModel):

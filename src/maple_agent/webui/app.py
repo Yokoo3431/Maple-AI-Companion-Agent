@@ -167,6 +167,24 @@ def create_app(
             if built.knowledge_state is not None:
                 knowledge_state = built.knowledge_state.model_dump(mode="json")
         dataset = knowledge.dataset
+        retrieval = None
+        if vision_worker is not None and vision_worker.latest_ocr:
+            query = vision_worker.latest_ocr[0].text
+            if knowledge_state is not None and knowledge_state.get("matched_entities"):
+                top = knowledge_state["matched_entities"][0]
+                retrieval = {
+                    "query": query,
+                    "top_candidate": top["name"],
+                    "score": knowledge_state.get("confidence", 0),
+                    "reason": knowledge_state.get("selection_reason", ""),
+                }
+            else:
+                retrieval = {
+                    "query": query,
+                    "top_candidate": None,
+                    "score": 0,
+                    "reason": "no match",
+                }
         return {
             "enabled": True,
             "status": knowledge.profile_status,
@@ -180,6 +198,7 @@ def create_app(
                 "npcs": len(dataset.npcs) if dataset is not None else 0,
                 "monsters": len(dataset.monsters) if dataset is not None else 0,
             },
+            "retrieval": retrieval,
         }
 
     @app.get("/api/context/state")

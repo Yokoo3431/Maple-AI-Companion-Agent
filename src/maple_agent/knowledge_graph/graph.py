@@ -69,6 +69,34 @@ class KnowledgeGraph:
     def find_item(self, ref: int | str) -> ItemNode | None:
         return self._items.get(str(ref))
 
+    @property
+    def maps(self) -> list[MapNode]:
+        seen: dict[str, MapNode] = {}
+        for node in self._maps.values():
+            seen.setdefault(str(node.map_id), node)
+        return list(seen.values())
+
+    @property
+    def npcs(self) -> list[NPCNode]:
+        seen: dict[str, NPCNode] = {}
+        for node in self._npcs.values():
+            seen.setdefault(str(node.npc_id), node)
+        return list(seen.values())
+
+    @property
+    def monsters(self) -> list[MonsterNode]:
+        seen: dict[str, MonsterNode] = {}
+        for node in self._monsters.values():
+            seen.setdefault(str(node.monster_id), node)
+        return list(seen.values())
+
+    @property
+    def items(self) -> list[ItemNode]:
+        seen: dict[str, ItemNode] = {}
+        for node in self._items.values():
+            seen.setdefault(str(node.item_id), node)
+        return list(seen.values())
+
     def npcs_in_map(self, map_id: int | str) -> list[NPCNode]:
         result: list[NPCNode] = []
         for relation in self._relations_index.get(("map", str(map_id)), []):

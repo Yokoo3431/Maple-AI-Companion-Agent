@@ -79,7 +79,7 @@ def test_dataset_fusion_with_ocr_correction(tmp_path):
     )
     assert world.current_map is not None
     assert world.current_map.name == "射手村"
-    assert world.confidence == pytest.approx(0.81)
+    assert world.confidence == pytest.approx(0.765)
     replay = json.loads(
         (
             tmp_path

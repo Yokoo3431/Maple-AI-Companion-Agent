@@ -9,6 +9,7 @@ from pathlib import Path
 
 from maple_agent.fusion.models import WorldState
 from maple_agent.knowledge.models import MapInfo, MonsterInfo, NpcInfo
+from maple_agent.knowledge.retrieval import AliasIndex, EntityRanker, RankingResult
 from maple_agent.knowledge_graph.graph import KnowledgeGraph
 from maple_agent.logging_setup import TraceContext
 from maple_agent.providers.knowledge import KnowledgeProvider
@@ -30,6 +31,8 @@ class FusionService:
         self.knowledge = knowledge
         self.graph = graph
         self.sessions_dir = Path(sessions_dir)
+        self._index = AliasIndex.from_graph(graph) if graph is not None else None
+        self.ranker = EntityRanker()
         self._last_match: dict | None = None
 
     def fuse(
@@ -86,28 +89,52 @@ class FusionService:
             if obs.type == "text" and obs.normalized_value:
                 text = str(obs.normalized_value)
                 if self.graph is not None:
-                    for candidate, score in self._candidates(text):
-                        node = self.graph.find_map(candidate)
+                    best_map: RankingResult | None = None
+                    best_fuzzy: RankingResult | None = None
+                    for candidate_text, boost in self._candidates(text):
+                        ranking = self._rank_entity(
+                            candidate_text,
+                            entity_type="map",
+                            ocr_confidence=obs.confidence,
+                            boost=boost,
+                        )
+                        if ranking.best is not None:
+                            if ranking.best.source != "fuzzy" and best_map is None:
+                                best_map = ranking
+                            if best_fuzzy is None or (
+                                ranking.best.score > best_fuzzy.best.score
+                            ):
+                                best_fuzzy = ranking
+                    chosen = best_map or best_fuzzy
+                    if chosen is not None:
+                        candidate_list = self._candidates(text)
+                        node = self.graph.find_map(chosen.best.entity_id)
                         if node is not None:
-                            candidates = self._candidates(text)
                             self._last_match = {
                                 "ocr_text": text,
                                 "candidate_list": [
                                     {"text": item, "score": s}
-                                    for item, s in candidates
+                                    for item, s in candidate_list
                                 ],
                                 "ranking": [
                                     item
-                                    for item, _ in candidates
-                                    if self.graph.find_map(item) is not None
+                                    for item, _ in candidate_list
+                                    if self._index.search(
+                                        item, entity_type="map"
+                                    )
                                 ],
-                                "matched": node.name,
-                                "confidence": round(obs.confidence * score, 4),
+                                "matched": chosen.best.text,
+                                "confidence": chosen.best.score,
                                 "dataset_version": self.knowledge.dataset_version(),
+                                "candidate_scores": [
+                                    candidate.model_dump()
+                                    for candidate in chosen.candidates
+                                ],
+                                "ranking_reason": chosen.ranking_reason,
                             }
                             return (
                                 node.name,
-                                self._last_match["confidence"],
+                                chosen.best.score,
                                 text,
                             )
                 else:
@@ -130,6 +157,34 @@ class FusionService:
             and cleaned_all != cleaned
         ):
             result.append((cleaned_all, 0.8))
+        return result
+
+    def _rank_entity(
+        self,
+        query: str,
+        *,
+        entity_type: str,
+        ocr_confidence: float,
+        boost: float = 1.0,
+        context_hits: set[str] | None = None,
+    ) -> RankingResult:
+        if self._index is None:
+            return RankingResult(query=query, ocr_confidence=ocr_confidence)
+        candidates = self._index.search(query, entity_type=entity_type)
+        result = self.ranker.rank(
+            query,
+            candidates,
+            ocr_confidence=ocr_confidence,
+            context_hits=context_hits,
+        )
+        if result.best is not None and boost != 1.0:
+            result = result.model_copy(
+                update={
+                    "best": result.best.model_copy(
+                        update={"score": round(result.best.score * boost, 4)}
+                    )
+                }
+            )
         return result
 
     def _entities(
@@ -164,17 +219,23 @@ class FusionService:
                 if obs.type != "text" or not obs.normalized_value:
                     continue
                 text = str(obs.normalized_value)
-                npc_node = self.graph.find_npc(text)
-                if npc_node is not None:
-                    entity = self.knowledge.get_npc(npc_node.npc_id, trace_id=tid)
+                npc_ranking = self._rank_entity(
+                    text, entity_type="npc", ocr_confidence=obs.confidence
+                )
+                if npc_ranking.best is not None:
+                    entity = self.knowledge.get_npc(
+                        npc_ranking.best.entity_id, trace_id=tid
+                    )
                     if entity is not None and entity.npc_id not in {
                         item.npc_id for item in npcs
                     }:
                         npcs.append(entity)
-                monster_node = self.graph.find_monster(text)
-                if monster_node is not None:
+                monster_ranking = self._rank_entity(
+                    text, entity_type="monster", ocr_confidence=obs.confidence
+                )
+                if monster_ranking.best is not None:
                     entity = self.knowledge.get_monster(
-                        monster_node.monster_id, trace_id=tid
+                        monster_ranking.best.entity_id, trace_id=tid
                     )
                     if entity is not None and entity.monster_id not in {
                         item.monster_id for item in monsters
@@ -211,6 +272,16 @@ class FusionService:
                 self._last_match.get("ranking")
                 if self._last_match
                 else [matched]
+            ),
+            "candidate_scores": (
+                self._last_match.get("candidate_scores")
+                if self._last_match
+                else []
+            ),
+            "ranking_reason": (
+                self._last_match.get("ranking_reason")
+                if self._last_match
+                else ""
             ),
         }
         (directory / "knowledge_match.json").write_text(

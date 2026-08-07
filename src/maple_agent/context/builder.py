@@ -94,6 +94,12 @@ class ContextBuilder:
             )
         return KnowledgeState(
             matched_entities=entities,
+            top_candidates=entities,
             confidence=world_state.confidence,
             source="knowledge_graph",
+            selection_reason=(
+                f"best={world_state.current_map.name}"
+                if world_state.current_map is not None
+                else ""
+            ),
         )
