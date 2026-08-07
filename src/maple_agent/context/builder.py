@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from maple_agent.context.models import AgentContext
+from maple_agent.context.models import AgentContext, GoalContext
 from maple_agent.fusion.models import WorldState
 from maple_agent.logging_setup import TraceContext
 from maple_agent.providers.knowledge import KnowledgeProvider
@@ -26,13 +26,25 @@ class ContextBuilder:
         world_state: WorldState | None,
         runtime_state: str,
         trace_id: str | None = None,
+        goal_context: GoalContext | None = None,
     ) -> AgentContext:
         with TraceContext(trace_id=trace_id) as trace:
+            resolved_goal = goal_context
+            if resolved_goal is None and self.knowledge is not None:
+                try:
+                    available = self.knowledge.get_available_quests()
+                except Exception:
+                    available = []
+                resolved_goal = GoalContext(
+                    available_quests=available,
+                    trace_id=trace.trace_id,
+                )
             context = AgentContext(
                 world_state=world_state,
                 runtime_state=runtime_state,
                 vision_summary=vision_state.summary if vision_state else "",
                 knowledge_profile=self.knowledge.game_profile if self.knowledge else "",
+                goal_context=resolved_goal,
                 trace_id=trace.trace_id,
             )
             logger.info(

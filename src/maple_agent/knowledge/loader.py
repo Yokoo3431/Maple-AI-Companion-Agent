@@ -14,6 +14,7 @@ from maple_agent.knowledge.models import (
     NpcInfo,
     QuestTemplate,
 )
+from maple_agent.quest.models import Quest
 
 
 @dataclass
@@ -26,6 +27,7 @@ class KnowledgeData:
     npcs: list[NpcInfo] = field(default_factory=list)
     monsters: list[MonsterInfo] = field(default_factory=list)
     quests: list[QuestTemplate] = field(default_factory=list)
+    quests_domain: list[Quest] = field(default_factory=list)
 
     @property
     def counts(self) -> dict[str, int]:
@@ -83,6 +85,10 @@ def load_profile(profile_dir: Path, game_profile: str) -> KnowledgeData:
     ]
     data.quests = [
         QuestTemplate.model_validate(item) for item in _read_json_or_csv(profile_dir / "quests")
+    ]
+    data.quests_domain = [
+        Quest.model_validate(item)
+        for item in _read_json_or_csv(profile_dir / "quests_domain")
     ]
     return data
 

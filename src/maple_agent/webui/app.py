@@ -203,6 +203,22 @@ def create_app(
             "last_error": agent_loop.last_error or "",
         }
 
+    @app.get("/api/quest/state")
+    async def api_quest_state():
+        if knowledge is None:
+            return {"enabled": False}
+        try:
+            available = knowledge.get_available_quests()
+        except Exception:
+            available = []
+        return {
+            "enabled": True,
+            "profile": knowledge.game_profile,
+            "quest_total": len(knowledge.data.quests_domain),
+            "available_total": len(available),
+            "available_names": [quest.name for quest in available],
+        }
+
     @app.post("/api/runtime/start")
     async def api_runtime_start():
         return runtime_command(runtime.start)

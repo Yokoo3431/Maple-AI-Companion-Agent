@@ -16,6 +16,8 @@ from maple_agent.knowledge.models import (
     QuestTemplate,
 )
 from maple_agent.providers.base import BaseProvider
+from maple_agent.quest.graph import QuestGraph
+from maple_agent.quest.models import Quest, QuestObjective, QuestRequirement, QuestReward
 
 logger = logging.getLogger("maple_agent.knowledge")
 
@@ -28,6 +30,7 @@ class KnowledgeProvider(BaseProvider):
         self._configured_profile = ""
         self._profile_available = False
         self._data = KnowledgeData()
+        self._quest_graph = QuestGraph([])
 
     @property
     def data(self) -> KnowledgeData:
@@ -111,6 +114,27 @@ class KnowledgeProvider(BaseProvider):
             trace_id,
         )
 
+    def get_quest(
+        self, ref: int | str, *, trace_id: str | None = None
+    ) -> Quest | None:
+        return self._lookup(
+            "get_quest",
+            lambda: self._quest_graph.get(ref),
+            trace_id,
+        )
+
+    def get_available_quests(
+        self,
+        completed_ids: list[int | str] | None = None,
+        *,
+        trace_id: str | None = None,
+    ) -> list[Quest]:
+        return self._lookup(
+            "get_available_quests",
+            lambda: self._quest_graph.available(completed_ids),
+            trace_id,
+        )
+
     def _find(self, items: list[Any], id_field: str, ref: int | str) -> Any | None:
         key = str(ref)
         for item in items:
@@ -146,6 +170,7 @@ class JsonKnowledgeProvider(KnowledgeProvider):
             if available:
                 profile_dir = self.knowledge_root / "versions" / self._configured_profile
                 self._data = load_profile(profile_dir, self._configured_profile)
+                self._quest_graph = QuestGraph(self._data.quests_domain)
                 self._profile_available = True
                 logger.info(
                     "knowledge profile loaded: %s version=%s counts=%s",
@@ -158,6 +183,7 @@ class JsonKnowledgeProvider(KnowledgeProvider):
                     game_profile=self._configured_profile,
                     version=version,
                 )
+                self._quest_graph = QuestGraph([])
                 self._profile_available = False
                 logger.warning(
                     "knowledge profile missing: %s",
@@ -193,4 +219,46 @@ class MockKnowledgeProvider(KnowledgeProvider):
                     rewards={"exp": "10"},
                 )
             ],
+            quests_domain=[
+                Quest(
+                    quest_id=1,
+                    name="新手教学",
+                    description="前往射手村找赫丽娜",
+                    npc_id=101,
+                    map_id=1,
+                    monster_ids=[100],
+                    item_ids=[1],
+                    requirements=[QuestRequirement(kind="level", target="1", quantity=1)],
+                    objectives=[
+                        QuestObjective(
+                            objective_id="o1",
+                            description="与赫丽娜对话",
+                            kind="talk",
+                            target="101",
+                        )
+                    ],
+                    rewards=[QuestReward(kind="exp", target="10", quantity=1)],
+                ),
+                Quest(
+                    quest_id=2,
+                    name="收集树液",
+                    description="击杀绿水灵收集树液",
+                    npc_id=101,
+                    map_id=1,
+                    monster_ids=[100],
+                    item_ids=[2],
+                    prerequisites=[1],
+                    objectives=[
+                        QuestObjective(
+                            objective_id="o1",
+                            description="收集 5 个树液",
+                            kind="collect",
+                            target="2",
+                            quantity=5,
+                        )
+                    ],
+                    rewards=[QuestReward(kind="meso", target="100", quantity=1)],
+                ),
+            ],
         )
+        self._quest_graph = QuestGraph(self._data.quests_domain)

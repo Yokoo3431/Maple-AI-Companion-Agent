@@ -220,3 +220,12 @@ class AgentLoop:
             json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+        if context is not None and context.goal_context is not None:
+            (directory / "quest_context.json").write_text(
+                json.dumps(
+                    context.goal_context.model_dump(mode="json"),
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
