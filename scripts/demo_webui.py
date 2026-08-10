@@ -9,6 +9,7 @@ import uvicorn
 
 from maple_agent.action_plan import ActionPlanner
 from maple_agent.agent import AgentLoop
+from maple_agent.confirmation import ConfirmationManager, HumanConfirmationGate
 from maple_agent.context import ContextBuilder
 from maple_agent.decision import (
     DecisionContext,
@@ -434,6 +435,18 @@ def main() -> None:
     vision_evaluation = {
         "result": vision_eval_result.model_dump(mode="json"),
     }
+    confirmation_manager = ConfirmationManager(sessions_dir="sessions")
+    confirmation_request = HumanConfirmationGate().create_request(
+        action_plan=action_plan,
+        vision_result=vision_eval_result,
+        decision_result=decision_result,
+        trace_id=loop_trace_id,
+    )
+    confirmation_manager.create(confirmation_request)
+    confirmation = {
+        "request": confirmation_request.model_dump(mode="json"),
+        "token": None,
+    }
     evaluation_benchmark = EvaluationBenchmark(sessions_dir="sessions")
     evaluation_metrics = evaluation_benchmark.benchmark()
     evaluation_report_text = EvaluationReport().generate(
@@ -472,6 +485,8 @@ def main() -> None:
         evaluation=evaluation,
         observation=observation,
         vision_evaluation=vision_evaluation,
+        confirmation_manager=confirmation_manager,
+        confirmation=confirmation,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

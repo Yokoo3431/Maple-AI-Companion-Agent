@@ -241,6 +241,18 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Human Confirmation</div>
+        <div class="card-body">
+          <pre id="confirmation-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+          <div class="d-flex gap-2 mt-2">
+            <button id="btn-confirm-approve" class="btn btn-sm btn-success" onclick="confirmationCmd('approve')" disabled>Approve</button>
+            <button id="btn-confirm-reject" class="btn btn-sm btn-danger" onclick="confirmationCmd('reject')" disabled>Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -323,6 +335,46 @@
     refreshEvaluation();
     refreshObservation();
     refreshVisionEvaluation();
+    refreshConfirmation();
+  }
+
+  let confirmationCurrentId = '';
+
+  async function refreshConfirmation() {
+    const res = await fetch('/api/confirmation/state');
+    const data = await res.json();
+    const el = document.getElementById('confirmation-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const r = data.request;
+    if (!r) {
+      el.textContent = '无确认请求';
+      return;
+    }
+    confirmationCurrentId = r.confirmation_id;
+    el.textContent = [
+      `ACTION: ${r.action || '-'}`,
+      `TARGET: ${r.target || '-'}`,
+      `RISK: ${r.risk_level || '-'}`,
+      `VISION SCORE: ${Math.round((r.vision_score || 0) * 100)}%`,
+      `STATUS: ${r.status}`,
+    ].join('\n');
+    const pending = r.status === 'PENDING';
+    document.getElementById('btn-confirm-approve').disabled = !pending;
+    document.getElementById('btn-confirm-reject').disabled = !pending;
+  }
+
+  async function confirmationCmd(cmd) {
+    const res = await fetch(`/api/confirmation/${cmd}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({confirmation_id: confirmationCurrentId}),
+    });
+    const body = await res.json();
+    if (!res.ok) alert(body.error || '确认操作失败');
+    refreshConfirmation();
   }
 
   async function refreshVisionEvaluation() {

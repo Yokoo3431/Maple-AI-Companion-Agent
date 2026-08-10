@@ -16,6 +16,10 @@ from fastapi.templating import Jinja2Templates
 
 from maple_agent import __version__
 from maple_agent.agent.loop import AgentLoop
+from maple_agent.confirmation.manager import (
+    ConfirmationError,
+    ConfirmationManager,
+)
 from maple_agent.context.builder import ContextBuilder
 from maple_agent.events import EventBus
 from maple_agent.game.window import GameWindowDetector, MockGameWindowDetector
@@ -65,6 +69,8 @@ def create_app(
     evaluation: dict | None = None,
     observation: dict | None = None,
     vision_evaluation: dict | None = None,
+    confirmation_manager: ConfirmationManager | None = None,
+    confirmation: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -265,6 +271,48 @@ def create_app(
         if vision_evaluation is None:
             return {"enabled": False}
         return {"enabled": True, **vision_evaluation}
+
+    @app.get("/api/confirmation/state")
+    async def api_confirmation_state():
+        if confirmation is None:
+            return {"enabled": False}
+        return {"enabled": True, **confirmation}
+
+    @app.post("/api/confirmation/approve")
+    async def api_confirmation_approve(payload: dict):
+        if confirmation_manager is None:
+            return JSONResponse(
+                status_code=400,
+                content={"ok": False, "error": "confirmation manager 未接入"},
+            )
+        try:
+            token = confirmation_manager.approve(
+                payload.get("confirmation_id", "")
+            )
+            return {"ok": True, "token": token.model_dump(mode="json")}
+        except ConfirmationError as exc:
+            return JSONResponse(
+                status_code=409,
+                content={"ok": False, "error": str(exc)},
+            )
+
+    @app.post("/api/confirmation/reject")
+    async def api_confirmation_reject(payload: dict):
+        if confirmation_manager is None:
+            return JSONResponse(
+                status_code=400,
+                content={"ok": False, "error": "confirmation manager 未接入"},
+            )
+        try:
+            request = confirmation_manager.reject(
+                payload.get("confirmation_id", "")
+            )
+            return {"ok": True, "request": request.model_dump(mode="json")}
+        except ConfirmationError as exc:
+            return JSONResponse(
+                status_code=409,
+                content={"ok": False, "error": str(exc)},
+            )
 
     @app.get("/api/context/state")
     async def api_context_state():
