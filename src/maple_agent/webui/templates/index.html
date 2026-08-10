@@ -217,6 +217,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Agent Evaluation(只读)</div>
+        <div class="card-body">
+          <pre id="evaluation-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -296,6 +304,29 @@
     refreshExecutionOrchestration();
     refreshReflection();
     refreshExperience();
+    refreshEvaluation();
+  }
+
+  async function refreshEvaluation() {
+    const res = await fetch('/api/evaluation/state');
+    const data = await res.json();
+    const el = document.getElementById('evaluation-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const m = data.metrics || {};
+    const r = data.last_result || {};
+    const pct = (v) => `${Math.round((v || 0) * 100)}%`;
+    el.textContent = [
+      `TRACE COUNT: ${data.trace_count || 0}`,
+      `DECISION SCORE: ${pct(r.decision_score ?? m.decision_accuracy)}`,
+      `PLAN SCORE: ${pct(r.planning_score ?? m.plan_valid_rate)}`,
+      `EXECUTION SCORE: ${pct(r.execution_score ?? m.execution_success_rate)}`,
+      `REFLECTION SCORE: ${pct(r.reflection_score ?? m.reflection_accuracy)}`,
+      `MEMORY SCORE: ${pct(r.memory_score ?? m.experience_hit_rate)}`,
+      `OVERALL SCORE: ${pct(r.overall_score ?? m.overall_score)}`,
+    ].join('\n');
   }
 
   async function refreshExperience() {

@@ -15,6 +15,7 @@ from maple_agent.decision import (
     DecisionEngine,
     DecisionOption,
 )
+from maple_agent.evaluation import EvaluationBenchmark, EvaluationReport
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
 from maple_agent.executor import MockExecutorProvider
@@ -261,6 +262,7 @@ def main() -> None:
         runtime_state=runtime.state.value,
         trace_id=new_id(),
     ).knowledge_state
+    loop_trace_id = new_id()
     decision_options: list[DecisionOption] = []
     experience_store = ExperienceStore(
         [
@@ -329,7 +331,7 @@ def main() -> None:
             quest_plan=quest_plan,
             options=decision_options,
         ),
-        trace_id=new_id(),
+        trace_id=loop_trace_id,
     )
     action_planner = ActionPlanner(sessions_dir="sessions")
     action_plan = action_planner.plan(
@@ -337,7 +339,7 @@ def main() -> None:
         world_state=world_state,
         knowledge_state=knowledge_state,
         goal_id=goal.goal_id if goal is not None else None,
-        trace_id=new_id(),
+        trace_id=loop_trace_id,
     )
     decision = {
         "goal": goal.model_dump(mode="json") if goal is not None else None,
@@ -347,7 +349,10 @@ def main() -> None:
         "plan": action_plan.model_dump(mode="json"),
     }
     orchestrator = ExecutionOrchestrator(sessions_dir="sessions")
-    orchestration_state = orchestrator.run(action_plan, trace_id=new_id())
+    orchestration_state = orchestrator.run(
+        action_plan,
+        trace_id=loop_trace_id,
+    )
     execution_orchestration = {
         "plan": f"{action_plan.action} {action_plan.target}".strip(),
         "state": orchestration_state.model_dump(mode="json"),
@@ -366,7 +371,7 @@ def main() -> None:
         feedback=last_record.feedback,
         world_state=world_state,
         expected_result=action_plan.expected_result,
-        trace_id=new_id(),
+        trace_id=loop_trace_id,
     )
     reflection = {
         "result": reflection_result.model_dump(mode="json"),
@@ -387,6 +392,22 @@ def main() -> None:
             for record in experience_retriever.last_results
         ],
     }
+    evaluation_benchmark = EvaluationBenchmark(sessions_dir="sessions")
+    evaluation_metrics = evaluation_benchmark.benchmark()
+    evaluation_report_text = EvaluationReport().generate(
+        evaluation_benchmark.last_result,
+        evaluation_metrics,
+    )
+    evaluation = {
+        "trace_count": evaluation_benchmark.last_trace_count,
+        "metrics": evaluation_metrics.model_dump(mode="json"),
+        "last_result": (
+            evaluation_benchmark.last_result.model_dump(mode="json")
+            if evaluation_benchmark.last_result is not None
+            else None
+        ),
+        "report": evaluation_report_text,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -406,6 +427,7 @@ def main() -> None:
         execution_orchestration=execution_orchestration,
         reflection=reflection,
         experience=experience_data,
+        evaluation=evaluation,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
