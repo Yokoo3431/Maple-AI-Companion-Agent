@@ -209,6 +209,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Experience(只读)</div>
+        <div class="card-body">
+          <pre id="experience-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -287,6 +295,28 @@
     refreshActionPlan();
     refreshExecutionOrchestration();
     refreshReflection();
+    refreshExperience();
+  }
+
+  async function refreshExperience() {
+    const res = await fetch('/api/experience/state');
+    const data = await res.json();
+    const el = document.getElementById('experience-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const query = data.last_query || {};
+    const hits = (data.last_results || []).map(
+      (r) => `${r.action}(${r.success ? '成功' : '失败'})`
+    );
+    el.textContent = [
+      `EXPERIENCES: ${data.total || 0}`,
+      `SUCCESS: ${data.success_count || 0}`,
+      `FAILURE: ${data.failure_count || 0}`,
+      `LAST QUERY: ${query.map_name || '-'}`,
+      `HITS: ${hits.join(', ') || '-'}`,
+    ].join('\n');
   }
 
   async function refreshReflection() {

@@ -18,6 +18,11 @@ from maple_agent.decision import (
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
 from maple_agent.executor import MockExecutorProvider
+from maple_agent.experience import (
+    ExperienceRecord,
+    ExperienceRetriever,
+    ExperienceStore,
+)
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
@@ -257,6 +262,42 @@ def main() -> None:
         trace_id=new_id(),
     ).knowledge_state
     decision_options: list[DecisionOption] = []
+    experience_store = ExperienceStore(
+        [
+            ExperienceRecord(
+                experience_id="exp-1",
+                context_snapshot={"map_name": "射手村"},
+                goal="新手教学",
+                action="TALK",
+                result="任务已接受",
+                reflection="对话成功",
+                success=True,
+                resolution="直接与 NPC 对话",
+            ),
+            ExperienceRecord(
+                experience_id="exp-2",
+                context_snapshot={"map_name": "射手村"},
+                goal="新手教学",
+                action="DEFEAT",
+                result="执行失败",
+                reflection="等级不足",
+                success=False,
+                failure_type="EXECUTION_FAILED",
+                resolution="提升等级后再挑战",
+            ),
+            ExperienceRecord(
+                experience_id="exp-3",
+                context_snapshot={"map_name": "射手村"},
+                goal="新手教学",
+                action="COLLECT",
+                result="收集完成",
+                reflection="收集成功",
+                success=True,
+                resolution="按地图引导收集",
+            ),
+        ]
+    )
+    experience_retriever = ExperienceRetriever(store=experience_store)
     if quest_plan is not None:
         for index, step in enumerate(quest_plan.steps):
             decision_options.append(
@@ -276,7 +317,10 @@ def main() -> None:
                     reason=f"来自任务计划步骤 {index + 1}: {step.description}",
                 )
             )
-    decision_engine = DecisionEngine(sessions_dir="sessions")
+    decision_engine = DecisionEngine(
+        sessions_dir="sessions",
+        experience=experience_retriever,
+    )
     decision_result = decision_engine.decide(
         DecisionContext(
             world_state=world_state,
@@ -329,6 +373,20 @@ def main() -> None:
         "trigger": ReflectionTrigger().evaluate(reflection_result).value,
         "state": reflection_memory.state.model_dump(mode="json"),
     }
+    experience_data = {
+        "total": experience_store.count(),
+        "success_count": len(experience_store.successful_recovery()),
+        "failure_count": len(experience_store.similar_failure()),
+        "last_query": experience_retriever.last_query,
+        "last_results": [
+            {
+                "experience_id": record.experience_id,
+                "action": record.action,
+                "success": record.success,
+            }
+            for record in experience_retriever.last_results
+        ],
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -347,6 +405,7 @@ def main() -> None:
         action_plan=action_plan_data,
         execution_orchestration=execution_orchestration,
         reflection=reflection,
+        experience=experience_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

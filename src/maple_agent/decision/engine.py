@@ -5,11 +5,15 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from maple_agent.decision.evaluator import DecisionEvaluator
 from maple_agent.decision.models import DecisionContext, DecisionOption, DecisionResult
 from maple_agent.goal.models import Goal, GoalType
 from maple_agent.logging_setup import TraceContext
+
+if TYPE_CHECKING:
+    from maple_agent.experience.retriever import ExperienceRetriever
 
 logger = logging.getLogger("maple_agent.decision")
 
@@ -105,15 +109,19 @@ class DecisionEngine:
         *,
         evaluator: DecisionEvaluator | None = None,
         sessions_dir: str | Path = "sessions",
-        goal_weight: float = 0.5,
+        goal_weight: float = 0.4,
         knowledge_weight: float = 0.3,
+        experience_weight: float = 0.1,
         risk_weight: float = 0.2,
+        experience: ExperienceRetriever | None = None,
     ) -> None:
         self.evaluator = evaluator or DecisionEvaluator()
         self.sessions_dir = Path(sessions_dir)
         self.goal_weight = goal_weight
         self.knowledge_weight = knowledge_weight
+        self.experience_weight = experience_weight
         self.risk_weight = risk_weight
+        self.experience = experience
         self.last_result: DecisionResult | None = None
 
     def decide(
@@ -173,12 +181,41 @@ class DecisionEngine:
     ) -> float:
         goal_score = self._goal_alignment(option.action, context.goal)
         knowledge_score = option.confidence * self._context_confidence(context)
+        experience_bonus = self._experience_bonus(option, context)
         raw = (
             self.goal_weight * goal_score
             + self.knowledge_weight * knowledge_score
+            + self.experience_weight * experience_bonus
             - self.risk_weight * option.risk
         )
         return round(max(0.0, min(1.0, raw)), 4)
+
+    def _experience_bonus(
+        self,
+        option: DecisionOption,
+        context: DecisionContext,
+    ) -> float:
+        """历史经验加成:同动作成功经验加分,失败经验扣分。"""
+        if self.experience is None:
+            return 0.0
+        records = self.experience.retrieve(
+            world_state=context.world_state,
+            knowledge_state=context.knowledge_state,
+            goal=context.goal,
+            action=option.action,
+        )
+        matched = [
+            record
+            for record in records
+            if record.action.upper() == option.action.upper()
+        ]
+        if not matched:
+            return 0.0
+        success_count = sum(1 for record in matched if record.success)
+        failure_count = sum(1 for record in matched if not record.success)
+        bonus = 0.1 + 0.05 * success_count
+        penalty = 0.1 * failure_count
+        return round(max(0.0, min(0.5, bonus - penalty)), 4)
 
     @staticmethod
     def _context_confidence(context: DecisionContext) -> float:
@@ -231,8 +268,25 @@ class DecisionEngine:
             ),
             "selected_score": result.score,
             "selected_reason": result.explanation,
+            "experience": self._experience_replay(),
         }
         (directory / "decision_trace.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+
+    def _experience_replay(self) -> dict | None:
+        if self.experience is None:
+            return None
+        return {
+            "query": self.experience.last_query,
+            "retrieved": [
+                {
+                    "experience_id": record.experience_id,
+                    "action": record.action,
+                    "success": record.success,
+                    "failure_type": record.failure_type,
+                }
+                for record in self.experience.last_results
+            ],
+        }

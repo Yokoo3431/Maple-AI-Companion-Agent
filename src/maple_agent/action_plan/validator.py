@@ -5,7 +5,23 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from maple_agent.action_plan.models import ActionPlan, ActionPlanStatus
-from maple_agent.decision.evaluator import ALLOWED_ACTIONS
+
+# 与 decision.evaluator 白名单保持一致;本地定义避免 action_plan -> decision 依赖环
+ALLOWED_ACTIONS = frozenset(
+    {
+        "OBSERVE",
+        "ANALYZE",
+        "QUERY_KNOWLEDGE",
+        "WAIT",
+        "PAUSE",
+        "TALK",
+        "COLLECT",
+        "DEFEAT",
+        "DELIVER",
+        "COMPLETE",
+        "MOVE_HINT",
+    }
+)
 
 
 class ActionPlanValidationResult(BaseModel):

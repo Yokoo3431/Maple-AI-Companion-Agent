@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from maple_agent.action_plan.models import (
     ActionPlan,
@@ -16,9 +17,11 @@ from maple_agent.action_plan.validator import (
     ActionPlanValidator,
 )
 from maple_agent.context.models import KnowledgeState
-from maple_agent.decision.models import DecisionResult
 from maple_agent.fusion.models import WorldState
 from maple_agent.logging_setup import TraceContext, new_id
+
+if TYPE_CHECKING:
+    from maple_agent.decision.models import DecisionResult
 
 logger = logging.getLogger("maple_agent.action_plan")
 
