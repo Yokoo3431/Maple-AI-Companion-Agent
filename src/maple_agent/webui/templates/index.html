@@ -277,6 +277,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Long Horizon Planning(只读)</div>
+        <div class="card-body">
+          <pre id="long-horizon-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -363,6 +371,30 @@
     refreshExecutorSandbox();
     refreshAgentLoop();
     refreshArchitecture();
+    refreshLongHorizon();
+  }
+
+  async function refreshLongHorizon() {
+    const res = await fetch('/api/long-horizon/state');
+    const data = await res.json();
+    const el = document.getElementById('long-horizon-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const goal = data.goal || {};
+    const state = data.state || {};
+    const recovery = data.recovery;
+    const milestones = (goal.milestones || []).map(
+      (m) => `${m.order + 1}. ${m.title}`
+    );
+    el.textContent = [
+      `GOAL: ${goal.description || goal.goal_id || '-'}`,
+      `MILESTONES: ${milestones.join(' | ') || '-'}`,
+      `CURRENT TASK: ${state.next_action || '-'}`,
+      `PROGRESS: ${Math.round((data.progress || 0) * 100)}%`,
+      `RECOVERY STATUS: ${recovery ? recovery.action : 'none'}`,
+    ].join('\n');
   }
 
   async function refreshArchitecture() {

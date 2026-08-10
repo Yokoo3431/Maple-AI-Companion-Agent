@@ -74,6 +74,7 @@ def create_app(
     executor_sandbox: dict | None = None,
     cognitive_loop: dict | None = None,
     architecture: dict | None = None,
+    long_horizon: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -334,6 +335,12 @@ def create_app(
         if architecture is None:
             return {"enabled": False}
         return {"enabled": True, **architecture}
+
+    @app.get("/api/long-horizon/state")
+    async def api_long_horizon_state():
+        if long_horizon is None:
+            return {"enabled": False}
+        return {"enabled": True, **long_horizon}
 
     @app.get("/api/context/state")
     async def api_context_state():

@@ -16,6 +16,11 @@ from maple_agent.evaluation.models import EvaluationResult
 from maple_agent.executor_sandbox.models import SandboxExecutionResult
 from maple_agent.observation.models import ObservationState
 from maple_agent.reflection.models import ReflectionResult
+from maple_agent.task_planning.models import (
+    LongHorizonGoal,
+    TaskExecutionState,
+    TaskGraph,
+)
 from maple_agent.vision_eval.models import VisionEvaluationResult
 
 
@@ -49,4 +54,7 @@ class AgentLoopContext(BaseModel):
     sandbox_result: SandboxExecutionResult | None = None
     reflection_result: ReflectionResult | None = None
     evaluation_result: EvaluationResult | None = None
+    goal_state: LongHorizonGoal | None = None
+    task_graph: TaskGraph | None = None
+    planning_state: TaskExecutionState | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

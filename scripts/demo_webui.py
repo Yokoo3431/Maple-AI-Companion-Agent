@@ -75,7 +75,16 @@ from maple_agent.reflection import (
     ReflectionMemory,
     ReflectionTrigger,
 )
+from maple_agent.reflection.models import FailureType, ReflectionResult
 from maple_agent.runtime import RuntimeManager
+from maple_agent.task_planning import (
+    LongHorizonGoal,
+    Milestone,
+    RecoveryPlanner,
+    TaskDecomposer,
+    TaskExecutionStateManager,
+    save_task_planning_trace,
+)
 from maple_agent.validation import VisionPipelineValidator
 from maple_agent.vision import (
     MockCaptureProvider,
@@ -539,6 +548,73 @@ def main() -> None:
         "trace_version": TRACE_SCHEMA_VERSION,
         "safety_mode": SAFETY_MODE,
     }
+    horizon_goal = LongHorizonGoal(
+        goal_id="goal-horizon-1",
+        description="完成新手任务链",
+        priority=10,
+        constraints=["只读观察", "Mock Only"],
+        success_condition="提交任务并验证完成",
+        milestones=[
+            Milestone(
+                milestone_id="ms-1",
+                title="找到 NPC",
+                order=0,
+                task_ids=["task-1"],
+            ),
+            Milestone(
+                milestone_id="ms-2",
+                title="接受任务",
+                order=1,
+                task_ids=["task-2"],
+            ),
+            Milestone(
+                milestone_id="ms-3",
+                title="收集材料",
+                order=2,
+                task_ids=["task-3", "task-4"],
+            ),
+            Milestone(
+                milestone_id="ms-4",
+                title="提交任务",
+                order=3,
+                task_ids=["task-5"],
+            ),
+        ],
+    )
+    task_graph = TaskDecomposer().decompose(horizon_goal)
+    task_manager = TaskExecutionStateManager(task_graph)
+    task_manager.mark_completed("task-1")
+    task_manager.mark_completed("task-2")
+    recovery_reflection = ReflectionResult(
+        reflection_id="refl-recovery",
+        execution_id="exec-recovery",
+        success=False,
+        failure_type=FailureType.EXECUTION_FAILED,
+        failure_reason="模拟执行失败",
+        confidence=0.5,
+        next_action="replan",
+        trace_id=loop_trace_id,
+    )
+    recovery_plan = RecoveryPlanner().plan(
+        recovery_reflection,
+        goal_id=horizon_goal.goal_id,
+        task_id="task-3",
+    )
+    save_task_planning_trace(
+        "sessions",
+        loop_trace_id,
+        goal=horizon_goal,
+        graph=task_graph,
+        state=task_manager.snapshot(),
+        recovery=recovery_plan,
+    )
+    long_horizon_data = {
+        "goal": horizon_goal.model_dump(mode="json"),
+        "graph": task_graph.model_dump(mode="json"),
+        "state": task_manager.snapshot().model_dump(mode="json"),
+        "recovery": recovery_plan.model_dump(mode="json"),
+        "progress": task_manager.progress(),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -566,6 +642,7 @@ def main() -> None:
         executor_sandbox=executor_sandbox_data,
         cognitive_loop=agent_loop_data,
         architecture=architecture_data,
+        long_horizon=long_horizon_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
