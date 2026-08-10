@@ -7,6 +7,8 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
+from maple_agent.architecture import AGENT_VERSION, TRACE_SCHEMA_VERSION
+
 
 class AgentLoopStage(BaseModel):
     """单个阶段记录。"""
@@ -18,7 +20,9 @@ class AgentLoopStage(BaseModel):
 class AgentLoopTrace(BaseModel):
     """统一闭环 trace。"""
 
+    schema_version: str = TRACE_SCHEMA_VERSION
     trace_id: str = ""
+    agent_version: str = AGENT_VERSION
     stages: list[AgentLoopStage] = Field(default_factory=list)
     final_status: str = ""
 

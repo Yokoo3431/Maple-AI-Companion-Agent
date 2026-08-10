@@ -10,6 +10,12 @@ import uvicorn
 from maple_agent.action_plan import ActionPlanner
 from maple_agent.agent import AgentLoop
 from maple_agent.agent_loop import AgentLoopOrchestrator
+from maple_agent.architecture import (
+    ARCHITECTURE_VERSION,
+    CORE_MODULES,
+    SAFETY_MODE,
+    TRACE_SCHEMA_VERSION,
+)
 from maple_agent.confirmation import (
     ConfirmationManager,
     ConfirmationStatus,
@@ -527,6 +533,12 @@ def main() -> None:
             mode="json"
         ),
     }
+    architecture_data = {
+        "version": ARCHITECTURE_VERSION,
+        "module_count": len(CORE_MODULES),
+        "trace_version": TRACE_SCHEMA_VERSION,
+        "safety_mode": SAFETY_MODE,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -553,6 +565,7 @@ def main() -> None:
         confirmation=confirmation,
         executor_sandbox=executor_sandbox_data,
         cognitive_loop=agent_loop_data,
+        architecture=architecture_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

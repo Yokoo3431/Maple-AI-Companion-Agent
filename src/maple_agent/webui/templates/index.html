@@ -269,6 +269,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Architecture Status(只读)</div>
+        <div class="card-body">
+          <pre id="architecture-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -354,6 +362,23 @@
     refreshConfirmation();
     refreshExecutorSandbox();
     refreshAgentLoop();
+    refreshArchitecture();
+  }
+
+  async function refreshArchitecture() {
+    const res = await fetch('/api/architecture/state');
+    const data = await res.json();
+    const el = document.getElementById('architecture-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `VERSION: ${data.version || '-'}`,
+      `MODULE COUNT: ${data.module_count || 0}`,
+      `TRACE VERSION: ${data.trace_version || '-'}`,
+      `SAFETY MODE: ${data.safety_mode || '-'}`,
+    ].join('\n');
   }
 
   async function refreshAgentLoop() {
