@@ -261,6 +261,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Agent Cognitive Loop(只读)</div>
+        <div class="card-body">
+          <pre id="agent-loop-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -345,6 +353,32 @@
     refreshVisionEvaluation();
     refreshConfirmation();
     refreshExecutorSandbox();
+    refreshAgentLoop();
+  }
+
+  async function refreshAgentLoop() {
+    const res = await fetch('/api/agent-loop/state');
+    const data = await res.json();
+    const el = document.getElementById('agent-loop-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const ctx = data.context || {};
+    const trace = data.trace || {};
+    const conf = ctx.confirmation_result;
+    const sandbox = ctx.sandbox_result;
+    const refl = ctx.reflection_result;
+    const evalr = ctx.evaluation_result;
+    el.textContent = [
+      `TRACE ID: ${ctx.trace_id ? ctx.trace_id.slice(0, 8) : '-'}`,
+      `CURRENT STAGE: ${ctx.status || '-'}`,
+      `STATUS: ${trace.final_status || '-'}`,
+      `CONFIRMATION: ${conf ? conf.status : '-'}`,
+      `SANDBOX MODE: ${sandbox ? sandbox.mode : '-'}`,
+      `REFLECTION: ${refl ? (refl.success ? 'success' : 'failed') : '-'}`,
+      `FINAL RESULT: ${evalr ? Math.round((evalr.overall_score || 0) * 100) + '%' : '-'}`,
+    ].join('\n');
   }
 
   async function refreshExecutorSandbox() {

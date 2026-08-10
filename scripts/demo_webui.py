@@ -9,6 +9,7 @@ import uvicorn
 
 from maple_agent.action_plan import ActionPlanner
 from maple_agent.agent import AgentLoop
+from maple_agent.agent_loop import AgentLoopOrchestrator
 from maple_agent.confirmation import (
     ConfirmationManager,
     ConfirmationStatus,
@@ -500,6 +501,32 @@ def main() -> None:
         ),
         "report": evaluation_report_text,
     }
+    agent_loop_orchestrator = AgentLoopOrchestrator(
+        observation_collector=observation_collector,
+        vision_evaluator=vision_evaluator,
+        decision_engine=decision_engine,
+        action_planner=action_planner,
+        confirmation_manager=confirmation_manager,
+        confirmation_gate=HumanConfirmationGate(),
+        sandbox=executor_sandbox,
+        reflection_engine=reflection_engine,
+        evaluation_benchmark=evaluation_benchmark,
+        sessions_dir="sessions",
+        knowledge=providers["knowledge"],
+    )
+    agent_loop_context = agent_loop_orchestrator.run(
+        image_bytes=b"mock-image-bytes",
+        goal=goal,
+        auto_approve=True,
+        trace_id=new_id(),
+    )
+    agent_loop_data = {
+        "context": agent_loop_context.model_dump(mode="json"),
+        "trace": agent_loop_orchestrator.last_trace.model_dump(mode="json"),
+        "validation": agent_loop_orchestrator.last_validation.model_dump(
+            mode="json"
+        ),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -525,6 +552,7 @@ def main() -> None:
         confirmation_manager=confirmation_manager,
         confirmation=confirmation,
         executor_sandbox=executor_sandbox_data,
+        cognitive_loop=agent_loop_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

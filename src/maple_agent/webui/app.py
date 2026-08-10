@@ -72,6 +72,7 @@ def create_app(
     confirmation_manager: ConfirmationManager | None = None,
     confirmation: dict | None = None,
     executor_sandbox: dict | None = None,
+    cognitive_loop: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -320,6 +321,12 @@ def create_app(
         if executor_sandbox is None:
             return {"enabled": False}
         return {"enabled": True, **executor_sandbox}
+
+    @app.get("/api/agent-loop/state")
+    async def api_agent_loop_state():
+        if cognitive_loop is None:
+            return {"enabled": False}
+        return {"enabled": True, **cognitive_loop}
 
     @app.get("/api/context/state")
     async def api_context_state():

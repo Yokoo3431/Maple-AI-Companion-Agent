@@ -1,175 +1,302 @@
-"""Agent Loop 单测:状态迁移 / retry / 异常恢复 / trace / replay。"""
+"""Agent Loop 单测:完整闭环 / 失败 / 阻断 / 沙箱 / 反思 / 评估 / Replay / 校验。"""
+
+from __future__ import annotations
 
 import json
 
-import pytest
 from fastapi.testclient import TestClient
 
-from maple_agent.agent import AgentLoop, AgentLoopState, IllegalTransitionError
-from maple_agent.agent.loop import validate_transition
-from maple_agent.context import ContextBuilder
-from maple_agent.events import Event, EventBus, EventType
-from maple_agent.logging_setup import setup_logging
-from maple_agent.planner import MockPlannerProvider
-from maple_agent.planner.models import PlannerInput, PlanResult, PlanStep
-from maple_agent.providers.knowledge import MockKnowledgeProvider
+from maple_agent.action_plan.planner import ActionPlanner
+from maple_agent.agent_loop import (
+    AgentLoopContext,
+    AgentLoopOrchestrator,
+    AgentLoopStage,
+    AgentLoopStatus,
+    AgentLoopTrace,
+    AgentLoopValidator,
+)
+from maple_agent.confirmation.gate import HumanConfirmationGate
+from maple_agent.confirmation.manager import ConfirmationManager
+from maple_agent.decision.engine import DecisionEngine
+from maple_agent.evaluation.benchmark import EvaluationBenchmark
+from maple_agent.events import EventBus
+from maple_agent.executor_sandbox.models import SandboxExecutionResult, SandboxExecutionStatus
+from maple_agent.executor_sandbox.sandbox import LimitedExecutorSandbox
+from maple_agent.observation import ObservationAdapter, ObservationCollector
+from maple_agent.providers import MockKnowledgeProvider, MockOCRProvider
+from maple_agent.reflection.engine import ReflectionEngine
 from maple_agent.runtime import RuntimeManager
+from maple_agent.vision_eval import RiskLevel, VisionEvaluationResult, VisionEvaluator
 from maple_agent.webui.app import create_app
 
 
-def test_transition_table_strict():
-    validate_transition(AgentLoopState.IDLE, AgentLoopState.OBSERVING)
-    with pytest.raises(IllegalTransitionError):
-        validate_transition(AgentLoopState.IDLE, AgentLoopState.PLANNING)
+class HighRiskVision:
+    """返回 HIGH 风险的视觉评估(用于阻断测试)。"""
+
+    def evaluate(self, **kwargs) -> VisionEvaluationResult:
+        return VisionEvaluationResult(
+            evaluation_id="e-high",
+            frame_id="f-high",
+            overall_score=0.2,
+            ocr_score=0.1,
+            entity_score=0.1,
+            consistency_score=0.3,
+            confidence_score=0.1,
+            risk_level=RiskLevel.HIGH,
+        )
 
 
-def _build_loop(bus: EventBus, planner=None, tmp_path=None):
-    knowledge = MockKnowledgeProvider()
-    knowledge.initialize()
-    return AgentLoop(
-        bus=bus,
-        context_builder=ContextBuilder(knowledge),
-        planner=planner or MockPlannerProvider(),
-        sessions_dir=tmp_path / "sessions" if tmp_path else "sessions",
+def _knowledge() -> MockKnowledgeProvider:
+    provider = MockKnowledgeProvider()
+    provider.initialize()
+    provider.load_dataset()
+    return provider
+
+
+def _build_orchestrator(
+    tmp_path,
+    *,
+    vision=None,
+    ocr_raise: bool = False,
+) -> AgentLoopOrchestrator:
+    ocr = MockOCRProvider(
+        text="射手村",
+        confidence=0.95,
+        raise_on_call=ocr_raise,
+    )
+    ocr.initialize()
+    adapter = ObservationAdapter(ocr=ocr, sessions_dir=tmp_path)
+    knowledge = _knowledge()
+    collector = ObservationCollector(
+        adapter,
+        knowledge=knowledge,
+        sessions_dir=tmp_path,
+    )
+    vision_evaluator = vision or VisionEvaluator(
+        knowledge=knowledge,
+        sessions_dir=tmp_path,
+    )
+    return AgentLoopOrchestrator(
+        observation_collector=collector,
+        vision_evaluator=vision_evaluator,
+        decision_engine=DecisionEngine(sessions_dir=tmp_path),
+        action_planner=ActionPlanner(sessions_dir=tmp_path),
+        confirmation_manager=ConfirmationManager(sessions_dir=tmp_path),
+        confirmation_gate=HumanConfirmationGate(),
+        sandbox=LimitedExecutorSandbox(sessions_dir=tmp_path),
+        reflection_engine=ReflectionEngine(sessions_dir=tmp_path),
+        evaluation_benchmark=EvaluationBenchmark(sessions_dir=tmp_path),
+        sessions_dir=tmp_path,
+        knowledge=knowledge,
     )
 
 
-@pytest.mark.asyncio
-async def test_loop_full_run_publishes_events_and_replay(tmp_path):
-    bus = EventBus()
-    events: list[Event] = []
-    bus.subscribe(events.append)
-    await bus.start()
-    loop = _build_loop(bus, tmp_path=tmp_path)
-    plan = loop.run_once(
-        runtime_state="RUNNING",
-        trace_id="trace-loop-1",
+def test_full_successful_loop(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-full",
     )
-    await bus.wait_idle()
-    assert loop.state is AgentLoopState.IDLE
-    assert plan is not None
-    assert loop.last_plan is plan
-    assert loop.last_error is None
-    event_types = {e.event_type for e in events}
-    assert EventType.OBSERVE_STARTED in event_types
-    assert EventType.CONTEXT_READY in event_types
-    assert EventType.LOOP_PLAN_CREATED in event_types
-    assert EventType.PLAN_VALIDATED in event_types
-    traces = {e.trace_id for e in events}
-    assert traces == {"trace-loop-1"}
-    assert [e.event_type for e in events if e.event_type is EventType.LOOP_PLAN_CREATED]
+    assert context.status is AgentLoopStatus.COMPLETED
+    assert context.observation_state is not None
+    assert context.observation_state.map_name == "射手村"
+    assert context.vision_result is not None
+    assert context.decision_result is not None
+    assert context.decision_result.selected_option is not None
+    assert context.action_plan is not None
+    assert context.confirmation_result is not None
+    assert context.confirmation_result.status.value == "APPROVED"
+    assert context.permission_token is not None
+    assert context.permission_token.approved is True
+    assert context.sandbox_result is not None
+    assert context.sandbox_result.status is SandboxExecutionStatus.COMPLETED
+    assert context.sandbox_result.mode == "MOCK_ONLY"
+    assert context.reflection_result is not None
+    assert context.evaluation_result is not None
+    assert orchestrator.last_validation is not None
+    assert orchestrator.last_validation.valid is True
 
+
+def test_observation_failure(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path, ocr_raise=True)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-obs-fail",
+    )
+    assert context.status is AgentLoopStatus.FAILED
+    assert any(
+        stage.stage == "error" for stage in orchestrator.last_trace.stages
+    )
+
+
+def test_vision_high_risk_blocked(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path, vision=HighRiskVision())
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-high-risk",
+    )
+    assert context.status is AgentLoopStatus.BLOCKED
+    assert context.sandbox_result is None
+    assert context.confirmation_result is None
+
+
+def test_confirmation_reject_blocked(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=False,
+        trace_id="trace-reject",
+    )
+    assert context.status is AgentLoopStatus.BLOCKED
+    assert context.permission_token is None
+    assert context.sandbox_result is None
+
+
+def test_missing_token_blocked(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=False,
+        trace_id="trace-no-token",
+    )
+    assert context.status is AgentLoopStatus.BLOCKED
+    assert context.permission_token is None
+
+
+def test_sandbox_completion(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-sandbox",
+    )
+    assert context.sandbox_result is not None
+    assert context.sandbox_result.success is True
+    assert context.sandbox_result.mode == "MOCK_ONLY"
+    assert context.sandbox_result.audit["permission"] == "verified"
+
+
+def test_reflection_output(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-reflect",
+    )
+    assert context.reflection_result is not None
+    assert context.reflection_result.success is True
+    assert context.reflection_result.next_action == "continue"
+
+
+def test_evaluation_output(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-eval",
+    )
+    assert context.evaluation_result is not None
+    assert context.evaluation_result.trace_id == "trace-eval"
+    assert context.evaluation_result.overall_score > 0
+
+
+def test_replay_generation(tmp_path):
+    orchestrator = _build_orchestrator(tmp_path)
+    orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-replay",
+    )
     replay = json.loads(
-        (tmp_path / "sessions" / "trace-loop-1" / "agent_loop.json").read_text(
+        (tmp_path / "trace-replay" / "agent_loop_trace.json").read_text(
             encoding="utf-8"
         )
     )
-    assert replay["final_state"] == "IDLE"
-    assert replay["context"]["runtime_state"] == "RUNNING"
-    assert replay["planner_result"]["steps"]
-    assert replay["errors"] == []
-    assert "IDLE" in [t["from"] for t in replay["transitions"]]
-    await bus.stop()
+    assert replay["trace_id"] == "trace-replay"
+    stage_names = [stage["stage"] for stage in replay["stages"]]
+    assert "observation" in stage_names
+    assert "decision" in stage_names
+    assert "confirmation" in stage_names
+    assert "sandbox" in stage_names
+    assert "reflection" in stage_names
+    assert "evaluation" in stage_names
+    assert replay["final_status"] == "COMPLETED"
 
 
-def test_loop_retries_once_then_succeeds(tmp_path):
-    class FlakyPlanner:
-        def __init__(self) -> None:
-            self.calls = 0
-
-        def plan(self, context: PlannerInput) -> PlanResult:
-            self.calls += 1
-            if self.calls == 1:
-                raise RuntimeError("boom once")
-            return PlanResult(
-                plan_id="p1",
-                steps=[PlanStep(step_id="s1", action="observe")],
-                trace_id=context.trace_id,
-            )
-
-    bus = EventBus()
-    flaky = FlakyPlanner()
-    loop = _build_loop(bus, planner=flaky, tmp_path=tmp_path)
-    plan = loop.run_once(runtime_state="READY", trace_id="trace-retry")
-    assert flaky.calls == 2
-    assert loop.state is AgentLoopState.IDLE
-    assert loop.last_error is None
-    assert plan.steps[0].action == "observe"
-
-
-def test_loop_retry_exhausted_goes_error_and_recovers(tmp_path):
-    class AlwaysFailPlanner:
-        def plan(self, context: PlannerInput) -> PlanResult:
-            raise RuntimeError("always fails")
-
-    bus = EventBus()
-    loop = _build_loop(bus, planner=AlwaysFailPlanner(), tmp_path=tmp_path)
-    with pytest.raises(RuntimeError):
-        loop.run_once(runtime_state="READY", trace_id="trace-fail")
-    assert loop.state is AgentLoopState.ERROR
-    assert loop.last_error is not None
-    replay = json.loads(
-        (tmp_path / "sessions" / "trace-fail" / "agent_loop.json").read_text(
-            encoding="utf-8"
-        )
+def test_invalid_stage_transition():
+    trace = AgentLoopTrace(
+        trace_id="trace-invalid",
+        stages=[
+            AgentLoopStage(stage="sandbox", status="MOCK_ONLY"),
+            AgentLoopStage(stage="observation", status="completed"),
+        ],
+        final_status="COMPLETED",
     )
-    assert replay["errors"] == ["always fails"]
-    assert replay["final_state"] == "ERROR"
-    loop.reset()
-    assert loop.state is AgentLoopState.IDLE
-    assert loop.last_error is None
+    context = AgentLoopContext(
+        trace_id="trace-invalid",
+        status=AgentLoopStatus.COMPLETED,
+        sandbox_result=SandboxExecutionResult(
+            execution_id="e",
+            status=SandboxExecutionStatus.COMPLETED,
+            success=True,
+            mode="MOCK_ONLY",
+        ),
+    )
+    result = AgentLoopValidator().validate(context, trace)
+    assert result.valid is False
+    assert any("阶段顺序非法" in issue for issue in result.issues)
+    assert any("禁止跳过 Human Confirmation" in issue for issue in result.issues)
 
 
-@pytest.mark.asyncio
-async def test_loop_error_event_published():
-    class AlwaysFailPlanner:
-        def plan(self, context: PlannerInput) -> PlanResult:
-            raise RuntimeError("loop boom")
-
-    bus = EventBus()
-    events: list[Event] = []
-    bus.subscribe(events.append)
-    await bus.start()
-    loop = _build_loop(bus, planner=AlwaysFailPlanner())
-    with pytest.raises(RuntimeError):
-        loop.run_once(runtime_state="READY", trace_id="trace-err-event")
-    await bus.wait_idle()
-    error_events = [
-        e for e in events if e.event_type is EventType.LOOP_ERROR
-    ]
-    assert error_events
-    assert error_events[0].trace_id == "trace-err-event"
-    await bus.stop()
+def test_validator_skipped_confirmation():
+    context = AgentLoopContext(
+        trace_id="trace-skip",
+        status=AgentLoopStatus.COMPLETED,
+        sandbox_result=SandboxExecutionResult(
+            execution_id="e",
+            status=SandboxExecutionStatus.COMPLETED,
+            success=True,
+            mode="MOCK_ONLY",
+        ),
+    )
+    result = AgentLoopValidator().validate(context)
+    assert result.valid is False
+    assert any("禁止跳过 Human Confirmation" in issue for issue in result.issues)
+    assert any("Sandbox 缺少 PermissionToken" in issue for issue in result.issues)
 
 
-def test_loop_trace_in_logs(tmp_path):
-    setup_logging(tmp_path / "logs", level="INFO", console=False)
-    bus = EventBus()
-    loop = _build_loop(bus, tmp_path=tmp_path)
-    loop.run_once(runtime_state="READY", trace_id="trace-loop-log")
-    log = (tmp_path / "logs" / "agent.log").read_text(encoding="utf-8")
-    assert "agent loop state: IDLE -> OBSERVING" in log
-    assert "trace=trace-loop-log" in log
-
-
-def test_webui_loop_state_endpoint():
+def test_webui_agent_loop_endpoint(tmp_path):
     bus = EventBus()
     runtime = RuntimeManager(bus=bus)
-    loop = _build_loop(bus)
-    loop.run_once(runtime_state="OFFLINE", trace_id="trace-web-loop")
-    app = create_app(runtime=runtime, bus=bus, agent_loop=loop)
+    orchestrator = _build_orchestrator(tmp_path)
+    context = orchestrator.run(
+        image_bytes=b"mock-image",
+        auto_approve=True,
+        trace_id="trace-webui",
+    )
+    payload = {
+        "context": context.model_dump(mode="json"),
+        "trace": orchestrator.last_trace.model_dump(mode="json"),
+        "validation": orchestrator.last_validation.model_dump(mode="json"),
+    }
+    app = create_app(runtime=runtime, bus=bus, cognitive_loop=payload)
     with TestClient(app) as client:
-        resp = client.get("/api/loop/state")
+        resp = client.get("/api/agent-loop/state")
     data = resp.json()
+    assert resp.status_code == 200
     assert data["enabled"] is True
-    assert data["state"] == "IDLE"
-    assert data["steps"] == 2
+    assert data["context"]["status"] == "COMPLETED"
+    assert data["trace"]["final_status"] == "COMPLETED"
+    assert data["validation"]["valid"] is True
 
 
-def test_webui_loop_state_disabled():
+def test_webui_agent_loop_disabled():
     bus = EventBus()
     runtime = RuntimeManager(bus=bus)
     app = create_app(runtime=runtime, bus=bus)
     with TestClient(app) as client:
-        resp = client.get("/api/loop/state")
+        resp = client.get("/api/agent-loop/state")
     assert resp.json()["enabled"] is False
