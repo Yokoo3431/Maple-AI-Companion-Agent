@@ -78,4 +78,9 @@ class AgentContext(BaseModel):
     quest_plan_context: QuestPlanContext | None = None
     execution_context: ExecutionContext | None = None
     knowledge_state: KnowledgeState | None = None
+    reflection_state: ReflectionState | None = None
     trace_id: str = ""
+
+
+# 延迟导入:reflection 包初始化链会回到本模块,放到底部避免循环导入
+from maple_agent.reflection.models import ReflectionState  # noqa: E402

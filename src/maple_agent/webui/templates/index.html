@@ -201,6 +201,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Reflection(只读)</div>
+        <div class="card-body">
+          <pre id="reflection-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -278,6 +286,29 @@
     refreshDecision();
     refreshActionPlan();
     refreshExecutionOrchestration();
+    refreshReflection();
+  }
+
+  async function refreshReflection() {
+    const res = await fetch('/api/reflection/state');
+    const data = await res.json();
+    const el = document.getElementById('reflection-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const r = data.result;
+    if (!r) {
+      el.textContent = '无反思结果';
+      return;
+    }
+    el.textContent = [
+      `LAST RESULT: ${r.actual_result || '-'}`,
+      `SUCCESS: ${r.success}`,
+      `FAILURE TYPE: ${r.failure_type || '-'}`,
+      `REPLAN: ${data.trigger || '-'}`,
+      `CONFIDENCE: ${Math.round((r.confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshExecutionOrchestration() {

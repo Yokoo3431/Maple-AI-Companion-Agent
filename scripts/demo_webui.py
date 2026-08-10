@@ -43,6 +43,11 @@ from maple_agent.quest_planner import (
     QuestPlanValidator,
     QuestResolver,
 )
+from maple_agent.reflection import (
+    ReflectionEngine,
+    ReflectionMemory,
+    ReflectionTrigger,
+)
 from maple_agent.runtime import RuntimeManager
 from maple_agent.validation import VisionPipelineValidator
 from maple_agent.vision import (
@@ -303,6 +308,27 @@ def main() -> None:
         "plan": f"{action_plan.action} {action_plan.target}".strip(),
         "state": orchestration_state.model_dump(mode="json"),
     }
+    reflection_memory = ReflectionMemory()
+    reflection_engine = ReflectionEngine(
+        memory=reflection_memory,
+        trigger=ReflectionTrigger(),
+        sessions_dir="sessions",
+    )
+    last_record = (
+        orchestrator.last_records[-1] if orchestrator.last_records else None
+    )
+    reflection_result = reflection_engine.reflect(
+        execution=last_record.result,
+        feedback=last_record.feedback,
+        world_state=world_state,
+        expected_result=action_plan.expected_result,
+        trace_id=new_id(),
+    )
+    reflection = {
+        "result": reflection_result.model_dump(mode="json"),
+        "trigger": ReflectionTrigger().evaluate(reflection_result).value,
+        "state": reflection_memory.state.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -320,6 +346,7 @@ def main() -> None:
         decision=decision,
         action_plan=action_plan_data,
         execution_orchestration=execution_orchestration,
+        reflection=reflection,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
