@@ -71,6 +71,7 @@ from maple_agent.vision.coordinate import (
     VisionAlignmentService,
     VisionCoordinateMapper,
 )
+from maple_agent.vision_eval import VisionEvaluator
 from maple_agent.webui.app import create_app
 from maple_agent.window import MockWindowDetector, WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
@@ -421,6 +422,18 @@ def main() -> None:
         "state": observation_state.model_dump(mode="json"),
         "validation": observation_validation.model_dump(mode="json"),
     }
+    vision_evaluator = VisionEvaluator(
+        knowledge=providers["knowledge"],
+        sessions_dir="sessions",
+    )
+    vision_eval_result = vision_evaluator.evaluate(
+        frame=observation_collector.last_frame,
+        state=observation_state,
+        trace_id=loop_trace_id,
+    )
+    vision_evaluation = {
+        "result": vision_eval_result.model_dump(mode="json"),
+    }
     evaluation_benchmark = EvaluationBenchmark(sessions_dir="sessions")
     evaluation_metrics = evaluation_benchmark.benchmark()
     evaluation_report_text = EvaluationReport().generate(
@@ -458,6 +471,7 @@ def main() -> None:
         experience=experience_data,
         evaluation=evaluation,
         observation=observation,
+        vision_evaluation=vision_evaluation,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

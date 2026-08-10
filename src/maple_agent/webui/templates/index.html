@@ -233,6 +233,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Vision Evaluation(只读)</div>
+        <div class="card-body">
+          <pre id="vision-evaluation-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -314,6 +322,27 @@
     refreshExperience();
     refreshEvaluation();
     refreshObservation();
+    refreshVisionEvaluation();
+  }
+
+  async function refreshVisionEvaluation() {
+    const res = await fetch('/api/vision-evaluation/state');
+    const data = await res.json();
+    const el = document.getElementById('vision-evaluation-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const r = data.result || {};
+    const pct = (v) => `${Math.round((v || 0) * 100)}%`;
+    el.textContent = [
+      `FRAME: ${r.frame_id ? r.frame_id.slice(0, 8) : '-'}`,
+      `OVERALL: ${pct(r.overall_score)}`,
+      `OCR: ${pct(r.ocr_score)}`,
+      `ENTITY: ${pct(r.entity_score)}`,
+      `CONSISTENCY: ${pct(r.consistency_score)}`,
+      `RISK: ${r.risk_level || '-'}`,
+    ].join('\n');
   }
 
   async function refreshObservation() {
