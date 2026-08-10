@@ -225,6 +225,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Observation(只读)</div>
+        <div class="card-body">
+          <pre id="observation-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -305,6 +313,26 @@
     refreshReflection();
     refreshExperience();
     refreshEvaluation();
+    refreshObservation();
+  }
+
+  async function refreshObservation() {
+    const res = await fetch('/api/observation/state');
+    const data = await res.json();
+    const el = document.getElementById('observation-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const frame = data.frame || {};
+    const state = data.state || {};
+    el.textContent = [
+      `FRAME: ${frame.frame_id ? frame.frame_id.slice(0, 8) : '-'}`,
+      `OCR: ${frame.ocr_text || '-'}`,
+      `CONFIDENCE: ${Math.round((frame.confidence || 0) * 100)}%`,
+      `ENTITIES: ${(state.visible_entities || []).join(', ') || '-'}`,
+      `STATE: ${state.map_name || '-'}`,
+    ].join('\n');
   }
 
   async function refreshEvaluation() {

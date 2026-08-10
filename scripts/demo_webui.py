@@ -36,6 +36,11 @@ from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
+from maple_agent.observation import (
+    ObservationAdapter,
+    ObservationCollector,
+    ObservationValidator,
+)
 from maple_agent.planner import LLMPlannerProvider
 from maple_agent.providers import (
     MockKnowledgeProvider,
@@ -392,6 +397,30 @@ def main() -> None:
             for record in experience_retriever.last_results
         ],
     }
+    observation_ocr = MockOCRProvider(text="射手村", confidence=0.95)
+    observation_ocr.initialize()
+    observation_adapter = ObservationAdapter(
+        ocr=observation_ocr,
+        sessions_dir="sessions",
+    )
+    observation_collector = ObservationCollector(
+        observation_adapter,
+        knowledge=providers["knowledge"],
+        sessions_dir="sessions",
+    )
+    observation_state = observation_collector.collect_and_save(
+        image_bytes=b"mock-image-bytes",
+        source="mock",
+        trace_id=loop_trace_id,
+    )
+    observation_validation = ObservationValidator().validate(
+        observation_collector.last_frame
+    )
+    observation = {
+        "frame": observation_collector.last_frame.model_dump(mode="json"),
+        "state": observation_state.model_dump(mode="json"),
+        "validation": observation_validation.model_dump(mode="json"),
+    }
     evaluation_benchmark = EvaluationBenchmark(sessions_dir="sessions")
     evaluation_metrics = evaluation_benchmark.benchmark()
     evaluation_report_text = EvaluationReport().generate(
@@ -428,6 +457,7 @@ def main() -> None:
         reflection=reflection,
         experience=experience_data,
         evaluation=evaluation,
+        observation=observation,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

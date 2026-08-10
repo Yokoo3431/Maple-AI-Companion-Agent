@@ -63,6 +63,7 @@ def create_app(
     reflection: dict | None = None,
     experience: dict | None = None,
     evaluation: dict | None = None,
+    observation: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -251,6 +252,12 @@ def create_app(
         if evaluation is None:
             return {"enabled": False}
         return {"enabled": True, **evaluation}
+
+    @app.get("/api/observation/state")
+    async def api_observation_state():
+        if observation is None:
+            return {"enabled": False}
+        return {"enabled": True, **observation}
 
     @app.get("/api/context/state")
     async def api_context_state():
