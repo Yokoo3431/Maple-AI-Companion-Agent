@@ -16,6 +16,7 @@ from maple_agent.decision import (
     DecisionOption,
 )
 from maple_agent.events import EventBus
+from maple_agent.execution import ExecutionOrchestrator
 from maple_agent.executor import MockExecutorProvider
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
@@ -296,6 +297,12 @@ def main() -> None:
     action_plan_data = {
         "plan": action_plan.model_dump(mode="json"),
     }
+    orchestrator = ExecutionOrchestrator(sessions_dir="sessions")
+    orchestration_state = orchestrator.run(action_plan, trace_id=new_id())
+    execution_orchestration = {
+        "plan": f"{action_plan.action} {action_plan.target}".strip(),
+        "state": orchestration_state.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -312,6 +319,7 @@ def main() -> None:
         knowledge_import=knowledge_import,
         decision=decision,
         action_plan=action_plan_data,
+        execution_orchestration=execution_orchestration,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

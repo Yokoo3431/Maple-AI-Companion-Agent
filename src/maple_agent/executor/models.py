@@ -25,8 +25,13 @@ class ExecutionTask(BaseModel):
     execution_id: str
     plan_id: str = ""
     step_id: str = ""
+    step_index: int = 0
     action: str
     target: str = ""
+    required_observation: str = ""
+    success_condition: str = ""
+    retry_count: int = 0
+    max_retry: int = 1
     status: ExecutionStatus = ExecutionStatus.CREATED
     trace_id: str = ""
 

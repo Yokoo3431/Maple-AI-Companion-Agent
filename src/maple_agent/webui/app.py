@@ -59,6 +59,7 @@ def create_app(
     knowledge_import: dict | None = None,
     decision: dict | None = None,
     action_plan: dict | None = None,
+    execution_orchestration: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -223,6 +224,12 @@ def create_app(
         if action_plan is None:
             return {"enabled": False}
         return {"enabled": True, **action_plan}
+
+    @app.get("/api/execution/orchestration/state")
+    async def api_execution_orchestration_state():
+        if execution_orchestration is None:
+            return {"enabled": False}
+        return {"enabled": True, **execution_orchestration}
 
     @app.get("/api/context/state")
     async def api_context_state():
