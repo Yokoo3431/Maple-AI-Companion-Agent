@@ -253,6 +253,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Sandbox Execution(只读)</div>
+        <div class="card-body">
+          <pre id="executor-sandbox-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -336,6 +344,25 @@
     refreshObservation();
     refreshVisionEvaluation();
     refreshConfirmation();
+    refreshExecutorSandbox();
+  }
+
+  async function refreshExecutorSandbox() {
+    const res = await fetch('/api/executor-sandbox/state');
+    const data = await res.json();
+    const el = document.getElementById('executor-sandbox-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const r = data.result || {};
+    el.textContent = [
+      `ACTION: ${r.audit && r.audit.scope ? r.audit.scope.split(':')[0] : (data.request && data.request.action) || '-'}`,
+      `TARGET: ${data.request && data.request.target || '-'}`,
+      `PERMISSION: ${(r.audit && r.audit.permission) || '-'}`,
+      `STATUS: ${r.status || '-'}`,
+      `MODE: ${r.mode || '-'}`,
+    ].join('\n');
   }
 
   let confirmationCurrentId = '';

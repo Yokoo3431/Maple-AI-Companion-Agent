@@ -9,7 +9,11 @@ import uvicorn
 
 from maple_agent.action_plan import ActionPlanner
 from maple_agent.agent import AgentLoop
-from maple_agent.confirmation import ConfirmationManager, HumanConfirmationGate
+from maple_agent.confirmation import (
+    ConfirmationManager,
+    ConfirmationStatus,
+    HumanConfirmationGate,
+)
 from maple_agent.context import ContextBuilder
 from maple_agent.decision import (
     DecisionContext,
@@ -20,6 +24,10 @@ from maple_agent.evaluation import EvaluationBenchmark, EvaluationReport
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
 from maple_agent.executor import MockExecutorProvider
+from maple_agent.executor_sandbox import (
+    LimitedExecutorSandbox,
+    SandboxExecutionRequest,
+)
 from maple_agent.experience import (
     ExperienceRecord,
     ExperienceRetriever,
@@ -443,9 +451,38 @@ def main() -> None:
         trace_id=loop_trace_id,
     )
     confirmation_manager.create(confirmation_request)
+    permission_token = None
+    if confirmation_request.status is ConfirmationStatus.PENDING:
+        permission_token = confirmation_manager.approve(
+            confirmation_request.confirmation_id
+        )
     confirmation = {
         "request": confirmation_request.model_dump(mode="json"),
-        "token": None,
+        "token": (
+            permission_token.model_dump(mode="json")
+            if permission_token is not None
+            else None
+        ),
+    }
+    executor_sandbox = LimitedExecutorSandbox(sessions_dir="sessions")
+    sandbox_request = SandboxExecutionRequest(
+        execution_id=new_id(),
+        trace_id=loop_trace_id,
+        permission_token_id=(
+            permission_token.token_id if permission_token is not None else ""
+        ),
+        action=action_plan.action,
+        target=action_plan.target,
+        scope=permission_token.scope if permission_token is not None else "",
+    )
+    sandbox_result = executor_sandbox.execute(
+        request=sandbox_request,
+        token=permission_token,
+        trace_id=loop_trace_id,
+    )
+    executor_sandbox_data = {
+        "request": sandbox_request.model_dump(mode="json"),
+        "result": sandbox_result.model_dump(mode="json"),
     }
     evaluation_benchmark = EvaluationBenchmark(sessions_dir="sessions")
     evaluation_metrics = evaluation_benchmark.benchmark()
@@ -487,6 +524,7 @@ def main() -> None:
         vision_evaluation=vision_evaluation,
         confirmation_manager=confirmation_manager,
         confirmation=confirmation,
+        executor_sandbox=executor_sandbox_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

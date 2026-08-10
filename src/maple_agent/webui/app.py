@@ -71,6 +71,7 @@ def create_app(
     vision_evaluation: dict | None = None,
     confirmation_manager: ConfirmationManager | None = None,
     confirmation: dict | None = None,
+    executor_sandbox: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -313,6 +314,12 @@ def create_app(
                 status_code=409,
                 content={"ok": False, "error": str(exc)},
             )
+
+    @app.get("/api/executor-sandbox/state")
+    async def api_executor_sandbox_state():
+        if executor_sandbox is None:
+            return {"enabled": False}
+        return {"enabled": True, **executor_sandbox}
 
     @app.get("/api/context/state")
     async def api_context_state():
