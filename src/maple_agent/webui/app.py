@@ -75,6 +75,7 @@ def create_app(
     cognitive_loop: dict | None = None,
     architecture: dict | None = None,
     long_horizon: dict | None = None,
+    goal_memory: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -341,6 +342,12 @@ def create_app(
         if long_horizon is None:
             return {"enabled": False}
         return {"enabled": True, **long_horizon}
+
+    @app.get("/api/goal-memory/state")
+    async def api_goal_memory_state():
+        if goal_memory is None:
+            return {"enabled": False}
+        return {"enabled": True, **goal_memory}
 
     @app.get("/api/context/state")
     async def api_context_state():

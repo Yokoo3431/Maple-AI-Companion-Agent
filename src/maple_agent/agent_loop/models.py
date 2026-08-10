@@ -14,6 +14,10 @@ from maple_agent.confirmation.models import (
 from maple_agent.decision.models import DecisionResult
 from maple_agent.evaluation.models import EvaluationResult
 from maple_agent.executor_sandbox.models import SandboxExecutionResult
+from maple_agent.goal_memory.models import (
+    GoalExperienceRecord,
+    OptimizedTaskGraph,
+)
 from maple_agent.observation.models import ObservationState
 from maple_agent.reflection.models import ReflectionResult
 from maple_agent.task_planning.models import (
@@ -57,4 +61,6 @@ class AgentLoopContext(BaseModel):
     goal_state: LongHorizonGoal | None = None
     task_graph: TaskGraph | None = None
     planning_state: TaskExecutionState | None = None
+    goal_experience: GoalExperienceRecord | None = None
+    planning_reference: OptimizedTaskGraph | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

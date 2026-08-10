@@ -43,6 +43,13 @@ from maple_agent.experience import (
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
+from maple_agent.goal_memory import (
+    GoalExperienceRecord,
+    GoalExperienceRetriever,
+    GoalExperienceStore,
+    PlanningOptimizer,
+    save_goal_memory_trace,
+)
 from maple_agent.knowledge.evaluation import (
     EvaluationRunner,
     RetrievalBenchmark,
@@ -615,6 +622,74 @@ def main() -> None:
         "recovery": recovery_plan.model_dump(mode="json"),
         "progress": task_manager.progress(),
     }
+    goal_experience_store = GoalExperienceStore(
+        [
+            GoalExperienceRecord(
+                experience_id="gxp-1",
+                goal_type="QUEST",
+                goal_description="完成新手任务链",
+                successful_path=[
+                    "task-1",
+                    "task-2",
+                    "task-3",
+                    "task-4",
+                    "task-5",
+                ],
+                failed_points=[],
+                task_pattern=[
+                    "task-1",
+                    "task-2",
+                    "task-3",
+                    "task-4",
+                    "task-5",
+                ],
+                duration_estimate=600,
+                success=True,
+                confidence=0.9,
+            ),
+            GoalExperienceRecord(
+                experience_id="gxp-2",
+                goal_type="QUEST",
+                goal_description="收集材料失败案例",
+                successful_path=["task-3"],
+                failed_points=["task-3"],
+                task_pattern=["task-3", "task-4"],
+                duration_estimate=300,
+                success=False,
+                confidence=0.6,
+            ),
+        ]
+    )
+    goal_retriever = GoalExperienceRetriever(goal_experience_store)
+    retrieved_experience = goal_retriever.retrieve(
+        current_goal=horizon_goal,
+        task_graph=task_graph,
+        goal_type="QUEST",
+    )
+    planning_optimizer = PlanningOptimizer()
+    optimized_graph = planning_optimizer.optimize(
+        graph=task_graph,
+        experience=(
+            retrieved_experience[0] if retrieved_experience else None
+        ),
+    )
+    save_goal_memory_trace(
+        "sessions",
+        loop_trace_id,
+        goal=horizon_goal,
+        retrieved=retrieved_experience,
+        similarity_score=goal_retriever.last_best_score,
+        optimization=optimized_graph,
+    )
+    goal_memory_data = {
+        "goal": horizon_goal.model_dump(mode="json"),
+        "retrieved": [
+            record.model_dump(mode="json")
+            for record in retrieved_experience
+        ],
+        "similarity": goal_retriever.last_best_score,
+        "optimization": optimized_graph.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -643,6 +718,7 @@ def main() -> None:
         cognitive_loop=agent_loop_data,
         architecture=architecture_data,
         long_horizon=long_horizon_data,
+        goal_memory=goal_memory_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
