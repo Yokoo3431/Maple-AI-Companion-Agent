@@ -28,6 +28,13 @@ from maple_agent.decision import (
     DecisionEngine,
     DecisionOption,
 )
+from maple_agent.environment import (
+    EnvironmentCollector,
+    EnvironmentSnapshotManager,
+    EnvironmentStateManager,
+    EnvironmentValidator,
+    save_environment_trace,
+)
 from maple_agent.evaluation import EvaluationBenchmark, EvaluationReport
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
@@ -904,6 +911,36 @@ def main() -> None:
             for conflict in goal_scheduler.last_conflicts
         ],
     }
+    environment_collector = EnvironmentCollector(
+        knowledge=providers["knowledge"],
+    )
+    environment_state = environment_collector.collect(
+        observation_state=observation_state,
+        knowledge_state=knowledge_state,
+        trace_id=loop_trace_id,
+    )
+    environment_manager = EnvironmentStateManager()
+    environment_manager.update(environment_state)
+    environment_snapshot = EnvironmentSnapshotManager().capture(
+        before=None,
+        after=environment_state,
+        trace_id=loop_trace_id,
+    )
+    environment_validation = EnvironmentValidator().validate(
+        environment_state
+    )
+    save_environment_trace(
+        "sessions",
+        loop_trace_id,
+        environment_state=environment_state,
+        snapshot=environment_snapshot,
+        validation=environment_validation,
+    )
+    environment_data = {
+        "state": environment_state.model_dump(mode="json"),
+        "snapshot": environment_snapshot.model_dump(mode="json"),
+        "validation": environment_validation.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -936,6 +973,7 @@ def main() -> None:
         planning_optimizer=planning_optimizer_data,
         failure_intelligence=failure_intelligence_data,
         goal_scheduler=goal_scheduler_data,
+        environment=environment_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

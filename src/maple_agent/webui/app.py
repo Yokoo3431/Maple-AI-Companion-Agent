@@ -79,6 +79,7 @@ def create_app(
     planning_optimizer: dict | None = None,
     failure_intelligence: dict | None = None,
     goal_scheduler: dict | None = None,
+    environment: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -369,6 +370,12 @@ def create_app(
         if goal_scheduler is None:
             return {"enabled": False}
         return {"enabled": True, **goal_scheduler}
+
+    @app.get("/api/environment/state")
+    async def api_environment_state():
+        if environment is None:
+            return {"enabled": False}
+        return {"enabled": True, **environment}
 
     @app.get("/api/context/state")
     async def api_context_state():

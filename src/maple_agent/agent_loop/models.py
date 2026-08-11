@@ -12,6 +12,10 @@ from maple_agent.confirmation.models import (
     PermissionToken,
 )
 from maple_agent.decision.models import DecisionResult
+from maple_agent.environment.models import (
+    EnvironmentSnapshot,
+    EnvironmentState,
+)
 from maple_agent.evaluation.models import EvaluationResult
 from maple_agent.executor_sandbox.models import SandboxExecutionResult
 from maple_agent.failure_intelligence.models import (
@@ -85,4 +89,6 @@ class AgentLoopContext(BaseModel):
     priority_reference: list[GoalPriorityResult] = Field(
         default_factory=list
     )
+    environment_state: EnvironmentState | None = None
+    environment_snapshot: EnvironmentSnapshot | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
