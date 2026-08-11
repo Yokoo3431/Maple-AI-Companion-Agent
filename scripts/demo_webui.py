@@ -35,6 +35,7 @@ from maple_agent.environment import (
     EnvironmentValidator,
     save_environment_trace,
 )
+from maple_agent.environment.models import EnvironmentState
 from maple_agent.evaluation import EvaluationBenchmark, EvaluationReport
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
@@ -134,6 +135,13 @@ from maple_agent.webui.app import create_app
 from maple_agent.window import MockWindowDetector, WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
 from maple_agent.window.models import WindowRect as BoundWindowRect
+from maple_agent.world_model import (
+    EnvironmentEventDetector,
+    EnvironmentHistoryManager,
+    EnvironmentTransitionDetector,
+    WorldStatePredictor,
+    save_world_model_trace,
+)
 
 
 def main() -> None:
@@ -941,6 +949,50 @@ def main() -> None:
         "snapshot": environment_snapshot.model_dump(mode="json"),
         "validation": environment_validation.model_dump(mode="json"),
     }
+    after_environment_state = EnvironmentState(
+        environment_id="env-after-2",
+        location="魔法密林",
+        visible_entities=["爱丽丝"],
+        resources=["树液"],
+        conditions={
+            "observed_count": 2,
+            "entity_count": 1,
+            "confidence": 0.85,
+        },
+        world_context="当前位于 魔法密林,可见实体: 爱丽丝,观察 2 条",
+        confidence=0.85,
+    )
+    world_history = EnvironmentHistoryManager()
+    world_history.append(environment_state)
+    world_history.append(after_environment_state)
+    world_transition = EnvironmentTransitionDetector().detect(
+        before=environment_state,
+        after=after_environment_state,
+    )
+    world_events = EnvironmentEventDetector().detect(
+        transition=world_transition,
+    )
+    for event in world_events:
+        world_history.add_event(event)
+    world_prediction = WorldStatePredictor().predict(
+        history=world_history.history,
+    )
+    save_world_model_trace(
+        "sessions",
+        loop_trace_id,
+        history=world_history.history,
+        transition=world_transition,
+        events=world_events,
+        prediction=world_prediction,
+    )
+    world_model_data = {
+        "history_count": len(world_history.history.snapshots),
+        "events": [
+            event.model_dump(mode="json") for event in world_events
+        ],
+        "transition": world_transition.model_dump(mode="json"),
+        "prediction": world_prediction.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -974,6 +1026,7 @@ def main() -> None:
         failure_intelligence=failure_intelligence_data,
         goal_scheduler=goal_scheduler_data,
         environment=environment_data,
+        world_model=world_model_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

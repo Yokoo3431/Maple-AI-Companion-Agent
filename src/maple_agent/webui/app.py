@@ -80,6 +80,7 @@ def create_app(
     failure_intelligence: dict | None = None,
     goal_scheduler: dict | None = None,
     environment: dict | None = None,
+    world_model: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -376,6 +377,12 @@ def create_app(
         if environment is None:
             return {"enabled": False}
         return {"enabled": True, **environment}
+
+    @app.get("/api/world-model/state")
+    async def api_world_model_state():
+        if world_model is None:
+            return {"enabled": False}
+        return {"enabled": True, **world_model}
 
     @app.get("/api/context/state")
     async def api_context_state():

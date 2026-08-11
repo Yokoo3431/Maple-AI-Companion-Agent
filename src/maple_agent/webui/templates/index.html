@@ -325,6 +325,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Dynamic World Model(只读)</div>
+        <div class="card-body">
+          <pre id="world-model-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -417,6 +425,26 @@
     refreshFailureIntelligence();
     refreshGoalScheduler();
     refreshEnvironment();
+    refreshWorldModel();
+  }
+
+  async function refreshWorldModel() {
+    const res = await fetch('/api/world-model/state');
+    const data = await res.json();
+    const el = document.getElementById('world-model-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const transition = data.transition || {};
+    const prediction = data.prediction || {};
+    el.textContent = [
+      `HISTORY COUNT: ${data.history_count || 0}`,
+      `EVENTS: ${(data.events || []).map((e) => e.event_type).join(', ') || '-'}`,
+      `LAST TRANSITION: ${transition.transition_type || '-'}`,
+      `PREDICTION: ${prediction.summary || '-'}`,
+      `CONFIDENCE: ${Math.round((prediction.confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshEnvironment() {

@@ -42,6 +42,11 @@ from maple_agent.task_planning.models import (
     TaskGraph,
 )
 from maple_agent.vision_eval.models import VisionEvaluationResult
+from maple_agent.world_model.models import (
+    EnvironmentHistory,
+    EnvironmentTransition,
+    PredictedEnvironmentState,
+)
 
 
 class AgentLoopStatus(StrEnum):
@@ -91,4 +96,7 @@ class AgentLoopContext(BaseModel):
     )
     environment_state: EnvironmentState | None = None
     environment_snapshot: EnvironmentSnapshot | None = None
+    environment_history: EnvironmentHistory | None = None
+    world_transition: EnvironmentTransition | None = None
+    environment_prediction: PredictedEnvironmentState | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
