@@ -16,6 +16,11 @@ from maple_agent.environment.models import (
     EnvironmentSnapshot,
     EnvironmentState,
 )
+from maple_agent.environment_reasoning.models import (
+    EnvironmentInterpretation,
+    EnvironmentRiskReference,
+    OpportunityReference,
+)
 from maple_agent.evaluation.models import EvaluationResult
 from maple_agent.executor_sandbox.models import SandboxExecutionResult
 from maple_agent.failure_intelligence.models import (
@@ -99,4 +104,9 @@ class AgentLoopContext(BaseModel):
     environment_history: EnvironmentHistory | None = None
     world_transition: EnvironmentTransition | None = None
     environment_prediction: PredictedEnvironmentState | None = None
+    environment_interpretation: EnvironmentInterpretation | None = None
+    environment_opportunities: list[OpportunityReference] = Field(
+        default_factory=list
+    )
+    environment_risk_reference: EnvironmentRiskReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

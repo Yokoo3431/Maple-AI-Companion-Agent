@@ -333,6 +333,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Environment Reasoning(只读)</div>
+        <div class="card-body">
+          <pre id="environment-reasoning-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -426,6 +434,25 @@
     refreshGoalScheduler();
     refreshEnvironment();
     refreshWorldModel();
+    refreshEnvironmentReasoning();
+  }
+
+  async function refreshEnvironmentReasoning() {
+    const res = await fetch('/api/environment-reasoning/state');
+    const data = await res.json();
+    const el = document.getElementById('environment-reasoning-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const interp = data.interpretation || {};
+    const risk = data.risk || {};
+    el.textContent = [
+      `MEANING: ${interp.meaning || '-'}`,
+      `OPPORTUNITIES: ${(data.opportunities || []).map((o) => o.opportunity_type).join(', ') || '-'}`,
+      `RISKS: ${risk.risk_level || '-'}: ${risk.reason || ''}`,
+      `CONFIDENCE: ${Math.round((interp.semantic_confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshWorldModel() {

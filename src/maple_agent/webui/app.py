@@ -81,6 +81,7 @@ def create_app(
     goal_scheduler: dict | None = None,
     environment: dict | None = None,
     world_model: dict | None = None,
+    environment_reasoning: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -383,6 +384,12 @@ def create_app(
         if world_model is None:
             return {"enabled": False}
         return {"enabled": True, **world_model}
+
+    @app.get("/api/environment-reasoning/state")
+    async def api_environment_reasoning_state():
+        if environment_reasoning is None:
+            return {"enabled": False}
+        return {"enabled": True, **environment_reasoning}
 
     @app.get("/api/context/state")
     async def api_context_state():

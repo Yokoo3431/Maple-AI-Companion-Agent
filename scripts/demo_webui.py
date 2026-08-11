@@ -36,6 +36,13 @@ from maple_agent.environment import (
     save_environment_trace,
 )
 from maple_agent.environment.models import EnvironmentState
+from maple_agent.environment_reasoning import (
+    EnvironmentOpportunityDetector,
+    EnvironmentReasoner,
+    EnvironmentReasoningValidator,
+    EnvironmentRiskAnalyzer,
+    save_environment_reasoning_trace,
+)
 from maple_agent.evaluation import EvaluationBenchmark, EvaluationReport
 from maple_agent.events import EventBus
 from maple_agent.execution import ExecutionOrchestrator
@@ -993,6 +1000,47 @@ def main() -> None:
         "transition": world_transition.model_dump(mode="json"),
         "prediction": world_prediction.model_dump(mode="json"),
     }
+    environment_interpretation = EnvironmentReasoner().interpret(
+        environment_state=environment_state,
+        environment_history=world_history.history,
+        world_events=world_events,
+        knowledge_state=knowledge_state,
+    )
+    environment_opportunities = EnvironmentOpportunityDetector().detect(
+        environment_state=environment_state,
+        history=world_history.history,
+        knowledge_state=knowledge_state,
+    )
+    environment_risk = EnvironmentRiskAnalyzer().analyze(
+        environment_state=environment_state,
+        interpretation=environment_interpretation,
+        history=world_history.history,
+    )
+    environment_reasoning_validation = (
+        EnvironmentReasoningValidator().validate(
+            interpretation=environment_interpretation,
+            opportunities=environment_opportunities,
+            risk_reference=environment_risk,
+        )
+    )
+    save_environment_reasoning_trace(
+        "sessions",
+        loop_trace_id,
+        interpretation=environment_interpretation,
+        opportunities=environment_opportunities,
+        risks=[environment_risk],
+    )
+    environment_reasoning_data = {
+        "interpretation": environment_interpretation.model_dump(mode="json"),
+        "opportunities": [
+            opportunity.model_dump(mode="json")
+            for opportunity in environment_opportunities
+        ],
+        "risk": environment_risk.model_dump(mode="json"),
+        "validation": environment_reasoning_validation.model_dump(
+            mode="json"
+        ),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1027,6 +1075,7 @@ def main() -> None:
         goal_scheduler=goal_scheduler_data,
         environment=environment_data,
         world_model=world_model_data,
+        environment_reasoning=environment_reasoning_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
