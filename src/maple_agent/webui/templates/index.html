@@ -349,6 +349,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Decision Reference(只读)</div>
+        <div class="card-body">
+          <pre id="decision-reference-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -444,6 +452,31 @@
     refreshWorldModel();
     refreshEnvironmentReasoning();
     refreshEnvironmentPlanning();
+    refreshDecisionReference();
+  }
+
+  async function refreshDecisionReference() {
+    const res = await fetch('/api/decision-reference/state');
+    const data = await res.json();
+    const el = document.getElementById('decision-reference-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const ref = data.reference || {};
+    const opts = (ref.recommended_options || []).map(
+      (o) => `${o.action}(${o.target || '-'})`
+    );
+    const alts = (ref.alternative_options || []).map(
+      (o) => `${o.action}(${o.target || '-'})`
+    );
+    el.textContent = [
+      `OPTIONS: ${opts.join(', ') || '-'}`,
+      `ALTERNATIVES: ${alts.join(', ') || '-'}`,
+      `RISKS: ${ref.risk_level || '-'}`,
+      `CONFIDENCE: ${Math.round((ref.confidence || 0) * 100)}%`,
+      `REASONING: ${(ref.reasoning || []).join('; ') || '-'}`,
+    ].join('\n');
   }
 
   async function refreshEnvironmentPlanning() {

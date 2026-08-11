@@ -83,6 +83,7 @@ def create_app(
     world_model: dict | None = None,
     environment_reasoning: dict | None = None,
     environment_planning: dict | None = None,
+    decision_reference: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -397,6 +398,12 @@ def create_app(
         if environment_planning is None:
             return {"enabled": False}
         return {"enabled": True, **environment_planning}
+
+    @app.get("/api/decision-reference/state")
+    async def api_decision_reference_state():
+        if decision_reference is None:
+            return {"enabled": False}
+        return {"enabled": True, **decision_reference}
 
     @app.get("/api/context/state")
     async def api_context_state():

@@ -28,6 +28,13 @@ from maple_agent.decision import (
     DecisionEngine,
     DecisionOption,
 )
+from maple_agent.decision_reference import (
+    DecisionReferenceBuilder,
+    DecisionReferenceValidator,
+    DecisionRiskIntegrator,
+    DecisionScorer,
+    save_decision_reference_trace,
+)
 from maple_agent.environment import (
     EnvironmentCollector,
     EnvironmentSnapshotManager,
@@ -1080,6 +1087,39 @@ def main() -> None:
         ],
         "validation": environment_planning_validation.model_dump(mode="json"),
     }
+    decision_reference_builder = DecisionReferenceBuilder()
+    decision_reference_ref = decision_reference_builder.build(
+        environment_reference=environment_planning_reference,
+        world_prediction=world_prediction,
+        failure_prevention=prevention_reference,
+        planning_quality=planning_score,
+        goal_id=horizon_goal.goal_id,
+    )
+    decision_score = DecisionScorer().score(
+        reference=decision_reference_ref,
+        historical_success=0.6,
+    )
+    decision_reference_validation = DecisionReferenceValidator().validate(
+        reference=decision_reference_ref,
+        score=decision_score,
+    )
+    decision_risk_notes = DecisionRiskIntegrator().integrate(
+        environment_reference=environment_planning_reference,
+        failure_prevention=prevention_reference,
+    )
+    save_decision_reference_trace(
+        "sessions",
+        loop_trace_id,
+        decision_reference=decision_reference_ref,
+        score=decision_score,
+        risk_notes=decision_risk_notes.risk_notes,
+    )
+    decision_reference_data = {
+        "reference": decision_reference_ref.model_dump(mode="json"),
+        "score": decision_score.model_dump(mode="json"),
+        "risk_notes": decision_risk_notes.risk_notes,
+        "validation": decision_reference_validation.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1116,6 +1156,7 @@ def main() -> None:
         world_model=world_model_data,
         environment_reasoning=environment_reasoning_data,
         environment_planning=environment_planning_data,
+        decision_reference=decision_reference_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

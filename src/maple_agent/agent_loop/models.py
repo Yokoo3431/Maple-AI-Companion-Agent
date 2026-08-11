@@ -12,6 +12,7 @@ from maple_agent.confirmation.models import (
     PermissionToken,
 )
 from maple_agent.decision.models import DecisionResult
+from maple_agent.decision_reference.models import DecisionReference
 from maple_agent.environment.models import (
     EnvironmentSnapshot,
     EnvironmentState,
@@ -113,4 +114,5 @@ class AgentLoopContext(BaseModel):
     )
     environment_risk_reference: EnvironmentRiskReference | None = None
     environment_planning_reference: EnvironmentPlanningReference | None = None
+    decision_reference: DecisionReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
