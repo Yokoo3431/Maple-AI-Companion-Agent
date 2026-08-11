@@ -19,6 +19,10 @@ from maple_agent.goal_memory.models import (
     OptimizedTaskGraph,
 )
 from maple_agent.observation.models import ObservationState
+from maple_agent.planning_optimizer.models import (
+    OptimizedPlanningReference,
+    PlanningQualityScore,
+)
 from maple_agent.reflection.models import ReflectionResult
 from maple_agent.task_planning.models import (
     LongHorizonGoal,
@@ -63,4 +67,6 @@ class AgentLoopContext(BaseModel):
     planning_state: TaskExecutionState | None = None
     goal_experience: GoalExperienceRecord | None = None
     planning_reference: OptimizedTaskGraph | None = None
+    planning_quality: PlanningQualityScore | None = None
+    optimization_reference: OptimizedPlanningReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

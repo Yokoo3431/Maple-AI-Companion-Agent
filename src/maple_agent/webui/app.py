@@ -76,6 +76,7 @@ def create_app(
     architecture: dict | None = None,
     long_horizon: dict | None = None,
     goal_memory: dict | None = None,
+    planning_optimizer: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -348,6 +349,12 @@ def create_app(
         if goal_memory is None:
             return {"enabled": False}
         return {"enabled": True, **goal_memory}
+
+    @app.get("/api/planning-optimizer/state")
+    async def api_planning_optimizer_state():
+        if planning_optimizer is None:
+            return {"enabled": False}
+        return {"enabled": True, **planning_optimizer}
 
     @app.get("/api/context/state")
     async def api_context_state():

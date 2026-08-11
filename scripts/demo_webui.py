@@ -65,6 +65,11 @@ from maple_agent.observation import (
     ObservationValidator,
 )
 from maple_agent.planner import LLMPlannerProvider
+from maple_agent.planning_optimizer import (
+    AdaptivePlannerOptimizer,
+    TaskGraphAnalyzer,
+    save_planning_optimization_trace,
+)
 from maple_agent.providers import (
     MockKnowledgeProvider,
     MockLLMProvider,
@@ -690,6 +695,30 @@ def main() -> None:
         "similarity": goal_retriever.last_best_score,
         "optimization": optimized_graph.model_dump(mode="json"),
     }
+    planning_optimizer = AdaptivePlannerOptimizer()
+    planning_analysis = TaskGraphAnalyzer().analyze(task_graph)
+    optimized_reference, planning_score = planning_optimizer.optimize(
+        graph=task_graph,
+        experience=(
+            retrieved_experience[0] if retrieved_experience else None
+        ),
+        analysis=planning_analysis,
+    )
+    save_planning_optimization_trace(
+        "sessions",
+        loop_trace_id,
+        goal_id=horizon_goal.goal_id,
+        original_plan=task_graph.model_dump(mode="json"),
+        analysis=planning_optimizer.last_analysis,
+        optimized_plan=optimized_reference,
+        score=planning_score,
+    )
+    planning_optimizer_data = {
+        "goal_id": horizon_goal.goal_id,
+        "analysis": planning_optimizer.last_analysis.model_dump(mode="json"),
+        "score": planning_score.model_dump(mode="json"),
+        "optimized": optimized_reference.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -719,6 +748,7 @@ def main() -> None:
         architecture=architecture_data,
         long_horizon=long_horizon_data,
         goal_memory=goal_memory_data,
+        planning_optimizer=planning_optimizer_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

@@ -293,6 +293,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Adaptive Planning Optimization(只读)</div>
+        <div class="card-body">
+          <pre id="planning-optimizer-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -381,6 +389,27 @@
     refreshArchitecture();
     refreshLongHorizon();
     refreshGoalMemory();
+    refreshPlanningOptimizer();
+  }
+
+  async function refreshPlanningOptimizer() {
+    const res = await fetch('/api/planning-optimizer/state');
+    const data = await res.json();
+    const el = document.getElementById('planning-optimizer-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const score = data.score || {};
+    const optimized = data.optimized || {};
+    const pct = (v) => `${Math.round((v || 0) * 100)}%`;
+    el.textContent = [
+      `CURRENT PLAN: ${(optimized.optimized_order || []).length} 任务`,
+      `QUALITY SCORE: ${pct(score.planning_score)}`,
+      `RISK: ${pct((data.analysis || {}).failure_probability)}`,
+      `EXPERIENCE ALIGNMENT: ${pct(score.experience_alignment)}`,
+      `OPTIMIZATION: ${optimized.summary || '-'}`,
+    ].join('\n');
   }
 
   async function refreshGoalMemory() {
