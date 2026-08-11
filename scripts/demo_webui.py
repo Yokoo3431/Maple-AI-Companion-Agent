@@ -108,6 +108,11 @@ from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
+from maple_agent.maple_context import (
+    MapleContextBuilder,
+    MapleContextValidator,
+    save_maple_context_trace,
+)
 from maple_agent.memory_association import (
     AssociationReasoner,
     SemanticAssociationEngine,
@@ -1257,6 +1262,59 @@ def main() -> None:
         "reference": semantic_reference.model_dump(mode="json"),
         "validation": semantic_validation,
     }
+    from maple_agent.agent_loop.models import (
+        AgentLoopContext,
+        AgentLoopStatus,
+    )
+
+    maple_agent_context = AgentLoopContext(
+        trace_id=loop_trace_id,
+        status=AgentLoopStatus.COMPLETED,
+        environment_state=environment_state,
+        environment_prediction=world_prediction,
+        environment_history=world_history.history,
+        environment_risk_reference=environment_risk,
+        environment_planning_reference=environment_planning_reference,
+        decision_reference=decision_reference_ref,
+        human_alignment_reference=human_aligned_reference,
+        memory_reference=memory_reference,
+        semantic_memory_reference=semantic_reference,
+        failure_prevention_reference=prevention_reference,
+        goal_state=horizon_goal,
+        goal_schedule=schedule_result,
+    )
+    maple_context_builder = MapleContextBuilder()
+    maple_context_reference = maple_context_builder.build(
+        agent_context=maple_agent_context,
+        player_id="maple-player-001",
+        trace_id=loop_trace_id,
+    )
+    maple_context_validation = MapleContextValidator().validate(
+        maple_context_reference,
+    )
+    save_maple_context_trace(
+        "sessions",
+        loop_trace_id,
+        reference=maple_context_reference,
+        validation=maple_context_validation.verdict.value,
+    )
+    maple_context_data = {
+        "player": maple_context_reference.player_context.model_dump(
+            mode="json"
+        ),
+        "world": maple_context_reference.world_context.model_dump(
+            mode="json"
+        ),
+        "goal": maple_context_reference.goal_context.model_dump(
+            mode="json"
+        ),
+        "cognitive": maple_context_reference.cognitive_context.model_dump(
+            mode="json"
+        ),
+        "summary": maple_context_reference.summary,
+        "confidence": maple_context_reference.confidence,
+        "validation": maple_context_validation.verdict.value,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1297,6 +1355,7 @@ def main() -> None:
         human_alignment=human_alignment_data,
         memory_graph=memory_graph_data,
         semantic_memory=semantic_memory_data,
+        maple_context=maple_context_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

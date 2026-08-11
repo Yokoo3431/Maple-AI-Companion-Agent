@@ -381,6 +381,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Maple Companion Context(只读)</div>
+        <div class="card-body">
+          <pre id="maple-context-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -480,6 +488,30 @@
     refreshHumanAlignment();
     refreshMemoryGraph();
     refreshSemanticMemory();
+    refreshMapleContext();
+  }
+
+  async function refreshMapleContext() {
+    const res = await fetch('/api/maple-context/state');
+    const data = await res.json();
+    const el = document.getElementById('maple-context-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const player = data.player || {};
+    const world = data.world || {};
+    const goal = data.goal || {};
+    const cognitive = data.cognitive || {};
+    el.textContent = [
+      `PLAYER: ${player.location || '-'}`,
+      `WORLD: ${world.location || '-'} (${(world.visible_entities || []).length} 实体)`,
+      `GOAL: ${goal.active_goal || '-'}`,
+      `COGNITION: ${cognitive.confidence ? Math.round(cognitive.confidence * 100) + '%' : '-'}`,
+      `MEMORY: ${cognitive.memory_reference || '-'}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshSemanticMemory() {
