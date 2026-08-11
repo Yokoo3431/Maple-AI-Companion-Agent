@@ -22,6 +22,10 @@ from maple_agent.goal_memory.models import (
     GoalExperienceRecord,
     OptimizedTaskGraph,
 )
+from maple_agent.goal_scheduler.models import (
+    GoalPriorityResult,
+    OptimizedGoalSchedule,
+)
 from maple_agent.observation.models import ObservationState
 from maple_agent.planning_optimizer.models import (
     OptimizedPlanningReference,
@@ -77,4 +81,8 @@ class AgentLoopContext(BaseModel):
         default_factory=list
     )
     failure_prevention_reference: FailurePreventionReference | None = None
+    goal_schedule: OptimizedGoalSchedule | None = None
+    priority_reference: list[GoalPriorityResult] = Field(
+        default_factory=list
+    )
     status: AgentLoopStatus = AgentLoopStatus.CREATED

@@ -1,6 +1,7 @@
 """启动 Phase 0 WebUI 控制台演示(纯本地,不触碰游戏)。"""
 
 import sys
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -57,6 +58,11 @@ from maple_agent.goal_memory import (
     GoalExperienceStore,
     PlanningOptimizer,
     save_goal_memory_trace,
+)
+from maple_agent.goal_scheduler import (
+    GoalScheduleRecord,
+    MultiGoalScheduler,
+    save_goal_schedule_trace,
 )
 from maple_agent.knowledge.evaluation import (
     EvaluationRunner,
@@ -812,6 +818,92 @@ def main() -> None:
         ),
         "prevention": prevention_reference.model_dump(mode="json"),
     }
+    schedule_goal_b = LongHorizonGoal(
+        goal_id="goal-b",
+        description="提升到 5 级",
+        priority=8,
+        success_condition="达到 5 级",
+        milestones=[
+            Milestone(
+                milestone_id="ms-b1",
+                title="击败怪物",
+                order=0,
+                task_ids=["task-b1"],
+            )
+        ],
+    )
+    schedule_goal_c = LongHorizonGoal(
+        goal_id="goal-c",
+        description="收集树液道具",
+        priority=5,
+        success_condition="收集 10 个树液",
+        milestones=[
+            Milestone(
+                milestone_id="ms-c1",
+                title="收集道具",
+                order=0,
+                task_ids=["task-c1"],
+            )
+        ],
+    )
+    goal_scheduler = MultiGoalScheduler()
+    schedule_records = [
+        GoalScheduleRecord(
+            schedule_id="sch-a",
+            goal_id=horizon_goal.goal_id,
+            priority=10,
+            urgency=0.3,
+            importance=0.9,
+            resource_cost=0.4,
+            deadline=datetime.now(UTC) + timedelta(days=5),
+            confidence=0.8,
+        ),
+        GoalScheduleRecord(
+            schedule_id="sch-b",
+            goal_id=schedule_goal_b.goal_id,
+            priority=8,
+            urgency=0.7,
+            importance=0.7,
+            resource_cost=0.7,
+            dependency=horizon_goal.goal_id,
+            deadline=datetime.now(UTC) + timedelta(days=1),
+            confidence=0.6,
+        ),
+        GoalScheduleRecord(
+            schedule_id="sch-c",
+            goal_id=schedule_goal_c.goal_id,
+            priority=5,
+            urgency=0.5,
+            importance=0.4,
+            resource_cost=0.3,
+            deadline=datetime.now(UTC) + timedelta(days=3),
+            confidence=0.5,
+        ),
+    ]
+    schedule_result = goal_scheduler.schedule(
+        goals=[horizon_goal, schedule_goal_b, schedule_goal_c],
+        records=schedule_records,
+    )
+    save_goal_schedule_trace(
+        "sessions",
+        loop_trace_id,
+        goals=[horizon_goal, schedule_goal_b, schedule_goal_c],
+        priority_scores=goal_scheduler.last_priorities,
+        schedule=schedule_result,
+        conflicts=goal_scheduler.last_conflicts,
+    )
+    goal_scheduler_data = {
+        "goal_count": len(schedule_records),
+        "priority_scores": [
+            score.model_dump(mode="json")
+            for score in goal_scheduler.last_priorities
+        ],
+        "schedule": schedule_result.model_dump(mode="json"),
+        "conflicts": [
+            conflict.model_dump(mode="json")
+            for conflict in goal_scheduler.last_conflicts
+        ],
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -843,6 +935,7 @@ def main() -> None:
         goal_memory=goal_memory_data,
         planning_optimizer=planning_optimizer_data,
         failure_intelligence=failure_intelligence_data,
+        goal_scheduler=goal_scheduler_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
