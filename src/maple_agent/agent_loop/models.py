@@ -16,6 +16,9 @@ from maple_agent.environment.models import (
     EnvironmentSnapshot,
     EnvironmentState,
 )
+from maple_agent.environment_planning.models import (
+    EnvironmentPlanningReference,
+)
 from maple_agent.environment_reasoning.models import (
     EnvironmentInterpretation,
     EnvironmentRiskReference,
@@ -109,4 +112,5 @@ class AgentLoopContext(BaseModel):
         default_factory=list
     )
     environment_risk_reference: EnvironmentRiskReference | None = None
+    environment_planning_reference: EnvironmentPlanningReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

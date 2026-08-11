@@ -341,6 +341,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Environment Planning Reference(只读)</div>
+        <div class="card-body">
+          <pre id="environment-planning-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -435,6 +443,26 @@
     refreshEnvironment();
     refreshWorldModel();
     refreshEnvironmentReasoning();
+    refreshEnvironmentPlanning();
+  }
+
+  async function refreshEnvironmentPlanning() {
+    const res = await fetch('/api/environment-planning/state');
+    const data = await res.json();
+    const el = document.getElementById('environment-planning-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const ref = data.reference || {};
+    const constraints = data.risk_constraints || [];
+    const adjustments = data.goal_adjustments || [];
+    el.textContent = [
+      `GOAL ADJUSTMENT: ${adjustments.map((a) => `${a.opportunity_type}(${a.suggested_priority})`).join(', ') || '-'}`,
+      `RISK CONSTRAINT: ${constraints.map((c) => `${c.level}: ${c.message}`).join('; ') || '-'}`,
+      `OPPORTUNITY: ${(ref.opportunity_notes || []).join('; ') || '-'}`,
+      `CONFIDENCE: ${Math.round((ref.confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshEnvironmentReasoning() {

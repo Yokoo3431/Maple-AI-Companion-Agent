@@ -36,6 +36,12 @@ from maple_agent.environment import (
     save_environment_trace,
 )
 from maple_agent.environment.models import EnvironmentState
+from maple_agent.environment_planning import (
+    EnvironmentAwarePlanner,
+    EnvironmentPlanningValidator,
+    EnvironmentRiskAdapter,
+    save_environment_planning_trace,
+)
 from maple_agent.environment_reasoning import (
     EnvironmentOpportunityDetector,
     EnvironmentReasoner,
@@ -1041,6 +1047,39 @@ def main() -> None:
             mode="json"
         ),
     }
+    environment_planner = EnvironmentAwarePlanner()
+    environment_planning_reference = environment_planner.build_reference(
+        opportunities=environment_opportunities,
+        risk_reference=environment_risk,
+        goal_id=horizon_goal.goal_id,
+    )
+    environment_planning_validation = EnvironmentPlanningValidator().validate(
+        reference=environment_planning_reference,
+        risk_reference=environment_risk,
+    )
+    environment_planning_constraint = EnvironmentRiskAdapter().adapt(
+        risk_reference=environment_risk,
+    )
+    save_environment_planning_trace(
+        "sessions",
+        loop_trace_id,
+        environment_reference=environment_planning_reference,
+        goal_adjustments=(
+            environment_planning_reference.priority_adjustments
+        ),
+        risk_constraints=[environment_planning_constraint],
+    )
+    environment_planning_data = {
+        "reference": environment_planning_reference.model_dump(mode="json"),
+        "goal_adjustments": [
+            adjustment.model_dump(mode="json")
+            for adjustment in environment_planning_reference.priority_adjustments
+        ],
+        "risk_constraints": [
+            environment_planning_constraint.model_dump(mode="json")
+        ],
+        "validation": environment_planning_validation.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1076,6 +1115,7 @@ def main() -> None:
         environment=environment_data,
         world_model=world_model_data,
         environment_reasoning=environment_reasoning_data,
+        environment_planning=environment_planning_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
