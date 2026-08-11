@@ -108,6 +108,12 @@ from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
+from maple_agent.memory_association import (
+    AssociationReasoner,
+    SemanticAssociationEngine,
+    SemanticAssociationValidator,
+    save_semantic_memory_trace,
+)
 from maple_agent.memory_graph import (
     MemoryConsolidator,
     MemoryGraphValidator,
@@ -1215,6 +1221,42 @@ def main() -> None:
         "retrieval": memory_reference.model_dump(mode="json"),
         "validation": memory_validation,
     }
+    semantic_engine = SemanticAssociationEngine()
+    semantic_relations = semantic_engine.associate(memory_nodes)
+    semantic_reasoner = AssociationReasoner()
+    semantic_summary = semantic_reasoner.summarize(semantic_relations)
+    semantic_reference = semantic_reasoner.build_reference(
+        semantic_relations,
+    )
+    semantic_validations = [
+        SemanticAssociationValidator().validate_relation(relation)
+        for relation in semantic_relations
+    ]
+    if all(
+        validation.verdict.value == "VALID"
+        for validation in semantic_validations
+    ):
+        semantic_validation = "VALID"
+    elif all(
+        validation.verdict.value != "BLOCKED"
+        for validation in semantic_validations
+    ):
+        semantic_validation = "WARNING"
+    else:
+        semantic_validation = "BLOCKED"
+    save_semantic_memory_trace(
+        "sessions",
+        loop_trace_id,
+        relations=semantic_relations,
+        summary=semantic_summary.model_dump(mode="json"),
+        validation=semantic_validation,
+    )
+    semantic_memory_data = {
+        "relation_count": len(semantic_relations),
+        "summary": semantic_summary.model_dump(mode="json"),
+        "reference": semantic_reference.model_dump(mode="json"),
+        "validation": semantic_validation,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1254,6 +1296,7 @@ def main() -> None:
         decision_reference=decision_reference_data,
         human_alignment=human_alignment_data,
         memory_graph=memory_graph_data,
+        semantic_memory=semantic_memory_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

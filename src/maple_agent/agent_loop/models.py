@@ -40,6 +40,7 @@ from maple_agent.goal_scheduler.models import (
     OptimizedGoalSchedule,
 )
 from maple_agent.human_alignment.models import HumanAlignedDecisionReference
+from maple_agent.memory_association.models import SemanticMemoryReference
 from maple_agent.memory_graph.models import RelevantMemoryReference
 from maple_agent.observation.models import ObservationState
 from maple_agent.planning_optimizer.models import (
@@ -119,4 +120,5 @@ class AgentLoopContext(BaseModel):
     decision_reference: DecisionReference | None = None
     human_alignment_reference: HumanAlignedDecisionReference | None = None
     memory_reference: RelevantMemoryReference | None = None
+    semantic_memory_reference: SemanticMemoryReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

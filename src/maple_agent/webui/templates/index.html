@@ -373,6 +373,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Semantic Memory Association(只读)</div>
+        <div class="card-body">
+          <pre id="semantic-memory-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -471,6 +479,26 @@
     refreshDecisionReference();
     refreshHumanAlignment();
     refreshMemoryGraph();
+    refreshSemanticMemory();
+  }
+
+  async function refreshSemanticMemory() {
+    const res = await fetch('/api/semantic-memory/state');
+    const data = await res.json();
+    const el = document.getElementById('semantic-memory-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const summary = data.summary || {};
+    el.textContent = [
+      `SEMANTIC RELATIONS: ${data.relation_count || 0}`,
+      `FAILURE PATTERNS: ${(summary.risk_patterns || []).length}`,
+      `SUCCESS PATTERNS: ${(summary.successful_patterns || []).length}`,
+      `PREFERENCE ALIGNMENT: ${(summary.preference_patterns || []).length}`,
+      `WORLD LINKS: ${((data.reference || {}).world_context || []).length}`,
+      `CONFIDENCE: ${Math.round((summary.confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshMemoryGraph() {
