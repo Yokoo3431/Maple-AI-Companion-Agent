@@ -365,6 +365,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Cognitive Memory Graph(只读)</div>
+        <div class="card-body">
+          <pre id="memory-graph-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -462,6 +470,26 @@
     refreshEnvironmentPlanning();
     refreshDecisionReference();
     refreshHumanAlignment();
+    refreshMemoryGraph();
+  }
+
+  async function refreshMemoryGraph() {
+    const res = await fetch('/api/memory-graph/state');
+    const data = await res.json();
+    const el = document.getElementById('memory-graph-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const retrieval = data.retrieval || {};
+    el.textContent = [
+      `MEMORY COUNT: ${data.memory_count || 0}`,
+      `MEMORY TYPES: ${(data.memory_types || []).join(', ') || '-'}`,
+      `RELATED FAILURES: ${(retrieval.related_failures || []).length}`,
+      `SIMILAR EXPERIENCES: ${(retrieval.similar_experiences || []).length}`,
+      `PREFERENCE HINTS: ${(retrieval.preference_hints || []).length}`,
+      `RETRIEVAL CONFIDENCE: ${Math.round((retrieval.confidence || 0) * 100)}%`,
+    ].join('\n');
   }
 
   async function refreshHumanAlignment() {

@@ -108,6 +108,14 @@ from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
 from maple_agent.logging_setup import new_id, setup_logging
+from maple_agent.memory_graph import (
+    MemoryConsolidator,
+    MemoryGraphValidator,
+    MemoryIndex,
+    MemoryRelationBuilder,
+    MemoryRetriever,
+    save_memory_graph_trace,
+)
 from maple_agent.observation import (
     ObservationAdapter,
     ObservationCollector,
@@ -1156,6 +1164,57 @@ def main() -> None:
         "feedback": human_feedback.model_dump(mode="json"),
         "validation": human_alignment_validation.model_dump(mode="json"),
     }
+    memory_consolidator = MemoryConsolidator()
+    memory_nodes = memory_consolidator.consolidate(
+        experiences=goal_experience_store.all(),
+        failures=all_patterns,
+        world_history=world_history.history,
+        decision_reference=decision_reference_ref,
+        preferences=human_aligner.memory,
+    )
+    memory_nodes = MemoryRelationBuilder().auto_link(memory_nodes)
+    memory_index = MemoryIndex()
+    memory_index.add_many(memory_nodes)
+    memory_retriever = MemoryRetriever(memory_index)
+    memory_reference = memory_retriever.retrieve(
+        current_goal=horizon_goal,
+        environment_state=environment_state,
+        decision_reference=decision_reference_ref,
+    )
+    memory_validation_results = MemoryGraphValidator().validate_graph(
+        memory_nodes,
+    )
+    if all(
+        result.verdict.value == "VALID"
+        for result in memory_validation_results
+    ):
+        memory_validation = "VALID"
+    elif all(
+        result.verdict.value != "BLOCKED"
+        for result in memory_validation_results
+    ):
+        memory_validation = "WARNING"
+    else:
+        memory_validation = "BLOCKED"
+    all_relations = [
+        relation for node in memory_nodes for relation in node.relations
+    ]
+    save_memory_graph_trace(
+        "sessions",
+        loop_trace_id,
+        memory_nodes=memory_nodes,
+        relations=all_relations,
+        retrieval=memory_reference,
+        validation=memory_validation,
+    )
+    memory_graph_data = {
+        "memory_count": memory_index.count(),
+        "memory_types": sorted(
+            {node.memory_type.value for node in memory_nodes}
+        ),
+        "retrieval": memory_reference.model_dump(mode="json"),
+        "validation": memory_validation,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1194,6 +1253,7 @@ def main() -> None:
         environment_planning=environment_planning_data,
         decision_reference=decision_reference_data,
         human_alignment=human_alignment_data,
+        memory_graph=memory_graph_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

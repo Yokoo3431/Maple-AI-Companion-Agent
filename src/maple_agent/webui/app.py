@@ -85,6 +85,7 @@ def create_app(
     environment_planning: dict | None = None,
     decision_reference: dict | None = None,
     human_alignment: dict | None = None,
+    memory_graph: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -411,6 +412,12 @@ def create_app(
         if human_alignment is None:
             return {"enabled": False}
         return {"enabled": True, **human_alignment}
+
+    @app.get("/api/memory-graph/state")
+    async def api_memory_graph_state():
+        if memory_graph is None:
+            return {"enabled": False}
+        return {"enabled": True, **memory_graph}
 
     @app.get("/api/context/state")
     async def api_context_state():
