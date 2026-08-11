@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from maple_agent.action_plan.models import ActionPlan
 from maple_agent.confirmation.models import (
@@ -14,6 +14,10 @@ from maple_agent.confirmation.models import (
 from maple_agent.decision.models import DecisionResult
 from maple_agent.evaluation.models import EvaluationResult
 from maple_agent.executor_sandbox.models import SandboxExecutionResult
+from maple_agent.failure_intelligence.models import (
+    FailurePatternRecord,
+    FailurePreventionReference,
+)
 from maple_agent.goal_memory.models import (
     GoalExperienceRecord,
     OptimizedTaskGraph,
@@ -69,4 +73,8 @@ class AgentLoopContext(BaseModel):
     planning_reference: OptimizedTaskGraph | None = None
     planning_quality: PlanningQualityScore | None = None
     optimization_reference: OptimizedPlanningReference | None = None
+    failure_patterns: list[FailurePatternRecord] = Field(
+        default_factory=list
+    )
+    failure_prevention_reference: FailurePreventionReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

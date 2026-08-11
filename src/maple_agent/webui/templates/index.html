@@ -301,6 +301,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Failure Intelligence(只读)</div>
+        <div class="card-body">
+          <pre id="failure-intelligence-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -390,6 +398,27 @@
     refreshLongHorizon();
     refreshGoalMemory();
     refreshPlanningOptimizer();
+    refreshFailureIntelligence();
+  }
+
+  async function refreshFailureIntelligence() {
+    const res = await fetch('/api/failure-intelligence/state');
+    const data = await res.json();
+    const el = document.getElementById('failure-intelligence-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const analysis = data.analysis || {};
+    const prevention = data.prevention || {};
+    const top = data.top_pattern || {};
+    el.textContent = [
+      `FAILURE COUNT: ${data.failure_count || 0}`,
+      `TOP PATTERN: ${top.failure_type || '-'}`,
+      `ROOT CAUSE: ${analysis.root_cause || '-'}`,
+      `RISK LEVEL: ${analysis.risk_level || '-'}`,
+      `PREVENTION: ${prevention.summary || '-'}`,
+    ].join('\n');
   }
 
   async function refreshPlanningOptimizer() {

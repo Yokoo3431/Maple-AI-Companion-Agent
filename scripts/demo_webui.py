@@ -40,6 +40,14 @@ from maple_agent.experience import (
     ExperienceRetriever,
     ExperienceStore,
 )
+from maple_agent.failure_intelligence import (
+    FailureAnalyzer,
+    FailureExtractor,
+    FailurePatternMatcher,
+    FailurePatternRecord,
+    FailurePredictor,
+    save_failure_intelligence_trace,
+)
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
@@ -719,6 +727,91 @@ def main() -> None:
         "score": planning_score.model_dump(mode="json"),
         "optimized": optimized_reference.model_dump(mode="json"),
     }
+    failure_pattern_store = [
+        FailurePatternRecord(
+            pattern_id="fp-1",
+            failure_type="EXECUTION_FAILED",
+            trigger_conditions=["confidence=0.5"],
+            context_snapshot={
+                "confidence": 0.5,
+                "failed_task": "task-3",
+            },
+            affected_tasks=["task-3"],
+            root_cause="前置条件未满足",
+            resolution_strategy="重试并检查前置条件",
+            success_rate=0.3,
+            confidence=0.7,
+        )
+    ]
+    failure_extractor = FailureExtractor()
+    new_pattern = failure_extractor.extract(
+        reflection=recovery_reflection,
+        execution_trace=None,
+        task_planning_trace={"current_task": "task-3", "progress": 0.4},
+    )
+    all_patterns = failure_pattern_store + (
+        [new_pattern] if new_pattern is not None else []
+    )
+    failure_matcher = FailurePatternMatcher()
+    match_results = failure_matcher.match(
+        patterns=all_patterns,
+        current_task_graph=task_graph,
+        current_context={
+            "confidence": 0.5,
+            "failed_task": "task-3",
+        },
+        failure_type="EXECUTION_FAILED",
+    )
+    top_match = match_results[0] if match_results else None
+    top_pattern = (
+        next(
+            (
+                pattern
+                for pattern in all_patterns
+                if pattern.pattern_id == top_match.pattern_id
+            ),
+            None,
+        )
+        if top_match is not None
+        else None
+    )
+    failure_analyzer = FailureAnalyzer()
+    root_cause_analysis = (
+        failure_analyzer.analyze(
+            pattern=top_pattern,
+            match_score=top_match.score,
+        )
+        if top_pattern is not None
+        else None
+    )
+    failure_predictor = FailurePredictor()
+    prevention_reference = failure_predictor.build_prevention_reference(
+        task_graph=task_graph,
+        patterns=all_patterns,
+        analysis=root_cause_analysis,
+    )
+    save_failure_intelligence_trace(
+        "sessions",
+        loop_trace_id,
+        source_trace=loop_trace_id,
+        failure_pattern=top_pattern,
+        analysis=root_cause_analysis,
+        prevention_reference=prevention_reference,
+    )
+    failure_intelligence_data = {
+        "failure_count": len(all_patterns),
+        "top_pattern": (
+            top_pattern.model_dump(mode="json")
+            if top_pattern is not None
+            else None
+        ),
+        "analysis": (
+            root_cause_analysis.model_dump(mode="json")
+            if root_cause_analysis is not None
+            else None
+        ),
+        "prevention": prevention_reference.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -749,6 +842,7 @@ def main() -> None:
         long_horizon=long_horizon_data,
         goal_memory=goal_memory_data,
         planning_optimizer=planning_optimizer_data,
+        failure_intelligence=failure_intelligence_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
