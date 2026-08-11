@@ -357,6 +357,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Human Alignment(只读)</div>
+        <div class="card-body">
+          <pre id="human-alignment-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -453,6 +461,25 @@
     refreshEnvironmentReasoning();
     refreshEnvironmentPlanning();
     refreshDecisionReference();
+    refreshHumanAlignment();
+  }
+
+  async function refreshHumanAlignment() {
+    const res = await fetch('/api/human-alignment/state');
+    const data = await res.json();
+    const el = document.getElementById('human-alignment-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const ref = data.reference || {};
+    const alignment = data.alignment || {};
+    el.textContent = [
+      `PREFERENCES: ${(ref.preferred_options || []).map((o) => o.option_id).join(', ') || '-'}`,
+      `ADJUSTMENTS: ${(ref.adjustments || []).join('; ') || '-'}`,
+      `ALIGNMENT SCORE: ${Math.round((ref.alignment_score || 0) * 100)}%`,
+      `REASONING: ${(ref.reasoning || []).join('; ') || '-'}`,
+    ].join('\n');
   }
 
   async function refreshDecisionReference() {

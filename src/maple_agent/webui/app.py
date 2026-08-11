@@ -84,6 +84,7 @@ def create_app(
     environment_reasoning: dict | None = None,
     environment_planning: dict | None = None,
     decision_reference: dict | None = None,
+    human_alignment: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -404,6 +405,12 @@ def create_app(
         if decision_reference is None:
             return {"enabled": False}
         return {"enabled": True, **decision_reference}
+
+    @app.get("/api/human-alignment/state")
+    async def api_human_alignment_state():
+        if human_alignment is None:
+            return {"enabled": False}
+        return {"enabled": True, **human_alignment}
 
     @app.get("/api/context/state")
     async def api_context_state():

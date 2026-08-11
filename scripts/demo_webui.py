@@ -92,6 +92,13 @@ from maple_agent.goal_scheduler import (
     MultiGoalScheduler,
     save_goal_schedule_trace,
 )
+from maple_agent.human_alignment import (
+    FeedbackAction,
+    HumanAlignmentAligner,
+    HumanAlignmentValidator,
+    HumanFeedback,
+    save_human_alignment_trace,
+)
 from maple_agent.knowledge.evaluation import (
     EvaluationRunner,
     RetrievalBenchmark,
@@ -1120,6 +1127,35 @@ def main() -> None:
         "risk_notes": decision_risk_notes.risk_notes,
         "validation": decision_reference_validation.model_dump(mode="json"),
     }
+    human_feedback = HumanFeedback(
+        feedback_id="fb-demo",
+        option_id="opt-NPC_INTERACTION",
+        action=FeedbackAction.ACCEPT,
+        comment="用户偏好 NPC 对话推进任务",
+        trace_id=loop_trace_id,
+    )
+    human_aligner = HumanAlignmentAligner()
+    human_aligned_reference = human_aligner.align(
+        decision_reference=decision_reference_ref,
+        feedback=human_feedback,
+    )
+    human_alignment_validation = HumanAlignmentValidator().validate(
+        reference=human_aligned_reference,
+        alignment=human_aligner.last_score,
+    )
+    save_human_alignment_trace(
+        "sessions",
+        loop_trace_id,
+        decision_reference=decision_reference_ref,
+        feedback=human_feedback,
+        alignment=human_aligner.last_score,
+    )
+    human_alignment_data = {
+        "reference": human_aligned_reference.model_dump(mode="json"),
+        "alignment": human_aligner.last_score.model_dump(mode="json"),
+        "feedback": human_feedback.model_dump(mode="json"),
+        "validation": human_alignment_validation.model_dump(mode="json"),
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1157,6 +1193,7 @@ def main() -> None:
         environment_reasoning=environment_reasoning_data,
         environment_planning=environment_planning_data,
         decision_reference=decision_reference_data,
+        human_alignment=human_alignment_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

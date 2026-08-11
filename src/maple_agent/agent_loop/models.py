@@ -39,6 +39,7 @@ from maple_agent.goal_scheduler.models import (
     GoalPriorityResult,
     OptimizedGoalSchedule,
 )
+from maple_agent.human_alignment.models import HumanAlignedDecisionReference
 from maple_agent.observation.models import ObservationState
 from maple_agent.planning_optimizer.models import (
     OptimizedPlanningReference,
@@ -115,4 +116,5 @@ class AgentLoopContext(BaseModel):
     environment_risk_reference: EnvironmentRiskReference | None = None
     environment_planning_reference: EnvironmentPlanningReference | None = None
     decision_reference: DecisionReference | None = None
+    human_alignment_reference: HumanAlignedDecisionReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
