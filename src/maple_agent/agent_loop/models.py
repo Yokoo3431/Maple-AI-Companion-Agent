@@ -60,6 +60,7 @@ from maple_agent.task_planning.models import (
     TaskGraph,
 )
 from maple_agent.vision_eval.models import VisionEvaluationResult
+from maple_agent.vision_runtime.models import ScreenObservation
 from maple_agent.world_model.models import (
     EnvironmentHistory,
     EnvironmentTransition,
@@ -133,4 +134,5 @@ class AgentLoopContext(BaseModel):
     quest_goal_reference: QuestGoalReference | None = None
     perception_fusion_reference: PerceptionFusionReference | None = None
     reflex_reference: ReflexReference | None = None
+    vision_reference: ScreenObservation | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

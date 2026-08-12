@@ -211,6 +211,16 @@ from maple_agent.vision.coordinate import (
     VisionCoordinateMapper,
 )
 from maple_agent.vision_eval import VisionEvaluator
+from maple_agent.vision_runtime import (
+    GameStateParser,
+    MockScreenshotProvider,
+    VisionDetector,
+    VisionRuntimeValidator,
+    save_vision_runtime_trace,
+)
+from maple_agent.vision_runtime import (
+    MockOCRProvider as VisionRuntimeMockOCR,
+)
 from maple_agent.webui.app import create_app
 from maple_agent.window import MockWindowDetector, WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
@@ -1622,11 +1632,63 @@ def main() -> None:
             "validation": reflex_death_validation.verdict.value,
         },
     }
+    vision_runtime_capture = MockScreenshotProvider(
+        map_name="射手村",
+        npcs=["赫丽娜"],
+        monsters=["绿水灵"],
+        items=["红药水"],
+        ui_elements=["任务提示"],
+        hp_ratio=0.8,
+        mp_ratio=0.6,
+        quests=["新手任务"],
+        confidence=0.9,
+    )
+    vision_runtime_frame = vision_runtime_capture.capture(
+        trace_id=loop_trace_id
+    )
+    vision_runtime_ocr = VisionRuntimeMockOCR(
+        text=vision_runtime_capture.mock_ocr_text(),
+        confidence=0.9,
+    ).recognize(vision_runtime_frame)
+    vision_runtime_elements = VisionDetector().detect(
+        vision_runtime_frame,
+        vision_runtime_ocr,
+    )
+    vision_observation = GameStateParser().parse(
+        vision_runtime_frame,
+        vision_runtime_ocr,
+        vision_runtime_elements,
+    )
+    vision_runtime_validation = VisionRuntimeValidator().validate(
+        vision_runtime_frame,
+        vision_observation,
+    )
+    save_vision_runtime_trace(
+        "sessions",
+        loop_trace_id,
+        frame=vision_runtime_frame,
+        observation=vision_observation,
+        validation=vision_runtime_validation.verdict.value,
+    )
+    vision_runtime_data = {
+        "frame_id": vision_runtime_frame.frame_id,
+        "source": vision_runtime_frame.source.value,
+        "image_reference": vision_runtime_frame.image_reference,
+        "visible_map": vision_observation.visible_map,
+        "visible_entities": vision_observation.visible_entities,
+        "ui_elements": vision_observation.ui_elements,
+        "hp_reference": vision_observation.hp_reference,
+        "mp_reference": vision_observation.mp_reference,
+        "quest_reference": vision_observation.quest_reference,
+        "confidence": vision_observation.confidence,
+        "validation": vision_runtime_validation.verdict.value,
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
             "perception_fusion_reference": perception_fusion_reference,
             "reflex_reference": reflex_low_hp,
+            "vision_reference": vision_observation,
         }
     )
     app = create_app(
@@ -1675,6 +1737,7 @@ def main() -> None:
         quest_reasoning=quest_reasoning_data,
         perception_fusion=perception_fusion_data,
         reflex=reflex_data,
+        vision_runtime=vision_runtime_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

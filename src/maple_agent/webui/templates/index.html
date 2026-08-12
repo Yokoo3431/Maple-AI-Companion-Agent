@@ -429,6 +429,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Vision Runtime(只读)</div>
+        <div class="card-body">
+          <pre id="vision-runtime-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -534,6 +542,27 @@
     refreshQuestReasoning();
     refreshPerceptionFusion();
     refreshReflex();
+    refreshVisionRuntime();
+  }
+
+  async function refreshVisionRuntime() {
+    const res = await fetch('/api/vision-runtime/state');
+    const data = await res.json();
+    const el = document.getElementById('vision-runtime-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `FRAME ID: ${data.frame_id || '-'}`,
+      `MAP: ${data.visible_map || '-'}`,
+      `ENTITIES: ${(data.visible_entities || []).join(', ') || '-'}`,
+      `UI: ${(data.ui_elements || []).join(', ') || '-'}`,
+      `HP: ${data.hp_reference != null ? Math.round(data.hp_reference * 100) + '%' : '-'}`,
+      `MP: ${data.mp_reference != null ? Math.round(data.mp_reference * 100) + '%' : '-'}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshReflex() {
