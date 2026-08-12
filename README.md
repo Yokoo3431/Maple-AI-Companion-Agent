@@ -31,6 +31,7 @@
 | Phase 13E.1 | Safety vNext Gate Enforcement Hardening(门执行加固) | ✅ 已完成 |
 | Phase 13F | Real Vision Validation(真实视觉验证基础) | ✅ Foundation implemented |
 | Phase 13G | Knowledge Acquisition & Quality Gate(知识获取与质量门) | ✅ Foundation implemented |
+| Phase 13H | Repository Governance & Multi-Machine Handoff(仓库治理与多机交接) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -254,6 +255,16 @@ unknown relation 不静默 PORTAL)、拓扑校验、KnowledgeQualityBenchmark、
 
 **阶段完成 ≠ Knowledge Gate READY**:Knowledge Readiness 当前为 `FOUNDATION_ONLY`
 (demo 数据 canonical 未全覆盖、无 production denominator),不虚报。
+
+## Multi-machine Development
+
+项目支持在 Office / Home / Future PC 之间切换开发,并支持 Git clone 与 ZIP snapshot
+两种获取方式。所有 AI Agent 开工前请阅读 `AGENTS.md`(统一入口)与 `.project/CURRENT_STATE.yaml`,
+完整流程见 [docs/governance/MULTI_MACHINE_WORKFLOW.md](docs/governance/MULTI_MACHINE_WORKFLOW.md)。
+
+```text
+Phase 13H = 仓库治理与多机交接(AGENTS 入口 / Governance 文档 / .project 状态 / preflight)
+```
 
 ## 快速开始(Phase 0)
 

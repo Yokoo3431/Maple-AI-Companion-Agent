@@ -1,0 +1,32 @@
+project:
+  name: Maple-AI-Companion-Agent
+  repository: Yokoo3431/Maple-AI-Companion-Agent
+
+baseline:
+  branch: main
+  source_commit: 231725ea4f3314a0d70bead02dd77f54c3285bb0
+  commit: PENDING
+  previous_commit: 231725ea4f3314a0d70bead02dd77f54c3285bb0
+
+phase:
+  current: 13-H
+  status: IN_PROGRESS
+  last_completed: 13-G
+
+runtime:
+  safety_mode: MOCK_ONLY
+
+readiness:
+  real_vision: NOT_READY
+  knowledge: FOUNDATION_ONLY
+  controlled_execution: NOT_READY
+
+development:
+  role: IMPLEMENTER
+  last_machine: unspecified
+  git_repository_expected: true
+
+handoff:
+  status: READY
+  next_action: ""
+  blockers: []
