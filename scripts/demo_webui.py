@@ -134,6 +134,15 @@ from maple_agent.knowledge.evaluation import (
 from maple_agent.knowledge.importer import ImportSource, run_import
 from maple_agent.knowledge.retrieval import AliasIndex
 from maple_agent.knowledge_graph import build_graph
+from maple_agent.knowledge_quality import (
+    CanonicalMapper,
+    KnowledgeCoverageDenominator,
+    KnowledgeImportOrchestrator,
+    KnowledgeReadinessPolicy,
+    KnowledgeSourceReference,
+    KnowledgeSourceType,
+    ManualCuratedAdapter,
+)
 from maple_agent.logging_setup import new_id, setup_logging
 from maple_agent.maple_context import (
     MapleContextBuilder,
@@ -2412,6 +2421,86 @@ def main() -> None:
             "OCR provider unavailable",
         ],
     }
+    knowledge_mapper = CanonicalMapper.from_maple_graph(
+        maple_knowledge_graph,
+        game_profile="maple-v113",
+        server_profile="nostalgic",
+        data_version="demo-v1",
+    )
+    knowledge_source = KnowledgeSourceReference(
+        source_id="manual-demo",
+        source_type=KnowledgeSourceType.MANUAL_CURATED,
+        source_name="demo manual dataset",
+        game_profile="maple-v113",
+        server_profile="nostalgic",
+        data_version="demo-v1",
+        content_hash="fixture",
+        trust_level=0.5,
+        confidence=0.5,
+        adapter_name="ManualCuratedAdapter",
+        adapter_version="1.0",
+    )
+    knowledge_result = KnowledgeImportOrchestrator(
+        canonical_mapper=knowledge_mapper,
+        policy=KnowledgeReadinessPolicy(minimum_total_entities=5),
+    ).acquire(
+        knowledge_source,
+        ManualCuratedAdapter(),
+        denominators=[
+            KnowledgeCoverageDenominator(
+                source_name="fixture",
+                expected_counts={
+                    "map": 3,
+                    "portal": 2,
+                    "npc": 1,
+                    "monster": 1,
+                    "quest": 1,
+                    "item": 2,
+                },
+            )
+        ],
+    )
+    knowledge_quality_data = {
+        "dataset_version": knowledge_result.readiness.dataset_version,
+        "game_profile": knowledge_result.readiness.game_profile,
+        "server_profile": knowledge_result.readiness.server_version,
+        "sources": knowledge_result.manifest.canonical_mapped_count,
+        "total_relations": knowledge_result.manifest.relation_counts.get(
+            "total", 0
+        ),
+        "map_count": knowledge_result.manifest.entity_counts.get("map", 0),
+        "npc_count": knowledge_result.manifest.entity_counts.get("npc", 0),
+        "monster_count": knowledge_result.manifest.entity_counts.get(
+            "monster", 0
+        ),
+        "quest_count": knowledge_result.manifest.entity_counts.get(
+            "quest", 0
+        ),
+        "item_count": knowledge_result.manifest.entity_counts.get("item", 0),
+        "canonical_id_coverage": (
+            knowledge_result.benchmark.canonical_id_coverage
+        ),
+        "provenance_coverage": (
+            knowledge_result.benchmark.provenance_coverage
+        ),
+        "map_coverage": knowledge_result.readiness.map_coverage,
+        "portal_coverage": knowledge_result.readiness.portal_coverage,
+        "npc_coverage": knowledge_result.readiness.npc_coverage,
+        "monster_coverage": knowledge_result.readiness.monster_coverage,
+        "quest_coverage": knowledge_result.readiness.quest_coverage,
+        "item_coverage": knowledge_result.readiness.item_coverage,
+        "unresolved_reference_rate": (
+            knowledge_result.benchmark.unresolved_reference_rate
+        ),
+        "dangling_reference_rate": (
+            knowledge_result.benchmark.dangling_reference_rate
+        ),
+        "duplicate_rate": knowledge_result.benchmark.duplicate_rate,
+        "conflict_rate": knowledge_result.benchmark.conflict_rate,
+        "validation_score": knowledge_result.benchmark.validation_score,
+        "status": knowledge_result.readiness.status.value,
+        "reasons": knowledge_result.benchmark.reasons,
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -2491,6 +2580,7 @@ def main() -> None:
         recovery=recovery_data,
         action_verification=action_verification_data,
         real_vision=real_vision_data,
+        knowledge_quality=knowledge_quality_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

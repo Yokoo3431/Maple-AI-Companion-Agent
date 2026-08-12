@@ -30,6 +30,7 @@
 | Phase 13E | Safety Contract vNext Formalization(安全契约 vNext 正式化) | ✅ 已完成 |
 | Phase 13E.1 | Safety vNext Gate Enforcement Hardening(门执行加固) | ✅ 已完成 |
 | Phase 13F | Real Vision Validation(真实视觉验证基础) | ✅ Foundation implemented |
+| Phase 13G | Knowledge Acquisition & Quality Gate(知识获取与质量门) | ✅ Foundation implemented |
 
 当前架构路线:
 
@@ -52,7 +53,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Safety Contract vNext(仅契约,未启用)
 → Gate Enforcement Hardening(文档 Gate == 代码 Gate == 测试 Gate)
 → Real Vision Validation Gate(readiness 当前 NOT_READY,未虚报)
-→ Knowledge Quality Gate
+→ Knowledge Quality Gate(readiness 当前 FOUNDATION_ONLY,未虚报)
 → Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
 ```
@@ -233,6 +234,26 @@ Safety vNext 文档 Gate 与 machine-readable Gate 已完全对齐
 
 **阶段完成 ≠ Gate PASSED**:Real Vision Readiness 当前为 `NOT_READY`
 (本机未验证真实 Maple 客户端;OCR backend 当前环境不可用),不虚报。
+
+### Phase 13-G: Knowledge Acquisition & Quality Gate
+
+```text
+13-F Real Vision Foundation
+↓ 13-G Knowledge Acquisition & Quality Gate
+↓ Real Vision Client Benchmark
+↓ Controlled Execution Prerequisite Review
+↓ Future Isolated Input Prototype
+```
+
+已实现:来源 Provenance(`KnowledgeSourceReference`)、Canonical 映射(`CanonicalMapper`)、
+Source Adapter(LocalStatic / ManualCurated 可运行;Wiki / Static Game Resource 预留)、
+Generic Import Pipeline 复用(不新增第三套 importer)、World adapter 重构(`import_from_dataset`,
+unknown relation 不静默 PORTAL)、拓扑校验、KnowledgeQualityBenchmark、KnowledgeReadinessPolicy、
+自动 Readiness、versioned dataset 输出(`knowledge/versions/<version>/`)、CLI
+`scripts/validate_knowledge_quality.py`。
+
+**阶段完成 ≠ Knowledge Gate READY**:Knowledge Readiness 当前为 `FOUNDATION_ONLY`
+(demo 数据 canonical 未全覆盖、无 production denominator),不虚报。
 
 ## 快速开始(Phase 0)
 

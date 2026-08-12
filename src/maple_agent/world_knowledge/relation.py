@@ -12,6 +12,39 @@ class MapRelationBuilder:
     """把数据驱动的连接条目转为强类型连接参考。"""
 
     @staticmethod
+    def build_strict(
+        connections: list[dict],
+    ) -> tuple[list[MapConnectionReference], list[str]]:
+        """严格模式:未知关系类型不静默 PORTAL,跳过并返回 warnings。"""
+        built: list[MapConnectionReference] = []
+        warnings: list[str] = []
+        for item in connections or []:
+            source = str(item.get("from", item.get("source", "")))
+            target = str(item.get("to", item.get("target", "")))
+            if not source or not target:
+                warnings.append("relation missing source/target")
+                continue
+            raw_type = item.get("type", "PORTAL")
+            try:
+                connection_type = MapConnectionType(raw_type)
+            except ValueError:
+                warnings.append(f"unknown relation type: {raw_type}")
+                continue
+            built.append(
+                MapConnectionReference(
+                    source_map=source,
+                    target_map=target,
+                    connection_type=connection_type,
+                    direction_reference=item.get(
+                        "direction_reference",
+                        {},
+                    ),
+                    confidence=float(item.get("confidence", 0.9)),
+                )
+            )
+        return built, warnings
+
+    @staticmethod
     def build(
         connections: list[dict],
     ) -> list[MapConnectionReference]:

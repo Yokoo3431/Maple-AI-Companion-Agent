@@ -8,8 +8,13 @@ from typing import Any
 
 import yaml
 
+from maple_agent.knowledge.dataset import KnowledgeDataset
 from maple_agent.world_knowledge.map_graph import MapGraph
-from maple_agent.world_knowledge.models import MapNodeReference
+from maple_agent.world_knowledge.models import (
+    MapConnectionReference,
+    MapConnectionType,
+    MapNodeReference,
+)
 from maple_agent.world_knowledge.relation import MapRelationBuilder
 
 
@@ -88,6 +93,62 @@ class WorldKnowledgeImporter:
             payload,
             source=str(path),
         )
+
+    @staticmethod
+    def import_from_dataset(
+        dataset: KnowledgeDataset,
+    ) -> tuple[MapGraph, list[str]]:
+        """World-specific Adapter:复用 Generic Import Pipeline 产物构建 MapGraph。
+
+        不重复 JSON/YAML 解析与校验;未知关系类型跳过并返回 warnings,不静默 PORTAL。
+        """
+        graph = MapGraph()
+        by_id: dict[str, str] = {}
+        for map_node in dataset.maps:
+            map_id = str(map_node.map_id)
+            by_id[map_id] = map_node.name
+            graph.add_node(
+                MapNodeReference(
+                    map_id=map_id,
+                    map_name=map_node.name,
+                    aliases=list(map_node.aliases),
+                    region=getattr(map_node, "region", ""),
+                    map_type="",
+                    description="",
+                    confidence=0.9,
+                )
+            )
+        warnings: list[str] = []
+        for relation in dataset.relations:
+            if relation.source != "map" or relation.target != "map":
+                continue
+            source_name = by_id.get(str(relation.source_id))
+            target_name = by_id.get(str(relation.target_id))
+            if not source_name or not target_name:
+                warnings.append(
+                    f"dangling map relation: "
+                    f"{relation.source_id}->{relation.target_id}"
+                )
+                continue
+            try:
+                connection_type = MapConnectionType(
+                    relation.relation_type.value
+                )
+            except ValueError:
+                warnings.append(
+                    f"unknown relation type skipped: "
+                    f"{relation.relation_type.value}"
+                )
+                continue
+            graph.add_connection(
+                MapConnectionReference(
+                    source_map=source_name,
+                    target_map=target_name,
+                    connection_type=connection_type,
+                    confidence=getattr(relation, "confidence", 0.9),
+                )
+            )
+        return graph, warnings
 
     @staticmethod
     def _parse(data: dict | str) -> dict[str, Any]:

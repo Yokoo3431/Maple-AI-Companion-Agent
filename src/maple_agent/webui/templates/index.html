@@ -517,6 +517,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Knowledge Quality(只读)</div>
+        <div class="card-body">
+          <pre id="knowledge-quality-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -633,6 +641,31 @@
     refreshRecovery();
     refreshActionVerification();
     refreshRealVision();
+    refreshKnowledgeQuality();
+  }
+
+  async function refreshKnowledgeQuality() {
+    const res = await fetch('/api/knowledge-quality/state');
+    const data = await res.json();
+    const el = document.getElementById('knowledge-quality-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const fmt = v => v != null ? (Math.round(v * 100) + '%') : 'N/A';
+    el.textContent = [
+      `DATASET: ${data.dataset_version || '-'} / ${data.game_profile || '-'} / ${data.server_profile || '-'}`,
+      `SOURCES: ${data.sources || '-'}`,
+      `ENTITIES: map=${data.map_count ?? 0} npc=${data.npc_count ?? 0} monster=${data.monster_count ?? 0} quest=${data.quest_count ?? 0} item=${data.item_count ?? 0}`,
+      `RELATIONS: ${data.total_relations ?? 0}`,
+      `CANONICAL: ${fmt(data.canonical_id_coverage)}`,
+      `PROVENANCE: ${fmt(data.provenance_coverage)}`,
+      `MAP/PORTAL/NPC/MONSTER/QUEST/ITEM: ${fmt(data.map_coverage)}/${fmt(data.portal_coverage)}/${fmt(data.npc_coverage)}/${fmt(data.monster_coverage)}/${fmt(data.quest_coverage)}/${fmt(data.item_coverage)}`,
+      `UNRESOLVED: ${data.unresolved_reference_rate ?? 'N/A'} DANGLING: ${data.dangling_reference_rate ?? 'N/A'} DUP: ${data.duplicate_rate ?? 'N/A'} CONFLICT: ${data.conflict_rate ?? 'N/A'}`,
+      `VALIDATION SCORE: ${fmt(data.validation_score)}`,
+      `KNOWLEDGE READINESS: ${data.status || '-'}`,
+      `REASONS: ${(data.reasons || []).join('; ') || '-'}`,
+    ].join('\n');
   }
 
   async function refreshRealVision() {

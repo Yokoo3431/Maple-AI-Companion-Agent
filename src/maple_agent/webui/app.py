@@ -104,6 +104,7 @@ def create_app(
     recovery: dict | None = None,
     action_verification: dict | None = None,
     real_vision: dict | None = None,
+    knowledge_quality: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -544,6 +545,12 @@ def create_app(
         if real_vision is None:
             return {"enabled": False}
         return {"enabled": True, **real_vision}
+
+    @app.get("/api/knowledge-quality/state")
+    async def api_knowledge_quality_state():
+        if knowledge_quality is None:
+            return {"enabled": False}
+        return {"enabled": True, **knowledge_quality}
 
     @app.get("/api/context/state")
     async def api_context_state():
