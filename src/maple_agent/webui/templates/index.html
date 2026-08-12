@@ -413,6 +413,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Perception Fusion(只读)</div>
+        <div class="card-body">
+          <pre id="perception-fusion-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -516,6 +524,27 @@
     refreshMapleKnowledge();
     refreshPerception();
     refreshQuestReasoning();
+    refreshPerceptionFusion();
+  }
+
+  async function refreshPerceptionFusion() {
+    const res = await fetch('/api/perception-fusion/state');
+    const data = await res.json();
+    const el = document.getElementById('perception-fusion-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const sources = data.source_inputs || [];
+    el.textContent = [
+      `SOURCES: ${sources.map(s => `${s.source}:${Math.round((s.confidence || 0) * 100)}%`).join(', ') || '-'}`,
+      `FUSION CONFIDENCE: ${Math.round((data.fused_confidence || 0) * 100)}%`,
+      `CONSISTENCY: ${Math.round((data.consistency_score || 0) * 100)}%`,
+      `CONFLICTS: ${(data.conflicts || []).join(', ') || '-'}`,
+      `MISSING SIGNALS: ${(data.missing_signals || []).join(', ') || '-'}`,
+      `FOCUS: ${data.focus_reference || '-'}`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshQuestReasoning() {

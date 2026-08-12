@@ -147,6 +147,11 @@ from maple_agent.perception import (
 from maple_agent.perception import (
     MockVisionProvider as PerceptionMockVisionProvider,
 )
+from maple_agent.perception_fusion import (
+    PerceptionFusionEngine,
+    PerceptionFusionValidator,
+    save_perception_fusion_trace,
+)
 from maple_agent.planner import LLMPlannerProvider
 from maple_agent.planning_optimizer import (
     AdaptivePlannerOptimizer,
@@ -1477,8 +1482,51 @@ def main() -> None:
         "reasoning": quest_goal_reference.reasoning,
         "validation": quest_reasoning_validation.verdict.value,
     }
+    perception_fusion_engine = PerceptionFusionEngine()
+    perception_fusion_reference = perception_fusion_engine.fuse(
+        perception_reference=perception_reference,
+        knowledge_reference=maple_knowledge_ref,
+        context_reference=maple_context_reference,
+        quest_goal_reference=quest_goal_reference,
+        memory_reference=memory_reference,
+        semantic_memory_reference=semantic_reference,
+        human_alignment_reference=human_aligned_reference,
+    )
+    perception_fusion_validation = PerceptionFusionValidator().validate(
+        perception_fusion_reference
+    )
+    save_perception_fusion_trace(
+        "sessions",
+        loop_trace_id,
+        sources={
+            source.source: source.confidence
+            for source in perception_fusion_reference.source_inputs
+        },
+        fusion=perception_fusion_reference,
+        conflicts=perception_fusion_reference.conflicts,
+        validation=perception_fusion_validation.verdict.value,
+    )
+    perception_fusion_data = {
+        "fusion_id": perception_fusion_reference.fusion_id,
+        "source_inputs": [
+            source.model_dump(mode="json")
+            for source in perception_fusion_reference.source_inputs
+        ],
+        "fused_confidence": perception_fusion_reference.fused_confidence,
+        "consistency_score": (
+            perception_fusion_reference.consistency_score
+        ),
+        "conflicts": perception_fusion_reference.conflicts,
+        "missing_signals": perception_fusion_reference.missing_signals,
+        "focus_reference": perception_fusion_reference.focus_reference,
+        "reasoning": perception_fusion_reference.reasoning,
+        "validation": perception_fusion_validation.verdict.value,
+    }
     maple_agent_context = maple_agent_context.model_copy(
-        update={"quest_goal_reference": quest_goal_reference}
+        update={
+            "quest_goal_reference": quest_goal_reference,
+            "perception_fusion_reference": perception_fusion_reference,
+        }
     )
     app = create_app(
         runtime=runtime,
@@ -1524,6 +1572,7 @@ def main() -> None:
         maple_knowledge=maple_knowledge_data,
         perception=perception_data,
         quest_reasoning=quest_reasoning_data,
+        perception_fusion=perception_fusion_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

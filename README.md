@@ -6,12 +6,26 @@
 
 ## 功能规划(分阶段)
 
+> 项目目标保持不变:**Maple Companion AI(理解与规划)+ 未来隔离虚拟输入(仅规划,不实现真实输入)**。
+
 | 阶段 | 内容 | 状态 |
 | --- | --- | --- |
-| Phase 0 | 基础架构:配置 / 日志 / Event Bus / Runtime / WebUI / Agent 状态机框架 / 知识库框架 / 只读窗口检测 | 开发中(M0 进行中) |
-| Phase 1 | Vision + OCR + Input Provider + Agent 状态机 | 规划中 |
-| Phase 2 | 知识库 + 路线 + 补给 | 规划中 |
-| Phase 3 | 任务 Agent + Human Teaching | 规划中 |
+| Phase 0-7A | 基础架构 / 认知闭环(观察-决策-规划-确认-沙箱-反思-评估)/ 架构冻结 | ✅ 已完成 |
+| Phase 7B-8F | 长期规划 / 环境理解 / 决策参考 / 人类对齐 | ✅ 已完成 |
+| Phase 9A-9F | 记忆图谱 / 语义记忆 / Maple 上下文 / 领域知识 / 感知绑定 / 任务推理 | ✅ 已完成 |
+| Phase 10A | Perception Fusion(多源感知融合,只读) | ✅ 已完成 |
+| Phase 10B | L1 Reflex Foundation(HP/MP/UI 状态与危险事件快速感知) | 规划中 |
+| Phase 10C | Virtual Keyboard Isolation Layer(未来隔离虚拟输入层) | 规划中 |
+
+当前架构路线:
+
+```text
+Observation → Vision Evaluation → Knowledge → Decision → Planning
+→ Human Confirmation → Permission Sandbox(MOCK_ONLY) → Reflection → Evaluation
+→ Memory / Semantic Memory → Maple Context → Quest Reasoning → Perception Fusion
+```
+
+保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
 
 ## 快速开始(Phase 0)
 

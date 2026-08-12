@@ -46,6 +46,7 @@ from maple_agent.memory_association.models import SemanticMemoryReference
 from maple_agent.memory_graph.models import RelevantMemoryReference
 from maple_agent.observation.models import ObservationState
 from maple_agent.perception.models import MaplePerceptionReference
+from maple_agent.perception_fusion.models import PerceptionFusionReference
 from maple_agent.planning_optimizer.models import (
     OptimizedPlanningReference,
     PlanningQualityScore,
@@ -129,4 +130,5 @@ class AgentLoopContext(BaseModel):
     maple_knowledge_reference: MapleKnowledgeReference | None = None
     perception_reference: MaplePerceptionReference | None = None
     quest_goal_reference: QuestGoalReference | None = None
+    perception_fusion_reference: PerceptionFusionReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
