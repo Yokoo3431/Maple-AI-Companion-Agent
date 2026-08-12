@@ -58,6 +58,7 @@ from maple_agent.planning_optimizer.models import (
 from maple_agent.quest_reasoning.models import QuestGoalReference
 from maple_agent.reflection.models import ReflectionResult
 from maple_agent.reflex.models import ReflexReference
+from maple_agent.safety_gate.models import SafetyEvaluationReference
 from maple_agent.spatial_world.models import SpatialWorldReference
 from maple_agent.task_planning.models import (
     LongHorizonGoal,
@@ -147,4 +148,5 @@ class AgentLoopContext(BaseModel):
     navigation_reference: NavigationReference | None = None
     behavior_reference: BehaviorReference | None = None
     action_proposal_reference: ActionProposalReference | None = None
+    safety_evaluation_reference: SafetyEvaluationReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

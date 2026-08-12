@@ -23,6 +23,7 @@
 | Phase 12A | Navigation Planning Foundation(只读导航规划参考) | ✅ 已完成 |
 | Phase 12B | Behavior Planner Foundation(高层行为规划参考,只读) | ✅ 已完成 |
 | Phase 12C | Action Proposal Foundation(动作建议参考,只读) | ✅ 已完成 |
+| Phase 13A | Safety Gate Foundation(动作安全审核参考,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -38,6 +39,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Navigation Planning Reference(只规划,不执行)
 → Behavior Planning Reference(规划行为,不执行)
 → Action Proposal Reference(生成动作建议,不执行)
+→ Safety Gate Reference(安全审核,不执行)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
@@ -109,6 +111,20 @@ Future Input Layer
 
 当前阶段把行为步骤转换为语义动作建议(OBSERVE / NAVIGATE / INTERACT / COMBAT / COLLECT / VERIFY / WAIT),
 输出仅 Action Proposal Reference。**不执行**;禁止 Execute / Run / Send 按钮与任何真实输入。
+
+### Phase 13-A: Safety Gate
+
+```text
+Action Proposal
+    ↓
+Safety Gate
+    ↓
+Future Input Isolation
+```
+
+当前阶段对动作建议执行确定性安全审核(HP 风险 / 死亡风险 / 未知目标 / 非法动作),
+输出仅 SafetyEvaluationReference(ALLOW_REFERENCE / WARNING_REFERENCE / BLOCKED_REFERENCE)。
+**不执行**;审核结果不是执行许可,禁止 Approve Execute / Run / Send。
 
 ## 快速开始(Phase 0)
 

@@ -100,6 +100,7 @@ def create_app(
     navigation: dict | None = None,
     behavior: dict | None = None,
     action_proposal: dict | None = None,
+    safety_gate: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -516,6 +517,12 @@ def create_app(
         if action_proposal is None:
             return {"enabled": False}
         return {"enabled": True, **action_proposal}
+
+    @app.get("/api/safety-gate/state")
+    async def api_safety_gate_state():
+        if safety_gate is None:
+            return {"enabled": False}
+        return {"enabled": True, **safety_gate}
 
     @app.get("/api/context/state")
     async def api_context_state():

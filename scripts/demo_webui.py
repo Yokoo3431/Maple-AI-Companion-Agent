@@ -91,7 +91,10 @@ from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.game_state import (
     GameStateExtractor,
+    GameStateReference,
     GameStateValidator,
+    MapStateReference,
+    PlayerStateReference,
     save_game_state_trace,
 )
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
@@ -216,6 +219,11 @@ from maple_agent.reflex import (
     save_reflex_trace,
 )
 from maple_agent.runtime import RuntimeManager
+from maple_agent.safety_gate import (
+    SafetyEvaluator,
+    SafetyGateValidator,
+    save_safety_gate_trace,
+)
 from maple_agent.spatial_world import (
     SpatialMapStore,
     SpatialWorldBuilder,
@@ -1994,6 +2002,78 @@ def main() -> None:
             "validation": action_proposal_combat_validation.verdict.value,
         },
     }
+    safety_evaluator = SafetyEvaluator()
+    safety_allow = safety_evaluator.evaluate(
+        action_proposals[0],
+        game_state_reference=game_state_reference,
+        reflex_reference=reflex_normal,
+    )
+    safety_allow_validation = SafetyGateValidator().validate(safety_allow)
+    combat_action = next(
+        action
+        for action in action_proposals_combat
+        if action.action_type.value == "COMBAT"
+    )
+    hp_low_state = GameStateReference(
+        state_id="state-hp-low",
+        player_state=PlayerStateReference(hp=0.2, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        confidence=0.9,
+    )
+    safety_warning = safety_evaluator.evaluate(
+        combat_action,
+        game_state_reference=hp_low_state,
+        reflex_reference=reflex_normal,
+    )
+    safety_warning_validation = SafetyGateValidator().validate(
+        safety_warning
+    )
+    reflex_death = ReflexReference(
+        reflex_id="reflex-death-demo",
+        state=ReflexStateType.DEATH,
+        confidence=0.9,
+    )
+    safety_blocked = safety_evaluator.evaluate(
+        action_proposals[0],
+        game_state_reference=game_state_reference,
+        reflex_reference=reflex_death,
+    )
+    safety_blocked_validation = SafetyGateValidator().validate(
+        safety_blocked
+    )
+    save_safety_gate_trace(
+        "sessions",
+        loop_trace_id,
+        action=safety_allow.source_action,
+        decision=safety_allow.decision.value,
+        risk_factors=safety_allow.risk_factors,
+        validation=safety_allow_validation.verdict.value,
+    )
+    safety_gate_data = {
+        "source_action": safety_allow.source_action,
+        "decision": safety_allow.decision.value,
+        "risk_factors": safety_allow.risk_factors,
+        "reasoning": safety_allow.reasoning,
+        "confidence": safety_allow.confidence,
+        "validation": safety_allow_validation.verdict.value,
+        "warning_example": {
+            "action": safety_warning.source_action,
+            "decision": safety_warning.decision.value,
+            "risk_factors": safety_warning.risk_factors,
+            "confidence": safety_warning.confidence,
+            "validation": safety_warning_validation.verdict.value,
+        },
+        "blocked_example": {
+            "action": safety_blocked.source_action,
+            "decision": safety_blocked.decision.value,
+            "risk_factors": safety_blocked.risk_factors,
+            "confidence": safety_blocked.confidence,
+            "validation": safety_blocked_validation.verdict.value,
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -2008,6 +2088,7 @@ def main() -> None:
             "action_proposal_reference": (
                 action_proposals[0] if action_proposals else None
             ),
+            "safety_evaluation_reference": safety_allow,
         }
     )
     app = create_app(
@@ -2063,6 +2144,7 @@ def main() -> None:
         navigation=navigation_data,
         behavior=behavior_data,
         action_proposal=action_proposal_data,
+        safety_gate=safety_gate_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
