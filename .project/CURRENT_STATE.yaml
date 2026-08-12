@@ -17,7 +17,7 @@ runtime:
   safety_mode: MOCK_ONLY
 
 readiness:
-  real_vision: NOT_READY
+  real_vision: FOUNDATION_ONLY
   knowledge: FOUNDATION_ONLY
   controlled_execution: NOT_READY
 
