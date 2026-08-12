@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-I Real Vision Client Benchmark & Calibration Baseline
 - **Current phase**:13-I.1 Hybrid Local Perception & Background Capture Feasibility(COMPLETED)
-- **Baseline**:`ed1f87919a648a0e43cf9b1a61a5c35fdfa1139a`(source)
+- **Baseline**:`a05acd017dd7c5c870d20cc73d8800b94b64266b`(source)
 - **What changed**:
   - `hybrid_vision` 模块:PerceptionEvidence / FrameChangeDetector / VisionScheduler /
     HpMpGeometryExtractor / MapleVisualTemplateLibrary / KnowledgeGuidedResolver /
