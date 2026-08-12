@@ -56,6 +56,7 @@ from maple_agent.planning_optimizer.models import (
     PlanningQualityScore,
 )
 from maple_agent.quest_reasoning.models import QuestGoalReference
+from maple_agent.recovery.models import RecoveryReference
 from maple_agent.reflection.models import ReflectionResult
 from maple_agent.reflex.models import ReflexReference
 from maple_agent.safety_gate.models import SafetyEvaluationReference
@@ -149,4 +150,5 @@ class AgentLoopContext(BaseModel):
     behavior_reference: BehaviorReference | None = None
     action_proposal_reference: ActionProposalReference | None = None
     safety_evaluation_reference: SafetyEvaluationReference | None = None
+    recovery_reference: RecoveryReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

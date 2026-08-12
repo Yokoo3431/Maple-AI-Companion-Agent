@@ -24,6 +24,7 @@
 | Phase 12B | Behavior Planner Foundation(高层行为规划参考,只读) | ✅ 已完成 |
 | Phase 12C | Action Proposal Foundation(动作建议参考,只读) | ✅ 已完成 |
 | Phase 13A | Safety Gate Foundation(动作安全审核参考,只读) | ✅ 已完成 |
+| Phase 13B | Failure Recovery Foundation(失败检测与恢复建议,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -40,6 +41,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Behavior Planning Reference(规划行为,不执行)
 → Action Proposal Reference(生成动作建议,不执行)
 → Safety Gate Reference(安全审核,不执行)
+→ Recovery Reference(检测失败并提出恢复建议,不执行)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
@@ -125,6 +127,22 @@ Future Input Isolation
 当前阶段对动作建议执行确定性安全审核(HP 风险 / 死亡风险 / 未知目标 / 非法动作),
 输出仅 SafetyEvaluationReference(ALLOW_REFERENCE / WARNING_REFERENCE / BLOCKED_REFERENCE)。
 **不执行**;审核结果不是执行许可,禁止 Approve Execute / Run / Send。
+
+### Phase 13-B: Failure Recovery
+
+```text
+Action Proposal
+    ↓
+Safety Gate
+    ↓
+Recovery Foundation
+    ↓
+Future Input Isolation
+```
+
+当前阶段检测动作失败(导航超时 / 状态不匹配 / 战斗失败 / 安全阻止)并提出恢复建议
+(RETRY / WAIT_OBSERVATION / REPLAN / CHANGE_TARGET / ABORT)。
+输出仅 RecoveryReference。**不执行恢复**;禁止 Execute / Retry Now / Run 按钮与任何真实输入。
 
 ## 快速开始(Phase 0)
 

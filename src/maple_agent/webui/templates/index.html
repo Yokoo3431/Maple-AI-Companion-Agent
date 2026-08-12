@@ -493,6 +493,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Recovery(只读)</div>
+        <div class="card-body">
+          <pre id="recovery-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -606,6 +614,24 @@
     refreshBehavior();
     refreshActionProposal();
     refreshSafetyGate();
+    refreshRecovery();
+  }
+
+  async function refreshRecovery() {
+    const res = await fetch('/api/recovery/state');
+    const data = await res.json();
+    const el = document.getElementById('recovery-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    el.textContent = [
+      `ACTION: ${data.source_action || '-'}`,
+      `FAILURE: ${data.failure_type || '-'}`,
+      `RECOVERY: ${data.recovery_type || '-'}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshSafetyGate() {

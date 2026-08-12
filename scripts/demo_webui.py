@@ -203,6 +203,14 @@ from maple_agent.quest_reasoning import (
 from maple_agent.quest_reasoning import (
     QuestPlanner as QuestIntelligencePlanner,
 )
+from maple_agent.recovery import (
+    FailureDetector,
+    RecoveryValidator,
+    save_recovery_trace,
+)
+from maple_agent.recovery import (
+    RecoveryPlanner as FailureRecoveryPlanner,
+)
 from maple_agent.reflection import (
     ReflectionEngine,
     ReflectionMemory,
@@ -2074,6 +2082,94 @@ def main() -> None:
             "validation": safety_blocked_validation.verdict.value,
         },
     }
+    failure_detector = FailureDetector()
+    recovery_planner = FailureRecoveryPlanner()
+    recovery_timeout = recovery_planner.plan(
+        action_proposals[0],
+        failure_detector.detect(
+            action_proposals[0],
+            game_state=game_state_reference,
+            safety_evaluation=safety_allow,
+            timeout_hint=True,
+        ),
+        game_state=game_state_reference,
+        safety_evaluation=safety_allow,
+    )
+    recovery_timeout_validation = RecoveryValidator().validate(
+        recovery_timeout
+    )
+    interact_action = next(
+        action
+        for action in action_proposals
+        if action.action_type.value == "INTERACT"
+    )
+    recovery_mismatch = recovery_planner.plan(
+        interact_action,
+        failure_detector.detect(
+            interact_action,
+            game_state=game_state_reference,
+            safety_evaluation=safety_allow,
+            npc_missing=True,
+        ),
+        game_state=game_state_reference,
+        safety_evaluation=safety_allow,
+    )
+    recovery_combat = recovery_planner.plan(
+        combat_action,
+        failure_detector.detect(
+            combat_action,
+            game_state=hp_low_state,
+            safety_evaluation=safety_allow,
+            hp_decreased=True,
+        ),
+        game_state=hp_low_state,
+        safety_evaluation=safety_allow,
+    )
+    recovery_abort = recovery_planner.plan(
+        action_proposals[0],
+        failure_detector.detect(
+            action_proposals[0],
+            game_state=game_state_reference,
+            safety_evaluation=safety_blocked,
+        ),
+        game_state=game_state_reference,
+        safety_evaluation=safety_blocked,
+    )
+    recovery_abort_validation = RecoveryValidator().validate(recovery_abort)
+    save_recovery_trace(
+        "sessions",
+        loop_trace_id,
+        action=recovery_timeout.source_action,
+        failure=recovery_timeout.failure_type.value,
+        recovery=recovery_timeout.recovery_type.value,
+        validation=recovery_timeout_validation.verdict.value,
+    )
+    recovery_data = {
+        "source_action": recovery_timeout.source_action,
+        "failure_type": recovery_timeout.failure_type.value,
+        "recovery_type": recovery_timeout.recovery_type.value,
+        "reasoning": recovery_timeout.reasoning,
+        "confidence": recovery_timeout.confidence,
+        "validation": recovery_timeout_validation.verdict.value,
+        "examples": {
+            "state_mismatch": {
+                "failure": recovery_mismatch.failure_type.value,
+                "recovery": recovery_mismatch.recovery_type.value,
+                "confidence": recovery_mismatch.confidence,
+            },
+            "combat_failure": {
+                "failure": recovery_combat.failure_type.value,
+                "recovery": recovery_combat.recovery_type.value,
+                "confidence": recovery_combat.confidence,
+            },
+            "safety_blocked": {
+                "failure": recovery_abort.failure_type.value,
+                "recovery": recovery_abort.recovery_type.value,
+                "confidence": recovery_abort.confidence,
+                "validation": recovery_abort_validation.verdict.value,
+            },
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -2089,6 +2185,7 @@ def main() -> None:
                 action_proposals[0] if action_proposals else None
             ),
             "safety_evaluation_reference": safety_allow,
+            "recovery_reference": recovery_timeout,
         }
     )
     app = create_app(
@@ -2145,6 +2242,7 @@ def main() -> None:
         behavior=behavior_data,
         action_proposal=action_proposal_data,
         safety_gate=safety_gate_data,
+        recovery=recovery_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
