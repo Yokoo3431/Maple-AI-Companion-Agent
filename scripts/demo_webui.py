@@ -217,6 +217,10 @@ from maple_agent.quest_reasoning import (
 from maple_agent.quest_reasoning import (
     QuestPlanner as QuestIntelligencePlanner,
 )
+from maple_agent.real_vision import (
+    RealVisionBenchmarkResult,
+    build_real_vision_readiness,
+)
 from maple_agent.recovery import (
     FailureDetector,
     RecoveryValidator,
@@ -2375,6 +2379,39 @@ def main() -> None:
             },
         },
     }
+    real_vision_metrics = RealVisionBenchmarkResult(sample_count=0)
+    real_vision_readiness = build_real_vision_readiness(
+        real_vision_metrics,
+        real_client_tested=False,
+        capture_provider="windows",
+        ocr_provider="none",
+        capture_available=False,
+        ocr_available=False,
+    )
+    real_vision_data = {
+        "capture_provider": real_vision_readiness.capture_provider,
+        "ocr_provider": real_vision_readiness.ocr_provider,
+        "real_client_tested": real_vision_readiness.real_client_tested,
+        "sample_count": real_vision_readiness.sample_count,
+        "capture_success_rate": real_vision_metrics.capture_success_rate,
+        "map_accuracy": real_vision_readiness.map_detection_accuracy,
+        "hp_mp_accuracy": real_vision_readiness.hp_mp_accuracy,
+        "quest_state_accuracy": (
+            real_vision_readiness.quest_state_accuracy
+        ),
+        "npc_precision": real_vision_metrics.npc_precision,
+        "npc_recall": real_vision_metrics.npc_recall,
+        "mean_capture_latency_ms": (
+            real_vision_metrics.mean_capture_latency_ms
+        ),
+        "mean_ocr_latency_ms": real_vision_metrics.mean_ocr_latency_ms,
+        "validation_status": real_vision_readiness.validation_status.value,
+        "reasons": [
+            "real client not tested",
+            "capture provider unavailable",
+            "OCR provider unavailable",
+        ],
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -2453,6 +2490,7 @@ def main() -> None:
         safety_gate=safety_gate_data,
         recovery=recovery_data,
         action_verification=action_verification_data,
+        real_vision=real_vision_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

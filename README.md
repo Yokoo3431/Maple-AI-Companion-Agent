@@ -29,6 +29,7 @@
 | Phase 13D | Controlled Execution Architecture Review(受控执行架构评审) | ✅ 已完成 |
 | Phase 13E | Safety Contract vNext Formalization(安全契约 vNext 正式化) | ✅ 已完成 |
 | Phase 13E.1 | Safety vNext Gate Enforcement Hardening(门执行加固) | ✅ 已完成 |
+| Phase 13F | Real Vision Validation(真实视觉验证基础) | ✅ Foundation implemented |
 
 当前架构路线:
 
@@ -50,7 +51,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Controlled Execution Architecture Review(仅评审,未启用真实输入)
 → Safety Contract vNext(仅契约,未启用)
 → Gate Enforcement Hardening(文档 Gate == 代码 Gate == 测试 Gate)
-→ Real Vision Validation Gate
+→ Real Vision Validation Gate(readiness 当前 NOT_READY,未虚报)
 → Knowledge Quality Gate
 → Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
@@ -215,6 +216,23 @@ Real Vision 当前 `NOT_READY`、Knowledge 当前 `FOUNDATION_ONLY`,
 Safety vNext 文档 Gate 与 machine-readable Gate 已完全对齐
 (强类型 `GateInputReference` + 10 级 gate + `GateCheckReference` 审计 + 预算/过期/杀开关全量 enforce)。
 仍不启用真实输入;Overall Controlled Execution Readiness 仍为 `NOT_READY`。
+
+### Phase 13-F: Real Vision Validation
+
+```text
+13-E.1 Gate Enforcement
+↓ 13-F Real Vision Validation(只读)
+↓ 13-G Knowledge Acquisition & Quality Gate
+↓ Future Controlled Execution Prerequisites
+```
+
+已实现真实只读验证基础设施:Windows 窗口绑定截图 Provider、真实 OCR backend 适配
+(Windows OCR / Tesseract,可配置)、ROI 配置、数据集 manifest、Benchmark 引擎、
+延迟与置信度校准、Readiness 策略(自动生成,禁止手工 PASSED)、只读 smoke 脚本
+`scripts/validate_real_vision.py`。
+
+**阶段完成 ≠ Gate PASSED**:Real Vision Readiness 当前为 `NOT_READY`
+(本机未验证真实 Maple 客户端;OCR backend 当前环境不可用),不虚报。
 
 ## 快速开始(Phase 0)
 

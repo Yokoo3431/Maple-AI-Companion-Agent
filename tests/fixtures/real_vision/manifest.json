@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "manifest": {
+    "source": "local-user-assets",
+    "notes": "真实游戏截图不提交仓库;由用户提供本地 asset 路径与 ground truth。"
+  },
+  "samples": []
+}

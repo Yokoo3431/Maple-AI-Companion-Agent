@@ -1,0 +1,13 @@
+{
+  "profile_id": "default-800x600",
+  "game_profile": "maple-v113",
+  "server_profile": "nostalgic",
+  "resolution": "800x600",
+  "window_mode": "windowed",
+  "dpi_scale": 1.0,
+  "map_label_roi": { "x": 0, "y": 0, "width": 400, "height": 60 },
+  "hp_roi": { "x": 10, "y": 560, "width": 200, "height": 30 },
+  "mp_roi": { "x": 10, "y": 530, "width": 200, "height": 30 },
+  "quest_roi": { "x": 600, "y": 100, "width": 190, "height": 120 },
+  "dialog_roi": { "x": 100, "y": 430, "width": 600, "height": 130 }
+}

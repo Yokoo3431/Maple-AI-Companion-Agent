@@ -103,6 +103,7 @@ def create_app(
     safety_gate: dict | None = None,
     recovery: dict | None = None,
     action_verification: dict | None = None,
+    real_vision: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -537,6 +538,12 @@ def create_app(
         if action_verification is None:
             return {"enabled": False}
         return {"enabled": True, **action_verification}
+
+    @app.get("/api/real-vision/state")
+    async def api_real_vision_state():
+        if real_vision is None:
+            return {"enabled": False}
+        return {"enabled": True, **real_vision}
 
     @app.get("/api/context/state")
     async def api_context_state():

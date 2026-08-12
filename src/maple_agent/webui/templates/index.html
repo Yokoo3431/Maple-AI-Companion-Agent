@@ -509,6 +509,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Real Vision Validation(只读)</div>
+        <div class="card-body">
+          <pre id="real-vision-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -624,6 +632,32 @@
     refreshSafetyGate();
     refreshRecovery();
     refreshActionVerification();
+    refreshRealVision();
+  }
+
+  async function refreshRealVision() {
+    const res = await fetch('/api/real-vision/state');
+    const data = await res.json();
+    const el = document.getElementById('real-vision-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const fmt = v => v != null ? (Math.round(v * 100) + '%') : 'N/A';
+    el.textContent = [
+      `CAPTURE PROVIDER: ${data.capture_provider || '-'}`,
+      `OCR PROVIDER: ${data.ocr_provider || '-'}`,
+      `REAL CLIENT TESTED: ${data.real_client_tested ?? '-'}`,
+      `SAMPLE COUNT: ${data.sample_count ?? 0}`,
+      `CAPTURE SUCCESS: ${fmt(data.capture_success_rate)}`,
+      `MAP ACCURACY: ${fmt(data.map_accuracy)}`,
+      `HP/MP ACCURACY: ${fmt(data.hp_mp_accuracy)}`,
+      `QUEST ACCURACY: ${fmt(data.quest_state_accuracy)}`,
+      `ENTITY: P=${data.npc_precision != null ? data.npc_precision : 'N/A'} R=${data.npc_recall != null ? data.npc_recall : 'N/A'}`,
+      `LATENCY(cap/ocr): ${data.mean_capture_latency_ms ?? 'N/A'}/${data.mean_ocr_latency_ms ?? 'N/A'} ms`,
+      `READINESS: ${data.validation_status || '-'}`,
+      `REASONS: ${(data.reasons || []).join('; ') || '-'}`,
+    ].join('\n');
   }
 
   async function refreshActionVerification() {
