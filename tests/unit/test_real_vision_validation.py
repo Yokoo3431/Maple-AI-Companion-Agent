@@ -6,6 +6,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 from fastapi.testclient import TestClient
 
@@ -17,6 +18,7 @@ from maple_agent.maple_knowledge import (
     load_demo_knowledge,
 )
 from maple_agent.real_vision import (
+    CaptureStatus,
     RealOCRProvider,
     RealVisionBenchmark,
     RealVisionBenchmarkResult,
@@ -107,7 +109,14 @@ def test_real_provider_contract():
     assert provider.binding_status() == "BOUND"
     frame = provider.capture()
     assert frame.frame_id
-    assert provider.capture_reference() is not None
+    reference = provider.capture_reference()
+    assert reference is not None
+    # 环境无关:失败尝试也是有效 capture attempt(不要求 headless 成功截图)
+    if provider.last_status != CaptureStatus.OK:
+        assert frame.confidence == 0.0
+        assert reference.confidence == 0.0
+    else:
+        assert reference.confidence > 0
 
 
 def test_invalid_window():
@@ -116,6 +125,10 @@ def test_invalid_window():
     frame = provider.capture()
     assert frame.confidence == 0.0
     assert "unavailable" in frame.image_reference
+    reference = provider.capture_reference()
+    assert reference is not None
+    assert reference.confidence == 0.0
+    assert reference.source == "windows/unavailable"
 
 
 def test_zero_size_window():
@@ -124,6 +137,9 @@ def test_zero_size_window():
     )
     frame = provider.capture()
     assert frame.confidence == 0.0
+    reference = provider.capture_reference()
+    assert reference is not None
+    assert reference.confidence == 0.0
 
 
 def test_capture_failure_unsupported_method():
@@ -139,6 +155,52 @@ def test_capture_failure_unsupported_method():
     frame = provider.capture()
     assert frame.confidence == 0.0
     assert "method-not-supported" in frame.image_reference
+    reference = provider.capture_reference()
+    assert reference is not None
+    assert reference.confidence == 0.0
+    assert reference.source == "windows/capture-failed"
+
+
+def test_headless_capture_failure_deterministic(monkeypatch):
+    provider = WindowsScreenshotProvider(
+        window_rect={
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 600,
+        }
+    )
+    monkeypatch.setattr(
+        provider,
+        "_capture_region",
+        lambda rect: (
+            "unavailable://capture-failed",
+            CaptureStatus.CAPTURE_FAILED,
+        ),
+    )
+    frame = provider.capture()
+    assert frame.confidence == 0.0
+    assert provider.last_status is CaptureStatus.CAPTURE_FAILED
+    reference = provider.capture_reference()
+    assert reference is not None
+    assert reference.confidence == 0.0
+
+
+def test_win32_client_to_screen_coordinates():
+    provider = WindowsScreenshotProvider(window_title="MapleStory")
+    fake_win32 = SimpleNamespace(
+        FindWindow=lambda *args: 123,
+        GetClientRect=lambda handle: (0, 0, 800, 600),
+        ClientToScreen=lambda handle, point: (100, 50),
+    )
+    provider._win32 = fake_win32
+    rect = provider._resolve_rect()
+    assert rect == {
+        "left": 100,
+        "top": 50,
+        "width": 800,
+        "height": 600,
+    }
 
 
 def test_ocr_backend_adapter():
