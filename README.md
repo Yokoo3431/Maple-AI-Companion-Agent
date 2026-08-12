@@ -28,6 +28,7 @@
 | Phase 13C | Action Outcome Verification(动作结果验证,只读) | ✅ 已完成 |
 | Phase 13D | Controlled Execution Architecture Review(受控执行架构评审) | ✅ 已完成 |
 | Phase 13E | Safety Contract vNext Formalization(安全契约 vNext 正式化) | ✅ 已完成 |
+| Phase 13E.1 | Safety vNext Gate Enforcement Hardening(门执行加固) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -48,6 +49,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Recovery Reference(检测失败并提出恢复建议,不执行)
 → Controlled Execution Architecture Review(仅评审,未启用真实输入)
 → Safety Contract vNext(仅契约,未启用)
+→ Gate Enforcement Hardening(文档 Gate == 代码 Gate == 测试 Gate)
 → Real Vision Validation Gate
 → Knowledge Quality Gate
 → Future Controlled Execution Prerequisites
@@ -199,6 +201,20 @@ Controlled Execution Architecture Review
 No real input is enabled.ADR-001 已批准**架构方向**,但不授权任何真实输入;
 Real Vision 当前 `NOT_READY`、Knowledge 当前 `FOUNDATION_ONLY`,
 整体 Controlled Execution readiness 当前 `NOT_READY`。
+
+### Phase 13-E.1: Safety vNext Gate Enforcement Hardening
+
+```text
+13-E Safety Contract vNext
+↓ 13-E.1 Gate Enforcement Hardening
+↓ 13-F Real Vision Validation
+↓ 13-G Knowledge Quality Gate
+↓ Future Controlled Execution Prerequisites
+```
+
+Safety vNext 文档 Gate 与 machine-readable Gate 已完全对齐
+(强类型 `GateInputReference` + 10 级 gate + `GateCheckReference` 审计 + 预算/过期/杀开关全量 enforce)。
+仍不启用真实输入;Overall Controlled Execution Readiness 仍为 `NOT_READY`。
 
 ## 快速开始(Phase 0)
 

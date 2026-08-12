@@ -7,6 +7,14 @@ from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
+from maple_agent.action_proposal.models import ActionProposalReference
+from maple_agent.action_verification.models import ExpectedOutcomeReference
+from maple_agent.confirmation.models import (
+    ConfirmationStatus,
+    PermissionToken,
+)
+from maple_agent.safety_gate.models import SafetyEvaluationReference
+
 
 class ExecutionMode(StrEnum):
     """未来执行模式(仅契约枚举)。"""
@@ -65,6 +73,53 @@ class GateVerdict(StrEnum):
     ELIGIBLE_REFERENCE = "ELIGIBLE_REFERENCE"
     WARNING_REFERENCE = "WARNING_REFERENCE"
     BLOCKED_REFERENCE = "BLOCKED_REFERENCE"
+
+
+class GateCheckStatus(StrEnum):
+    """单级门检查结果。"""
+
+    PASS = "PASS"
+    BLOCK = "BLOCK"
+    WARN = "WARN"
+
+
+class GateCheckReference(BaseModel):
+    """单级门检查记录(可审计)。"""
+
+    gate_name: str
+    status: GateCheckStatus
+    reason: str = ""
+
+
+class ExecutionBudgetReference(BaseModel):
+    """执行预算参考(结构化 runtime metrics,无后台计时器)。"""
+
+    actions_last_second: int = 0
+    actions_last_minute: int = 0
+    continuous_execution_seconds: float = 0.0
+    retry_count: int = 0
+    failure_count: int = 0
+    current_action_elapsed: float = 0.0
+
+
+class GateInputReference(BaseModel):
+    """强类型门输入(复用既有契约,不复制业务系统)。"""
+
+    action: ActionProposalReference | None = None
+    action_validation: str = ""
+    safety_evaluation: SafetyEvaluationReference | None = None
+    confirmation: ConfirmationStatus | None = None
+    permission: PermissionToken | None = None
+    permission_policy: PermissionPolicyV2 | None = None
+    window_binding: GameWindowBindingReference | None = None
+    session: ExecutionSessionReference | None = None
+    policy: ControlledExecutionPolicyReference | None = None
+    kill_switches: list[KillSwitchReference] = Field(
+        default_factory=list
+    )
+    expected_outcome: ExpectedOutcomeReference | None = None
+    budget: ExecutionBudgetReference | None = None
+    runtime_mode: ExecutionMode = ExecutionMode.MOCK_ONLY
 
 
 class ControlledExecutionPolicyReference(BaseModel):
@@ -195,6 +250,9 @@ class ControlledExecutionGateReference(BaseModel):
     window_binding_id: str = ""
     expected_outcome_id: str = ""
     validation: str = ""
+    checks: list[GateCheckReference] = Field(default_factory=list)
+    contract_eligible: bool = False
+    runtime_eligible: bool = False
 
 
 class ControlledExecutionReadinessReference(BaseModel):
