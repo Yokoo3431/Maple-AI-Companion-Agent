@@ -21,6 +21,7 @@
 | Phase 11C | World Knowledge Foundation(Maple 世界知识图谱,只读) | ✅ 已完成 |
 | Phase 11D | Spatial World Model(地图内部空间认知,只读) | ✅ 已完成 |
 | Phase 12A | Navigation Planning Foundation(只读导航规划参考) | ✅ 已完成 |
+| Phase 12B | Behavior Planner Foundation(高层行为规划参考,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -34,6 +35,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → World Knowledge(外部知识 -> 地图图谱 -> 世界模型参考)
 → Spatial World Model(地图内部空间 / Portal / NPC / 任务区域)
 → Navigation Planning Reference(只规划,不执行)
+→ Behavior Planning Reference(规划行为,不执行)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
@@ -76,6 +78,20 @@ Future Behavior Planner
 
 当前阶段只规划(BFS 路径搜索 / Portal 路由 / 成本估算 / 目标解析),输出仅 Navigation Reference。
 **不执行移动**;禁止 Move / Execute 按钮与任何移动控制。
+
+### Phase 12-B: Behavior Planning
+
+```text
+Navigation Planning
+    ↓
+Behavior Planning Reference
+    ↓
+Future Action Proposal
+```
+
+当前阶段规划高层行为(NAVIGATE / INTERACT / COMBAT / COLLECT / VERIFY 等语义步骤),
+输出仅 Behavior Reference。**不执行**;COMBAT_REFERENCE 不是 Attack Command,
+禁止 Execute / Run 按钮与任何真实输入。
 
 ## 快速开始(Phase 0)
 

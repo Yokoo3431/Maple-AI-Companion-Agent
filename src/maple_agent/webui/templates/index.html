@@ -469,6 +469,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Behavior(只读)</div>
+        <div class="card-body">
+          <pre id="behavior-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -579,6 +587,24 @@
     refreshWorldKnowledge();
     refreshSpatialWorld();
     refreshNavigation();
+    refreshBehavior();
+  }
+
+  async function refreshBehavior() {
+    const res = await fetch('/api/behavior/state');
+    const data = await res.json();
+    const el = document.getElementById('behavior-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const steps = (data.behavior_steps || []).map(s => `${s.step_type}: ${s.description}`);
+    el.textContent = [
+      `GOAL: ${data.goal_reference || '-'}`,
+      `BEHAVIOR STEPS: ${steps.join(' | ') || '-'}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshNavigation() {

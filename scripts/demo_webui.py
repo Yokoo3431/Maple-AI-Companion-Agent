@@ -17,6 +17,11 @@ from maple_agent.architecture import (
     SAFETY_MODE,
     TRACE_SCHEMA_VERSION,
 )
+from maple_agent.behavior import (
+    BehaviorPlanner,
+    BehaviorValidator,
+    save_behavior_trace,
+)
 from maple_agent.confirmation import (
     ConfirmationManager,
     ConfirmationStatus,
@@ -181,11 +186,14 @@ from maple_agent.quest_planner import (
     QuestResolver,
 )
 from maple_agent.quest_reasoning import (
-    QuestPlanner as QuestIntelligencePlanner,
-)
-from maple_agent.quest_reasoning import (
+    GoalReference,
+    GoalType,
+    QuestGoalReference,
     QuestReasoningValidator,
     save_quest_reasoning_trace,
+)
+from maple_agent.quest_reasoning import (
+    QuestPlanner as QuestIntelligencePlanner,
 )
 from maple_agent.reflection import (
     ReflectionEngine,
@@ -195,7 +203,9 @@ from maple_agent.reflection import (
 from maple_agent.reflection.models import FailureType, ReflectionResult
 from maple_agent.reflex import (
     HpMpReference,
+    ReflexReference,
     ReflexStateDetector,
+    ReflexStateType,
     ReflexThresholds,
     ReflexValidator,
     save_reflex_trace,
@@ -1871,6 +1881,72 @@ def main() -> None:
             "validation": navigation_map_validation.verdict.value,
         },
     }
+    behavior_planner = BehaviorPlanner()
+    reflex_normal = ReflexReference(
+        reflex_id="reflex-normal-demo",
+        state=ReflexStateType.NORMAL,
+        confidence=0.9,
+    )
+    behavior_npc = behavior_planner.plan(
+        quest_goal_reference=quest_goal_reference,
+        navigation_reference=navigation_npc,
+        game_state_reference=game_state_reference,
+        reflex_reference=reflex_normal,
+    )
+    behavior_npc_validation = BehaviorValidator().validate(behavior_npc)
+    combat_goal = QuestGoalReference(
+        active_quests=[],
+        quest_progress=[],
+        recommended_goals=[
+            GoalReference(
+                goal_id="combat-goal",
+                goal_type=GoalType.QUEST_PROGRESS,
+                description="击杀绿水灵",
+                priority=0.8,
+                related_quest="绿水灵任务",
+                confidence=0.8,
+                reasoning="演示:击杀类任务",
+            )
+        ],
+        confidence=0.8,
+    )
+    behavior_combat = behavior_planner.plan(
+        quest_goal_reference=combat_goal,
+        navigation_reference=navigation_map,
+        game_state_reference=game_state_reference,
+        reflex_reference=reflex_normal,
+        target_hint="绿水灵",
+    )
+    behavior_combat_validation = BehaviorValidator().validate(
+        behavior_combat
+    )
+    save_behavior_trace(
+        "sessions",
+        loop_trace_id,
+        goal=behavior_npc.goal_reference,
+        steps=behavior_npc.behavior_steps,
+        validation=behavior_npc_validation.verdict.value,
+    )
+    behavior_data = {
+        "behavior_id": behavior_npc.behavior_id,
+        "goal_reference": behavior_npc.goal_reference,
+        "behavior_steps": [
+            step.model_dump(mode="json")
+            for step in behavior_npc.behavior_steps
+        ],
+        "confidence": behavior_npc.confidence,
+        "reasoning": behavior_npc.reasoning,
+        "validation": behavior_npc_validation.verdict.value,
+        "combat_example": {
+            "goal_reference": behavior_combat.goal_reference,
+            "steps": [
+                step.model_dump(mode="json")
+                for step in behavior_combat.behavior_steps
+            ],
+            "confidence": behavior_combat.confidence,
+            "validation": behavior_combat_validation.verdict.value,
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -1881,6 +1957,7 @@ def main() -> None:
             "world_knowledge_reference": world_knowledge_reference,
             "spatial_world_reference": spatial_world_reference,
             "navigation_reference": navigation_npc,
+            "behavior_reference": behavior_npc,
         }
     )
     app = create_app(
@@ -1934,6 +2011,7 @@ def main() -> None:
         world_knowledge=world_knowledge_data,
         spatial_world=spatial_world_data,
         navigation=navigation_data,
+        behavior=behavior_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
