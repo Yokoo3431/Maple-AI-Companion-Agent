@@ -397,6 +397,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Maple Perception(只读)</div>
+        <div class="card-body">
+          <pre id="perception-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -498,6 +506,27 @@
     refreshSemanticMemory();
     refreshMapleContext();
     refreshMapleKnowledge();
+    refreshPerception();
+  }
+
+  async function refreshPerception() {
+    const res = await fetch('/api/perception/state');
+    const data = await res.json();
+    const el = document.getElementById('perception-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const knowledge = data.related_knowledge || {};
+    el.textContent = [
+      `OBSERVATION ID: ${data.observation_id || '-'}`,
+      `VISIBLE ENTITIES: ${(data.visible_entities || []).map(e => e.name).join(', ') || '-'}`,
+      `DETECTED MAP: ${data.visible_map || '-'}`,
+      `KNOWLEDGE MATCHES: ${(knowledge.npc || []).join(', ') || '-'}`,
+      `QUEST: ${(knowledge.quest || []).join(', ') || '-'}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshMapleKnowledge() {

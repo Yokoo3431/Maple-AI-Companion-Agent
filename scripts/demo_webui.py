@@ -139,6 +139,14 @@ from maple_agent.observation import (
     ObservationCollector,
     ObservationValidator,
 )
+from maple_agent.perception import (
+    MaplePerceptionBinder,
+    PerceptionValidator,
+    save_perception_trace,
+)
+from maple_agent.perception import (
+    MockVisionProvider as PerceptionMockVisionProvider,
+)
 from maple_agent.planner import LLMPlannerProvider
 from maple_agent.planning_optimizer import (
     AdaptivePlannerOptimizer,
@@ -1269,6 +1277,46 @@ def main() -> None:
         "reference": semantic_reference.model_dump(mode="json"),
         "validation": semantic_validation,
     }
+    perception_entities, perception_relations = load_demo_knowledge()
+    perception_graph = MapleKnowledgeGraph()
+    for entity in perception_entities:
+        perception_graph.add_entity(entity)
+    for relation in perception_relations:
+        perception_graph.add_relation(relation)
+    perception_observation = PerceptionMockVisionProvider(
+        location="射手村",
+        visible_entities=["赫丽娜"],
+        ui_state="quest_available",
+        confidence=0.9,
+    ).capture()
+    perception_reference = MaplePerceptionBinder(
+        knowledge=perception_graph
+    ).bind(perception_observation)
+    perception_validation = PerceptionValidator().validate(
+        perception_observation,
+        perception_reference,
+    )
+    save_perception_trace(
+        "sessions",
+        loop_trace_id,
+        observation=perception_observation,
+        entities=perception_reference.visible_entities,
+        knowledge_binding=perception_reference,
+        validation=perception_validation.verdict.value,
+    )
+    perception_data = {
+        "observation_id": perception_reference.observation_id,
+        "visible_entities": [
+            entity.model_dump(mode="json")
+            for entity in perception_reference.visible_entities
+        ],
+        "visible_map": perception_reference.visible_map,
+        "ui_state_reference": perception_reference.ui_state_reference,
+        "related_knowledge": perception_reference.related_knowledge,
+        "confidence": perception_reference.confidence,
+        "reasoning": perception_reference.reasoning,
+        "validation": perception_validation.verdict.value,
+    }
     from maple_agent.agent_loop.models import (
         AgentLoopContext,
         AgentLoopStatus,
@@ -1289,6 +1337,7 @@ def main() -> None:
         failure_prevention_reference=prevention_reference,
         goal_state=horizon_goal,
         goal_schedule=schedule_result,
+        perception_reference=perception_reference,
     )
     maple_context_builder = MapleContextBuilder()
     maple_context_reference = maple_context_builder.build(
@@ -1415,6 +1464,7 @@ def main() -> None:
         semantic_memory=semantic_memory_data,
         maple_context=maple_context_data,
         maple_knowledge=maple_knowledge_data,
+        perception=perception_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
