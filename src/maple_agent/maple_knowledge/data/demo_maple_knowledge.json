@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {"knowledge_id": "map-100000000", "knowledge_type": "MAP", "name": "射手村", "aliases": ["Henesys", "射手"], "description": "冒险岛新手村之一", "source": "wiki/manual", "confidence": 0.95},
+    {"knowledge_id": "map-101000000", "knowledge_type": "MAP", "name": "魔法密林", "aliases": ["Ellinia", "魔法"], "description": "法师职业相关地图", "source": "wiki/manual", "confidence": 0.95},
+    {"knowledge_id": "npc-101", "knowledge_type": "NPC", "name": "赫丽娜", "aliases": ["Helena", "弓箭手教官"], "description": "弓箭手教官", "source": "wiki/manual", "confidence": 0.95},
+    {"knowledge_id": "monster-100", "knowledge_type": "MONSTER", "name": "绿水灵", "aliases": ["Slime", "绿水"], "description": "射手村常见怪物", "source": "wiki/manual", "confidence": 0.9},
+    {"knowledge_id": "item-2000000", "knowledge_type": "ITEM", "name": "红药水", "aliases": ["红瓶"], "description": "恢复HP药水", "source": "wiki/manual", "confidence": 0.9},
+    {"knowledge_id": "item-2000001", "knowledge_type": "ITEM", "name": "蓝药水", "aliases": ["蓝瓶"], "description": "恢复MP药水", "source": "wiki/manual", "confidence": 0.9},
+    {"knowledge_id": "quest-1", "knowledge_type": "QUEST", "name": "新手任务", "aliases": ["新手引导"], "description": "新手引导任务", "source": "manual", "confidence": 0.85},
+    {"knowledge_id": "job-1", "knowledge_type": "JOB", "name": "弓箭手", "aliases": ["Archer"], "description": "远程物理职业", "source": "manual", "confidence": 0.85},
+    {"knowledge_id": "skill-1", "knowledge_type": "SKILL", "name": "二连射", "aliases": [], "description": "弓箭手基础技能", "source": "manual", "confidence": 0.8}
+  ],
+  "relations": [
+    {"source_id": "npc-101", "target_id": "map-100000000", "relation_type": "LOCATED_IN", "confidence": 0.95},
+    {"source_id": "monster-100", "target_id": "map-100000000", "relation_type": "LOCATED_IN", "confidence": 0.9},
+    {"source_id": "monster-100", "target_id": "item-2000001", "relation_type": "DROPS", "confidence": 0.8},
+    {"source_id": "quest-1", "target_id": "npc-101", "relation_type": "REQUIRES", "confidence": 0.85},
+    {"source_id": "quest-1", "target_id": "map-100000000", "relation_type": "LOCATED_IN", "confidence": 0.85},
+    {"source_id": "job-1", "target_id": "npc-101", "relation_type": "RELATED_TO", "confidence": 0.8},
+    {"source_id": "job-1", "target_id": "skill-1", "relation_type": "BELONGS_TO", "confidence": 0.8}
+  ]
+}

@@ -41,6 +41,7 @@ from maple_agent.goal_scheduler.models import (
 )
 from maple_agent.human_alignment.models import HumanAlignedDecisionReference
 from maple_agent.maple_context.models import MapleCompanionContextReference
+from maple_agent.maple_knowledge.models import MapleKnowledgeReference
 from maple_agent.memory_association.models import SemanticMemoryReference
 from maple_agent.memory_graph.models import RelevantMemoryReference
 from maple_agent.observation.models import ObservationState
@@ -123,4 +124,5 @@ class AgentLoopContext(BaseModel):
     memory_reference: RelevantMemoryReference | None = None
     semantic_memory_reference: SemanticMemoryReference | None = None
     maple_context_reference: MapleCompanionContextReference | None = None
+    maple_knowledge_reference: MapleKnowledgeReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

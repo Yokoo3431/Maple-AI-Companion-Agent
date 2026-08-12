@@ -389,6 +389,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Maple Knowledge(只读)</div>
+        <div class="card-body">
+          <pre id="maple-knowledge-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -489,6 +497,25 @@
     refreshMemoryGraph();
     refreshSemanticMemory();
     refreshMapleContext();
+    refreshMapleKnowledge();
+  }
+
+  async function refreshMapleKnowledge() {
+    const res = await fetch('/api/maple-knowledge/state');
+    const data = await res.json();
+    const el = document.getElementById('maple-knowledge-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const retrieval = data.retrieval || {};
+    el.textContent = [
+      `ENTITY COUNT: ${data.entity_count || 0}`,
+      `CATEGORIES: ${(data.categories || []).join(', ') || '-'}`,
+      `RELATIONS: ${data.relation_count || 0}`,
+      `CONFIDENCE: ${Math.round((retrieval.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshMapleContext() {

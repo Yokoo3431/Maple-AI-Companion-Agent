@@ -113,6 +113,13 @@ from maple_agent.maple_context import (
     MapleContextValidator,
     save_maple_context_trace,
 )
+from maple_agent.maple_knowledge import (
+    MapleKnowledgeGraph,
+    MapleKnowledgeRetriever,
+    MapleKnowledgeValidator,
+    load_demo_knowledge,
+    save_maple_knowledge_trace,
+)
 from maple_agent.memory_association import (
     AssociationReasoner,
     SemanticAssociationEngine,
@@ -1315,6 +1322,57 @@ def main() -> None:
         "confidence": maple_context_reference.confidence,
         "validation": maple_context_validation.verdict.value,
     }
+    demo_entities, demo_relations = load_demo_knowledge()
+    maple_knowledge_graph = MapleKnowledgeGraph()
+    for entity in demo_entities:
+        maple_knowledge_graph.add_entity(entity)
+    for relation in demo_relations:
+        maple_knowledge_graph.add_relation(relation)
+    maple_knowledge_retriever = MapleKnowledgeRetriever(
+        maple_knowledge_graph,
+    )
+    maple_knowledge_ref = maple_knowledge_retriever.retrieve(
+        context=maple_context_reference,
+    )
+    maple_knowledge_validations = [
+        MapleKnowledgeValidator().validate_entity(entity)
+        for entity in demo_entities
+    ] + [
+        MapleKnowledgeValidator().validate_relation(
+            relation,
+            maple_knowledge_graph,
+        )
+        for relation in demo_relations
+    ]
+    if all(
+        validation.verdict.value == "VALID"
+        for validation in maple_knowledge_validations
+    ):
+        maple_knowledge_validation = "VALID"
+    elif all(
+        validation.verdict.value != "BLOCKED"
+        for validation in maple_knowledge_validations
+    ):
+        maple_knowledge_validation = "WARNING"
+    else:
+        maple_knowledge_validation = "BLOCKED"
+    save_maple_knowledge_trace(
+        "sessions",
+        loop_trace_id,
+        knowledge_entities=demo_entities,
+        relations=demo_relations,
+        retrieval_result=maple_knowledge_ref,
+        validation=maple_knowledge_validation,
+    )
+    maple_knowledge_data = {
+        "entity_count": len(demo_entities),
+        "categories": sorted(
+            {entity.knowledge_type.value for entity in demo_entities}
+        ),
+        "relation_count": len(demo_relations),
+        "retrieval": maple_knowledge_ref.model_dump(mode="json"),
+        "validation": maple_knowledge_validation,
+    }
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1356,6 +1414,7 @@ def main() -> None:
         memory_graph=memory_graph_data,
         semantic_memory=semantic_memory_data,
         maple_context=maple_context_data,
+        maple_knowledge=maple_knowledge_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

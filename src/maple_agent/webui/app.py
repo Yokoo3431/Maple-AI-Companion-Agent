@@ -88,6 +88,7 @@ def create_app(
     memory_graph: dict | None = None,
     semantic_memory: dict | None = None,
     maple_context: dict | None = None,
+    maple_knowledge: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -432,6 +433,12 @@ def create_app(
         if maple_context is None:
             return {"enabled": False}
         return {"enabled": True, **maple_context}
+
+    @app.get("/api/maple-knowledge/state")
+    async def api_maple_knowledge_state():
+        if maple_knowledge is None:
+            return {"enabled": False}
+        return {"enabled": True, **maple_knowledge}
 
     @app.get("/api/context/state")
     async def api_context_state():
