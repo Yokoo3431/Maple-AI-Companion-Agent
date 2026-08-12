@@ -17,6 +17,7 @@
 | Phase 10B | L1 Reflex Foundation(HP/MP/UI 状态与危险事件快速感知,只读) | ✅ 已完成 |
 | Phase 10C | Virtual Keyboard Isolation Layer(未来隔离虚拟输入层) | 规划中 |
 | Phase 11A | Vision Runtime Foundation(窗口视觉读取 -> 结构化观察,只读) | ✅ 已完成 |
+| Phase 11B | Game State Understanding(结构化 Maple 游戏状态,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -26,6 +27,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Memory / Semantic Memory → Maple Context → Quest Reasoning → Perception Fusion
 → L1 Reflex(状态感知参考)
 → Vision Runtime(窗口视觉读取,结构化观察)
+→ Game State Understanding(玩家/地图/实体/任务状态建模)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。

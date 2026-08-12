@@ -31,6 +31,7 @@ from maple_agent.failure_intelligence.models import (
     FailurePatternRecord,
     FailurePreventionReference,
 )
+from maple_agent.game_state.models import GameStateReference
 from maple_agent.goal_memory.models import (
     GoalExperienceRecord,
     OptimizedTaskGraph,
@@ -135,4 +136,5 @@ class AgentLoopContext(BaseModel):
     perception_fusion_reference: PerceptionFusionReference | None = None
     reflex_reference: ReflexReference | None = None
     vision_reference: ScreenObservation | None = None
+    game_state_reference: GameStateReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

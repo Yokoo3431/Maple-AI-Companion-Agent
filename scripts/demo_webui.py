@@ -79,6 +79,11 @@ from maple_agent.failure_intelligence import (
 )
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
+from maple_agent.game_state import (
+    GameStateExtractor,
+    GameStateValidator,
+    save_game_state_trace,
+)
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
 from maple_agent.goal_memory import (
     GoalExperienceRecord,
@@ -1683,12 +1688,53 @@ def main() -> None:
         "confidence": vision_observation.confidence,
         "validation": vision_runtime_validation.verdict.value,
     }
+    game_state_extractor = GameStateExtractor(maple_knowledge_graph)
+    game_state_reference = game_state_extractor.extract(vision_observation)
+    game_state_validation = GameStateValidator().validate(
+        game_state_reference
+    )
+    save_game_state_trace(
+        "sessions",
+        loop_trace_id,
+        player_state=game_state_reference.player_state,
+        map_state=game_state_reference.current_map,
+        entities=game_state_reference.visible_entities,
+        quest_state=game_state_reference.quest_state,
+        validation=game_state_validation.verdict.value,
+    )
+    game_state_data = {
+        "state_id": game_state_reference.state_id,
+        "player_state": (
+            game_state_reference.player_state.model_dump(mode="json")
+            if game_state_reference.player_state is not None
+            else {}
+        ),
+        "current_map": (
+            game_state_reference.current_map.model_dump(mode="json")
+            if game_state_reference.current_map is not None
+            else {}
+        ),
+        "visible_entities": [
+            entity.model_dump(mode="json")
+            for entity in game_state_reference.visible_entities
+        ],
+        "quest_state": (
+            game_state_reference.quest_state.model_dump(mode="json")
+            if game_state_reference.quest_state is not None
+            else {}
+        ),
+        "combat_state": game_state_reference.combat_state,
+        "confidence": game_state_reference.confidence,
+        "reasoning": game_state_reference.reasoning,
+        "validation": game_state_validation.verdict.value,
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
             "perception_fusion_reference": perception_fusion_reference,
             "reflex_reference": reflex_low_hp,
             "vision_reference": vision_observation,
+            "game_state_reference": game_state_reference,
         }
     )
     app = create_app(
@@ -1738,6 +1784,7 @@ def main() -> None:
         perception_fusion=perception_fusion_data,
         reflex=reflex_data,
         vision_runtime=vision_runtime_data,
+        game_state=game_state_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

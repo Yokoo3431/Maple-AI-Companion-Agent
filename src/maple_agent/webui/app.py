@@ -94,6 +94,7 @@ def create_app(
     perception_fusion: dict | None = None,
     reflex: dict | None = None,
     vision_runtime: dict | None = None,
+    game_state: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -474,6 +475,12 @@ def create_app(
         if vision_runtime is None:
             return {"enabled": False}
         return {"enabled": True, **vision_runtime}
+
+    @app.get("/api/game-state/state")
+    async def api_game_state():
+        if game_state is None:
+            return {"enabled": False}
+        return {"enabled": True, **game_state}
 
     @app.get("/api/context/state")
     async def api_context_state():
