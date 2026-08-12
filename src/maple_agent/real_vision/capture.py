@@ -264,7 +264,10 @@ class WindowsScreenshotProvider:
                 "printwindow unavailable/black frame; imagegrab fallback"
             )
         if self.method in ("auto", "imagegrab", "win32"):
-            return self._imagegrab(rect)
+            reference, status = self._imagegrab(rect)
+            if status is CaptureStatus.OK:
+                self.capture_method = "imagegrab"
+            return reference, status
         self.fallback_reason = f"method not supported: {self.method}"
         return "unavailable://method-not-supported", CaptureStatus.UNAVAILABLE
 

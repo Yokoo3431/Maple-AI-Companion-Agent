@@ -200,6 +200,7 @@ def test_printwindow_fallback_to_imagegrab(monkeypatch):
             "height": 600,
         }
     )
+    provider._win32 = object()
     monkeypatch.setattr(
         provider,
         "_printwindow",
@@ -208,10 +209,16 @@ def test_printwindow_fallback_to_imagegrab(monkeypatch):
             CaptureStatus.UNAVAILABLE,
         ),
     )
+    monkeypatch.setattr(
+        provider,
+        "_imagegrab",
+        lambda rect: ("capture://imagegrab/x", CaptureStatus.OK),
+    )
     reference, status = provider._capture_region(
         {"left": 0, "top": 0, "width": 800, "height": 600}
     )
     assert status is CaptureStatus.OK
+    assert reference == "capture://imagegrab/x"
     assert provider.capture_method == "imagegrab"
     assert "imagegrab fallback" in provider.fallback_reason
 
@@ -225,6 +232,7 @@ def test_printwindow_success_sets_method(monkeypatch):
             "height": 600,
         }
     )
+    provider._win32 = object()
     monkeypatch.setattr(
         provider,
         "_printwindow",
