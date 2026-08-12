@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-H Repository Governance & Multi-Machine Handoff
 - **Current phase**:13-I Real Vision Client Benchmark & Calibration Baseline(COMPLETED)
-- **Baseline**:`a36532fe2a528f645f55cf4017ecd488d9d34083`(source)
+- **Baseline**:`ed1f87919a648a0e43cf9b1a61a5c35fdfa1139a`(source)
 - **What changed**:
   - 真实客户端 Benchmark 工具链:`scripts/list_windows.py`(只读窗口发现)、
     `scripts/validate_real_vision.py`(扩展 `--dataset-dir / --capture-samples /
