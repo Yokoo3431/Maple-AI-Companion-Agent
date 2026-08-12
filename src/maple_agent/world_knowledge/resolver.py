@@ -33,11 +33,7 @@ class WorldKnowledgeResolver:
             if current_map
             else []
         )
-        connections = (
-            self.graph.find_connections(current_map)
-            if current_map
-            else []
-        )
+        connections = self.graph.all_connections()
         related_npcs = (
             self.graph.find_related_npcs(current_map)
             if current_map
@@ -73,6 +69,7 @@ class WorldKnowledgeResolver:
             f"当前地图: {current_map or '未知'}",
             f"已知地图: {len(known_maps)}",
             f"可达地图: {', '.join(reachable) or '无'}",
+            f"全图连接: {len(connections)}",
         ]
         reference = WorldKnowledgeReference(
             current_map=current_map,

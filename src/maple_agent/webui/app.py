@@ -97,6 +97,7 @@ def create_app(
     game_state: dict | None = None,
     world_knowledge: dict | None = None,
     spatial_world: dict | None = None,
+    navigation: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -495,6 +496,12 @@ def create_app(
         if spatial_world is None:
             return {"enabled": False}
         return {"enabled": True, **spatial_world}
+
+    @app.get("/api/navigation/state")
+    async def api_navigation_state():
+        if navigation is None:
+            return {"enabled": False}
+        return {"enabled": True, **navigation}
 
     @app.get("/api/context/state")
     async def api_context_state():

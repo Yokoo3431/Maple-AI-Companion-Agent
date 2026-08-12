@@ -78,3 +78,8 @@ class MapGraph:
 
     def connection_count(self) -> int:
         return len(self._connections)
+
+    def all_connections(
+        self,
+    ) -> list[MapConnectionReference]:
+        return list(self._connections)

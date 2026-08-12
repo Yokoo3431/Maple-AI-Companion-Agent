@@ -45,6 +45,7 @@ from maple_agent.maple_context.models import MapleCompanionContextReference
 from maple_agent.maple_knowledge.models import MapleKnowledgeReference
 from maple_agent.memory_association.models import SemanticMemoryReference
 from maple_agent.memory_graph.models import RelevantMemoryReference
+from maple_agent.navigation.models import NavigationReference
 from maple_agent.observation.models import ObservationState
 from maple_agent.perception.models import MaplePerceptionReference
 from maple_agent.perception_fusion.models import PerceptionFusionReference
@@ -141,4 +142,5 @@ class AgentLoopContext(BaseModel):
     game_state_reference: GameStateReference | None = None
     world_knowledge_reference: WorldKnowledgeReference | None = None
     spatial_world_reference: SpatialWorldReference | None = None
+    navigation_reference: NavigationReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

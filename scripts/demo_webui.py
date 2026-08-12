@@ -139,6 +139,11 @@ from maple_agent.memory_graph import (
     MemoryRetriever,
     save_memory_graph_trace,
 )
+from maple_agent.navigation import (
+    NavigationPlanner,
+    NavigationValidator,
+    save_navigation_trace,
+)
 from maple_agent.observation import (
     ObservationAdapter,
     ObservationCollector,
@@ -1809,6 +1814,63 @@ def main() -> None:
         "reasoning": spatial_world_reference.reasoning,
         "validation": spatial_world_validation.verdict.value,
     }
+    navigation_planner = NavigationPlanner()
+    navigation_npc = navigation_planner.plan(
+        target="赫丽娜",
+        game_state_reference=game_state_reference,
+        spatial_world_reference=spatial_world_reference,
+        world_knowledge_reference=world_knowledge_reference,
+        quest_goal_reference=quest_goal_reference,
+    )
+    navigation_npc_validation = NavigationValidator().validate(
+        navigation_npc
+    )
+    navigation_map = navigation_planner.plan(
+        target="魔法密林",
+        game_state_reference=game_state_reference,
+        spatial_world_reference=spatial_world_reference,
+        world_knowledge_reference=world_knowledge_reference,
+        quest_goal_reference=quest_goal_reference,
+    )
+    navigation_map_validation = NavigationValidator().validate(
+        navigation_map
+    )
+    save_navigation_trace(
+        "sessions",
+        loop_trace_id,
+        start=navigation_npc.start_location,
+        target=navigation_npc.target_location,
+        route=navigation_npc.route_steps,
+        validation=navigation_npc_validation.verdict.value,
+    )
+    navigation_data = {
+        "navigation_id": navigation_npc.navigation_id,
+        "start_location": navigation_npc.start_location,
+        "target_location": navigation_npc.target_location,
+        "route_steps": [
+            step.model_dump(mode="json")
+            for step in navigation_npc.route_steps
+        ],
+        "estimated_cost": navigation_npc.estimated_cost,
+        "confidence": navigation_npc.confidence,
+        "reasoning": navigation_npc.reasoning,
+        "validation": navigation_npc_validation.verdict.value,
+        "cross_map_example": {
+            "start": navigation_map.start_location,
+            "target": navigation_map.target_location,
+            "route": [
+                {
+                    "type": step.step_type.value,
+                    "source": step.source,
+                    "target": step.target,
+                }
+                for step in navigation_map.route_steps
+            ],
+            "cost": navigation_map.estimated_cost,
+            "confidence": navigation_map.confidence,
+            "validation": navigation_map_validation.verdict.value,
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -1818,6 +1880,7 @@ def main() -> None:
             "game_state_reference": game_state_reference,
             "world_knowledge_reference": world_knowledge_reference,
             "spatial_world_reference": spatial_world_reference,
+            "navigation_reference": navigation_npc,
         }
     )
     app = create_app(
@@ -1870,6 +1933,7 @@ def main() -> None:
         game_state=game_state_data,
         world_knowledge=world_knowledge_data,
         spatial_world=spatial_world_data,
+        navigation=navigation_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
