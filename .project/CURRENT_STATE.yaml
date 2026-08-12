@@ -4,13 +4,13 @@ project:
 
 baseline:
   branch: main
-  source_commit: 231725ea4f3314a0d70bead02dd77f54c3285bb0
-  commit: PENDING
+  source_commit: a36532fe2a528f645f55cf4017ecd488d9d34083
+  commit: a36532fe2a528f645f55cf4017ecd488d9d34083
   previous_commit: 231725ea4f3314a0d70bead02dd77f54c3285bb0
 
 phase:
   current: 13-H
-  status: IN_PROGRESS
+  status: COMPLETED
   last_completed: 13-G
 
 runtime:
