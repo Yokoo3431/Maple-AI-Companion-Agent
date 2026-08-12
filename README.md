@@ -26,6 +26,7 @@
 | Phase 13A | Safety Gate Foundation(动作安全审核参考,只读) | ✅ 已完成 |
 | Phase 13B | Failure Recovery Foundation(失败检测与恢复建议,只读) | ✅ 已完成 |
 | Phase 13C | Action Outcome Verification(动作结果验证,只读) | ✅ 已完成 |
+| Phase 13D | Controlled Execution Architecture Review(受控执行架构评审) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -44,6 +45,9 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Safety Gate Reference(安全审核,不执行)
 → Action Outcome Verification(验证动作预期与实际状态变化,不执行动作)
 → Recovery Reference(检测失败并提出恢复建议,不执行)
+→ Controlled Execution Architecture Review(仅评审,未启用真实输入)
+→ Future Safety Contract vNext
+→ Future Isolated Input Prototype
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
@@ -159,6 +163,22 @@ Action Proposal
 当前阶段验证动作预期与实际状态变化(Before/After GameState 比较 + 结构化证据 +
 SUCCESS / PARTIAL_SUCCESS / FAILED / TIMEOUT / INCONCLUSIVE / BLOCKED 判定)。
 **不执行动作**;HP 下降仅作为战斗证据,不单独判定失败;所有输出仅为 Reference。
+
+### Phase 13-D: Controlled Execution Architecture Review
+
+```text
+Action Verification
+↓ Recovery
+↓ Controlled Execution Architecture Review
+↓ Future Safety Contract vNext
+↓ Future Isolated Input Prototype
+```
+
+本阶段仅产出受控执行架构评审文档
+(`docs/architecture/execution_transition/`,含 Contract Draft / Threat Model / Migration Plan / ADR-001)。
+**Phase 13-D does not enable live input.** `SAFETY_MODE` 仍为 `MOCK_ONLY`,
+无真实 Input / SendInput / Virtual HID / Automation;只有未来 Architecture Review
+批准 Safety Contract vNext 后才允许受控原型。
 
 ## 快速开始(Phase 0)
 
