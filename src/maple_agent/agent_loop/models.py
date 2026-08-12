@@ -8,6 +8,10 @@ from pydantic import BaseModel, Field
 
 from maple_agent.action_plan.models import ActionPlan
 from maple_agent.action_proposal.models import ActionProposalReference
+from maple_agent.action_verification.models import (
+    ActionOutcomeReference,
+    ExpectedOutcomeReference,
+)
 from maple_agent.behavior.models import BehaviorReference
 from maple_agent.confirmation.models import (
     ConfirmationRequest,
@@ -151,4 +155,6 @@ class AgentLoopContext(BaseModel):
     action_proposal_reference: ActionProposalReference | None = None
     safety_evaluation_reference: SafetyEvaluationReference | None = None
     recovery_reference: RecoveryReference | None = None
+    action_outcome_reference: ActionOutcomeReference | None = None
+    action_expectation_reference: ExpectedOutcomeReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

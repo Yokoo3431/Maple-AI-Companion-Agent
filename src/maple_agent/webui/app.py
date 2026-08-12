@@ -102,6 +102,7 @@ def create_app(
     action_proposal: dict | None = None,
     safety_gate: dict | None = None,
     recovery: dict | None = None,
+    action_verification: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -530,6 +531,12 @@ def create_app(
         if recovery is None:
             return {"enabled": False}
         return {"enabled": True, **recovery}
+
+    @app.get("/api/action-verification/state")
+    async def api_action_verification_state():
+        if action_verification is None:
+            return {"enabled": False}
+        return {"enabled": True, **action_verification}
 
     @app.get("/api/context/state")
     async def api_context_state():

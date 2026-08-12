@@ -25,6 +25,7 @@
 | Phase 12C | Action Proposal Foundation(动作建议参考,只读) | ✅ 已完成 |
 | Phase 13A | Safety Gate Foundation(动作安全审核参考,只读) | ✅ 已完成 |
 | Phase 13B | Failure Recovery Foundation(失败检测与恢复建议,只读) | ✅ 已完成 |
+| Phase 13C | Action Outcome Verification(动作结果验证,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -41,6 +42,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Behavior Planning Reference(规划行为,不执行)
 → Action Proposal Reference(生成动作建议,不执行)
 → Safety Gate Reference(安全审核,不执行)
+→ Action Outcome Verification(验证动作预期与实际状态变化,不执行动作)
 → Recovery Reference(检测失败并提出恢复建议,不执行)
 ```
 
@@ -143,6 +145,20 @@ Future Input Isolation
 当前阶段检测动作失败(导航超时 / 状态不匹配 / 战斗失败 / 安全阻止)并提出恢复建议
 (RETRY / WAIT_OBSERVATION / REPLAN / CHANGE_TARGET / ABORT)。
 输出仅 RecoveryReference。**不执行恢复**;禁止 Execute / Retry Now / Run 按钮与任何真实输入。
+
+### Phase 13-C: Action Outcome Verification
+
+```text
+Action Proposal
+→ Safety Gate
+→ Action Outcome Verification
+→ Failure Recovery
+→ Future Virtual Input Isolation
+```
+
+当前阶段验证动作预期与实际状态变化(Before/After GameState 比较 + 结构化证据 +
+SUCCESS / PARTIAL_SUCCESS / FAILED / TIMEOUT / INCONCLUSIVE / BLOCKED 判定)。
+**不执行动作**;HP 下降仅作为战斗证据,不单独判定失败;所有输出仅为 Reference。
 
 ## 快速开始(Phase 0)
 

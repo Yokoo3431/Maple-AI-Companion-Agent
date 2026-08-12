@@ -18,7 +18,9 @@ class RecoveryPlanner:
 
     _MAPPING = {
         FailureType.NAVIGATION_TIMEOUT: RecoveryType.RETRY_REFERENCE,
+        FailureType.ACTION_TIMEOUT: RecoveryType.RETRY_REFERENCE,
         FailureType.STATE_MISMATCH: RecoveryType.REPLAN_REFERENCE,
+        FailureType.OUTCOME_MISMATCH: RecoveryType.REPLAN_REFERENCE,
         FailureType.COMBAT_FAILURE: (
             RecoveryType.WAIT_OBSERVATION_REFERENCE
         ),

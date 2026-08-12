@@ -11,8 +11,15 @@ import uvicorn
 from maple_agent.action_plan import ActionPlanner
 from maple_agent.action_proposal import (
     ActionProposalMapper,
+    ActionProposalReference,
     ActionProposalValidator,
+    ActionType,
     save_action_proposal_trace,
+)
+from maple_agent.action_verification import (
+    ActionOutcomeValidator,
+    ActionOutcomeVerifier,
+    save_action_verification_trace,
 )
 from maple_agent.agent import AgentLoop
 from maple_agent.agent_loop import AgentLoopOrchestrator
@@ -90,11 +97,13 @@ from maple_agent.failure_intelligence import (
 from maple_agent.fusion import FusionService
 from maple_agent.game import MockGameWindowDetector, WindowInfo, WindowRect
 from maple_agent.game_state import (
+    EntityStateReference,
     GameStateExtractor,
     GameStateReference,
     GameStateValidator,
     MapStateReference,
     PlayerStateReference,
+    QuestStateSnapshot,
     save_game_state_trace,
 )
 from maple_agent.goal import Goal, MockGoalProvider, RuleBasedGoalSelector
@@ -156,6 +165,11 @@ from maple_agent.navigation import (
     NavigationPlanner,
     NavigationValidator,
     save_navigation_trace,
+)
+from maple_agent.navigation.models import (
+    NavigationReference,
+    RouteStep,
+    RouteStepType,
 )
 from maple_agent.observation import (
     ObservationAdapter,
@@ -2170,6 +2184,197 @@ def main() -> None:
             },
         },
     }
+    outcome_verifier = ActionOutcomeVerifier()
+    interact_action = next(
+        action
+        for action in action_proposals
+        if action.action_type.value == "INTERACT"
+    )
+    before_interact = GameStateReference(
+        state_id="state-a-before",
+        player_state=PlayerStateReference(hp=0.8, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        visible_entities=[
+            EntityStateReference(name="赫丽娜", type="NPC")
+        ],
+        quest_state=QuestStateSnapshot(available_quests=["新手任务"]),
+        combat_state="NORMAL",
+        confidence=0.9,
+    )
+    after_interact = GameStateReference(
+        state_id="state-a-after",
+        player_state=PlayerStateReference(hp=0.8, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        visible_entities=[
+            EntityStateReference(name="赫丽娜", type="NPC")
+        ],
+        quest_state=QuestStateSnapshot(active_quests=["新手任务"]),
+        combat_state="NORMAL",
+        confidence=0.9,
+    )
+    outcome_interact = outcome_verifier.verify(
+        interact_action,
+        before=before_interact,
+        after=after_interact,
+        quest_goal=quest_goal_reference,
+        reflex_before=reflex_normal,
+        reflex_after=reflex_normal,
+    )
+    outcome_interact_validation = ActionOutcomeValidator().validate(
+        outcome_interact
+    )
+    save_action_verification_trace(
+        "sessions",
+        loop_trace_id,
+        action={"type": "INTERACT", "target": "赫丽娜"},
+        expectation=(
+            outcome_interact.expected_outcome.model_dump(mode="json")
+            if outcome_interact.expected_outcome is not None
+            else {}
+        ),
+        before_state=before_interact.model_dump(mode="json"),
+        after_state=after_interact.model_dump(mode="json"),
+        evidence=outcome_interact.evidence,
+        outcome=outcome_interact,
+        validation=outcome_interact_validation.verdict.value,
+    )
+    nav_action_east = ActionProposalReference(
+        action_id="action-nav-east",
+        action_type=ActionType.NAVIGATE,
+        target_reference="东部森林",
+        confidence=0.9,
+    )
+    nav_ref_east = NavigationReference(
+        navigation_id="nav-east",
+        start_location="射手村",
+        target_location="东部森林",
+        route_steps=[
+            RouteStep(
+                step_type=RouteStepType.PORTAL_REFERENCE,
+                source="射手村",
+                target="东部森林",
+            )
+        ],
+        estimated_cost=1.0,
+        confidence=0.9,
+    )
+    outcome_nav_timeout = outcome_verifier.verify(
+        nav_action_east,
+        before=before_interact,
+        after=before_interact,
+        navigation=nav_ref_east,
+        reflex_before=reflex_normal,
+        reflex_after=reflex_normal,
+        elapsed_reference=70.0,
+    )
+    before_combat = GameStateReference(
+        state_id="state-c-before",
+        player_state=PlayerStateReference(hp=0.8, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        visible_entities=[
+            EntityStateReference(name="绿水灵", type="MONSTER")
+        ],
+        quest_state=QuestStateSnapshot(),
+        combat_state="ENCOUNTER",
+        confidence=0.9,
+    )
+    after_combat = GameStateReference(
+        state_id="state-c-after",
+        player_state=PlayerStateReference(hp=0.6, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        visible_entities=[],
+        quest_state=QuestStateSnapshot(active_quests=["新手任务"]),
+        combat_state="NORMAL",
+        confidence=0.9,
+    )
+    outcome_combat = outcome_verifier.verify(
+        combat_action,
+        before=before_combat,
+        after=after_combat,
+        reflex_before=reflex_normal,
+        reflex_after=reflex_normal,
+    )
+    outcome_death = outcome_verifier.verify(
+        interact_action,
+        before=before_interact,
+        after=after_interact,
+        reflex_before=reflex_normal,
+        reflex_after=reflex_death,
+    )
+    after_low_confidence = GameStateReference(
+        state_id="state-e-after",
+        player_state=PlayerStateReference(hp=0.8, mp=0.6),
+        current_map=MapStateReference(
+            map_name="射手村",
+            known_map=True,
+        ),
+        confidence=0.1,
+    )
+    outcome_inconclusive = outcome_verifier.verify(
+        interact_action,
+        before=before_interact,
+        after=after_low_confidence,
+        quest_goal=quest_goal_reference,
+        reflex_before=reflex_normal,
+        reflex_after=reflex_normal,
+    )
+    nav_outcome_failure = failure_detector.detect(
+        nav_action_east,
+        outcome=outcome_nav_timeout,
+    )
+    nav_outcome_recovery = recovery_planner.plan(
+        nav_action_east,
+        nav_outcome_failure,
+    )
+    action_verification_data = {
+        "source_action": outcome_interact.source_action,
+        "expected_action": (
+            outcome_interact.expected_outcome.action_reference
+            if outcome_interact.expected_outcome is not None
+            else ""
+        ),
+        "status": outcome_interact.status.value,
+        "matched_conditions": outcome_interact.matched_conditions,
+        "unmatched_conditions": outcome_interact.unmatched_conditions,
+        "recovery_required": outcome_interact.recovery_required,
+        "confidence": outcome_interact.confidence,
+        "validation": outcome_interact_validation.verdict.value,
+        "scenarios": {
+            "navigation_timeout": {
+                "status": outcome_nav_timeout.status.value,
+                "recovery_required": (
+                    outcome_nav_timeout.recovery_required
+                ),
+                "recovery": nav_outcome_recovery.recovery_type.value,
+            },
+            "combat_hp_loss": {
+                "status": outcome_combat.status.value,
+                "recovery_required": outcome_combat.recovery_required,
+            },
+            "death": {
+                "status": outcome_death.status.value,
+                "recovery_required": outcome_death.recovery_required,
+            },
+            "inconclusive": {
+                "status": outcome_inconclusive.status.value,
+                "recovery_required": (
+                    outcome_inconclusive.recovery_required
+                ),
+            },
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -2186,6 +2391,10 @@ def main() -> None:
             ),
             "safety_evaluation_reference": safety_allow,
             "recovery_reference": recovery_timeout,
+            "action_outcome_reference": outcome_interact,
+            "action_expectation_reference": (
+                outcome_interact.expected_outcome
+            ),
         }
     )
     app = create_app(
@@ -2243,6 +2452,7 @@ def main() -> None:
         action_proposal=action_proposal_data,
         safety_gate=safety_gate_data,
         recovery=recovery_data,
+        action_verification=action_verification_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

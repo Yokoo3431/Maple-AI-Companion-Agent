@@ -6,6 +6,10 @@ from maple_agent.action_proposal.models import (
     ActionProposalReference,
     ActionType,
 )
+from maple_agent.action_verification.models import (
+    ActionOutcomeReference,
+    ActionOutcomeStatus,
+)
 from maple_agent.game_state.models import GameStateReference
 from maple_agent.recovery.models import FailureType
 from maple_agent.safety_gate.models import (
@@ -23,6 +27,7 @@ class FailureDetector:
         *,
         game_state: GameStateReference | None = None,
         safety_evaluation: SafetyEvaluationReference | None = None,
+        outcome: ActionOutcomeReference | None = None,
         timeout_hint: bool = False,
         npc_missing: bool = False,
         hp_decreased: bool = False,
@@ -33,6 +38,26 @@ class FailureDetector:
             is SafetyDecisionType.BLOCKED
         ):
             return FailureType.SAFETY_BLOCKED
+        if outcome is not None:
+            if outcome.status is ActionOutcomeStatus.BLOCKED:
+                return FailureType.SAFETY_BLOCKED
+            if outcome.status is ActionOutcomeStatus.TIMEOUT:
+                if action.action_type is ActionType.NAVIGATE:
+                    return FailureType.NAVIGATION_TIMEOUT
+                return FailureType.ACTION_TIMEOUT
+            if (
+                outcome.status is ActionOutcomeStatus.FAILED
+                or (
+                    outcome.status
+                    is ActionOutcomeStatus.PARTIAL_SUCCESS
+                    and action.action_type is ActionType.COMBAT
+                )
+            ):
+                if action.action_type is ActionType.INTERACT:
+                    return FailureType.STATE_MISMATCH
+                if action.action_type is ActionType.COMBAT:
+                    return FailureType.COMBAT_FAILURE
+                return FailureType.OUTCOME_MISMATCH
         if timeout_hint:
             return FailureType.NAVIGATION_TIMEOUT
         if (
