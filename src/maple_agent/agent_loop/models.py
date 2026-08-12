@@ -55,6 +55,7 @@ from maple_agent.planning_optimizer.models import (
 from maple_agent.quest_reasoning.models import QuestGoalReference
 from maple_agent.reflection.models import ReflectionResult
 from maple_agent.reflex.models import ReflexReference
+from maple_agent.spatial_world.models import SpatialWorldReference
 from maple_agent.task_planning.models import (
     LongHorizonGoal,
     TaskExecutionState,
@@ -139,4 +140,5 @@ class AgentLoopContext(BaseModel):
     vision_reference: ScreenObservation | None = None
     game_state_reference: GameStateReference | None = None
     world_knowledge_reference: WorldKnowledgeReference | None = None
+    spatial_world_reference: SpatialWorldReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

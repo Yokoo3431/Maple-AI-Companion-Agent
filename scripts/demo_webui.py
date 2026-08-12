@@ -196,6 +196,13 @@ from maple_agent.reflex import (
     save_reflex_trace,
 )
 from maple_agent.runtime import RuntimeManager
+from maple_agent.spatial_world import (
+    SpatialMapStore,
+    SpatialWorldBuilder,
+    SpatialWorldValidator,
+    load_demo_spatial_map,
+    save_spatial_world_trace,
+)
 from maple_agent.task_planning import (
     LongHorizonGoal,
     Milestone,
@@ -1770,6 +1777,38 @@ def main() -> None:
         "reasoning": world_knowledge_reference.reasoning,
         "validation": world_knowledge_validation.verdict.value,
     }
+    spatial_store = SpatialMapStore.from_data(load_demo_spatial_map())
+    spatial_world_reference = SpatialWorldBuilder(spatial_store).resolve(
+        world_knowledge_reference=world_knowledge_reference,
+        game_state_reference=game_state_reference,
+        maple_knowledge_reference=maple_knowledge_ref,
+    )
+    spatial_world_validation = SpatialWorldValidator().validate(
+        spatial_world_reference
+    )
+    save_spatial_world_trace(
+        "sessions",
+        loop_trace_id,
+        current_map=spatial_world_reference.current_map,
+        portals=spatial_world_reference.portals,
+        locations=spatial_world_reference.nearby_points,
+        validation=spatial_world_validation.verdict.value,
+    )
+    spatial_world_data = {
+        "current_map": spatial_world_reference.current_map,
+        "nearby_points": spatial_world_reference.nearby_points,
+        "portals": [
+            portal.model_dump(mode="json")
+            for portal in spatial_world_reference.portals
+        ],
+        "npc_positions": spatial_world_reference.npc_positions,
+        "quest_targets": spatial_world_reference.quest_targets,
+        "spatial_confidence": (
+            spatial_world_reference.spatial_confidence
+        ),
+        "reasoning": spatial_world_reference.reasoning,
+        "validation": spatial_world_validation.verdict.value,
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -1778,6 +1817,7 @@ def main() -> None:
             "vision_reference": vision_observation,
             "game_state_reference": game_state_reference,
             "world_knowledge_reference": world_knowledge_reference,
+            "spatial_world_reference": spatial_world_reference,
         }
     )
     app = create_app(
@@ -1829,6 +1869,7 @@ def main() -> None:
         vision_runtime=vision_runtime_data,
         game_state=game_state_data,
         world_knowledge=world_knowledge_data,
+        spatial_world=spatial_world_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

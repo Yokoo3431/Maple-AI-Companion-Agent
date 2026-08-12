@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "source": "manual-dataset",
+  "maps": [
+    {
+      "map_id": "map_100000000",
+      "name": "射手村",
+      "width": 1024,
+      "height": 720,
+      "platforms": [
+        { "name": "主广场", "x": 100, "y": 500, "width": 800, "height": 40 }
+      ],
+      "portals": [
+        { "portal_id": "east_forest", "target": "东部森林", "x": 800, "y": 200, "confidence": 0.95 }
+      ],
+      "npcs": [
+        { "name": "赫丽娜", "x": 120, "y": 80 }
+      ],
+      "monster_zones": [
+        { "name": "绿水灵区", "x": 700, "y": 300, "radius": 80 }
+      ],
+      "quest_zones": [
+        { "quest": "新手任务", "x": 120, "y": 80, "radius": 30 }
+      ],
+      "confidence": 0.95
+    },
+    {
+      "map_id": "map_100000001",
+      "name": "东部森林",
+      "width": 1280,
+      "height": 720,
+      "portals": [
+        { "portal_id": "henesys", "target": "射手村", "x": 100, "y": 200, "confidence": 0.9 }
+      ],
+      "monster_zones": [
+        { "name": "绿水灵区", "x": 600, "y": 300, "radius": 100 }
+      ],
+      "confidence": 0.9
+    },
+    {
+      "map_id": "map_101000000",
+      "name": "魔法密林",
+      "width": 1024,
+      "height": 720,
+      "confidence": 0.95
+    }
+  ]
+}
