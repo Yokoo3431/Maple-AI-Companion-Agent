@@ -33,6 +33,7 @@
 | Phase 13G | Knowledge Acquisition & Quality Gate(知识获取与质量门) | ✅ Foundation implemented |
 | Phase 13H | Repository Governance & Multi-Machine Handoff(仓库治理与多机交接) | ✅ 已完成 |
 | Phase 13I | Real Vision Client Benchmark & Calibration Baseline(真实客户端 Benchmark 与校准基线) | ✅ Phase COMPLETED / Real Vision = NOT_READY |
+| Phase 13I.1 | Hybrid Local Perception & Background Capture Feasibility(混合本地感知与后台捕获可行性) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 
 当前架构路线:
 
@@ -57,6 +58,8 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Real Vision Validation Gate(readiness 当前 NOT_READY,未虚报)
 → Knowledge Quality Gate(readiness 当前 FOUNDATION_ONLY,未虚报)
 → Real Vision Client Benchmark(13-I 真实客户端数据校准基线,readiness 不虚报)
+→ Hybrid Local Perception(13-I.1:change detection / geometry / template / selective OCR)
+→ WGC Background Capture Feasibility(13-I.1:后台/遮挡可用,minimized 不支持)
 → Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
 ```
@@ -277,6 +280,38 @@ suggested labels、`real_vision_client_benchmark.json` 报告、WebUI 状态映�
 
 **阶段完成 ≠ Real Vision PASSED**:Real Vision Readiness 由真实数据自动生成,
 本阶段输出以实际 Home PC 实测为准(遮挡/前台条件分别记录),不虚报。
+
+### Phase 13-I.1: Hybrid Local Perception & Background Capture Feasibility
+
+```text
+13-I Real Client Benchmark
+↓ 13-I.1 Hybrid Local Perception(OCR 不再是唯一路径)
+↓ Frame/ROI Change Detection → Cheap CV → Selective OCR → Local Model
+↓ WGC Background Capture Feasibility(后台/遮挡可用,minimized 不支持)
+↓ Privacy Boundary(raw vision data = local private)
+```
+
+已实现:`hybrid_vision` 模块(PerceptionEvidence / FrameChangeDetector /
+VisionScheduler / HpMpGeometryExtractor / MapleVisualTemplateLibrary /
+KnowledgeGuidedResolver / BenchmarkPrivacySanitizer)、
+`WindowsGraphicsCaptureProvider`(WGC,后台/遮挡窗口捕获)、
+`scripts/benchmark_hybrid_vision.py`(逐 provider 延迟 + 隐私双输出)、
+`scripts/probe_capture_conditions.py`(四条件独立测量)、
+`scripts/probe_windows_graphics_capture.py` / `scripts/probe_onnx_runtime.py`。
+
+真实 Home PC 结果(详见
+`docs/architecture/vision/hybrid_local_perception.md` 与
+`docs/architecture/vision/real_vision_13i1_public.json`):
+
+- HP geometry:40/40 找到,均值 0.987(真值 1.0);MP ROI 需校准
+- change detection:80ms,false/missed=0;template:4ms
+- WGC:FOREGROUND / BACKGROUND_VISIBLE / BACKGROUND_OCCLUDED 可用,
+  **MINIMIZED = NOT_SUPPORTED**(ImageGrab 与 WGC 均失败)
+- PaddleOCR:未采用(>1GB,当前版本组合 Windows CPU 运行时错误)
+- OmniParser:NOT_USEFUL_FOR_GAME_HUD;ONNX:CPU 路径可行
+
+**Readiness 不虚报**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
+Overall=NOT_READY;原始截图与真实数据仅存本地 sessions/。
 
 ## Multi-machine Development
 

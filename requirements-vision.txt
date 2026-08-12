@@ -3,4 +3,5 @@ opencv-python>=4.9
 numpy>=1.26
 pytesseract>=0.3.10
 pywin32>=305  # Windows-only:真实窗口发现/客户区坐标(win32gui/win32process)
+# windows-capture>=2.0  # 可选:Windows.Graphics.Capture 后台/遮挡窗口捕获(仅本机,CI 不安装)
 # paddleocr>=2.7   # 可选,体积大,按需安装

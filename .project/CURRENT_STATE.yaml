@@ -9,9 +9,9 @@ baseline:
   previous_commit: a36532fe2a528f645f55cf4017ecd488d9d34083
 
 phase:
-  current: 13-I
+  current: 13-I.1
   status: COMPLETED
-  last_completed: 13-H
+  last_completed: 13-I
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -28,5 +28,5 @@ development:
 
 handoff:
   status: READY
-  next_action: "13-I.1 targeted calibration: map label OCR / HP-MP numeric extraction / Quest ROI; background capture requires non-ImageGrab method"
+  next_action: "13-I.2 targeted perception calibration: MP ROI, HP/MP confidence heuristic, multi-map template discrimination, WGC provider integration; or Knowledge Dataset Expansion"
   blockers: []

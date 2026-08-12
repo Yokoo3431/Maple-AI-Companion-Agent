@@ -30,6 +30,7 @@ from maple_agent.real_vision.report import (
     build_real_vision_webui_state,
     save_real_vision_client_benchmark,
 )
+from maple_agent.real_vision.wgc import WindowsGraphicsCaptureProvider
 
 
 def save_real_vision_validation_trace(
@@ -76,6 +77,7 @@ __all__ = [
     "VisionValidationDataset",
     "VisionValidationSample",
     "WindowsOCRAdapter",
+    "WindowsGraphicsCaptureProvider",
     "WindowsScreenshotProvider",
     "build_real_vision_readiness",
     "load_vision_profiles",

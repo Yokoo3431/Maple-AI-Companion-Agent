@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "phase": "13-I.1",
+  "privacy": "REPOSITORY SAFE - no raw screenshots, no absolute paths, no PID/HWND, no chat text",
+  "machine_profile": {
+    "host_alias": "home-pc",
+    "resolution": "2560x1440",
+    "dpi_scale": 1.0,
+    "window_mode": "fullscreen-windowed",
+    "client_kind": "unity"
+  },
+  "capture_conditions": {
+    "FOREGROUND": {
+      "imagegrab": {"success_rate": 1.0, "black_frames": 0},
+      "wgc": {"available": true, "latency_mean_ms": 169}
+    },
+    "BACKGROUND_VISIBLE": {
+      "imagegrab": {"success_rate": 1.0, "content_verified": false, "note": "captured occluding content; verified vs wgc diff 88.7"},
+      "wgc": {"available": true, "latency_mean_ms": 179}
+    },
+    "BACKGROUND_OCCLUDED": {
+      "imagegrab": {"success_rate": 1.0, "content_verified": false, "note": "captured occluding content; verified vs wgc diff 94.5"},
+      "wgc": {"available": true, "latency_mean_ms": 152}
+    },
+    "MINIMIZED": {
+      "imagegrab": {"success_rate": 0.0},
+      "wgc": {"available": false, "note": "0 frames in 20s watchdog while truly minimized"},
+      "conclusion": "MINIMIZED_CAPTURE = NOT_SUPPORTED"
+    }
+  },
+  "capture_candidates": {
+    "imagegrab": {"role": "foreground capture", "limitation": "occlusion-sensitive, no minimized support"},
+    "printwindow": {"available": false, "note": "unity client returns failure/black"},
+    "windows_graphics_capture": {"available": true, "role": "background/occluded window capture", "limitation": "no frames while minimized"},
+    "dxgi_desktop_duplication": {"available": true, "role": "display capture only", "latency_first_frame_ms": 12.5, "limitation": "desktop composite, not reliable window/minimized capture"}
+  },
+  "providers_latency_ms": {
+    "change_detector": {"backend": "cv2", "mean": 80.5, "p95": 83.8, "false_change": 0, "missed_change": 0},
+    "hpmp_geometry": {"backend": "cv2", "mean": 138.5, "p95": 145.3, "hp_present": 40, "mp_present": 40},
+    "template_match": {"backend": "cv2", "mean": 4.2, "p95": 5.0},
+    "tesseract_roi": {"backend": "tesseract", "mean": 760.0, "p95": 791.7},
+    "full_frame_ocr_baseline": {"backend": "tesseract", "mean": 2490.2, "p95": 3881.6}
+  },
+  "metrics": {
+    "sample_count": 40,
+    "hp_geometry_mean_ratio": 0.9872,
+    "hp_ground_truth_ratio": 1.0,
+    "mp_geometry_mean_ratio": 0.7467,
+    "mp_ground_truth_ratio": 1.0,
+    "map_ocr_exact_accuracy": 0.0,
+    "map_ocr_alias_accuracy": 0.0,
+    "map_template_consistency_mean": 0.6761,
+    "knowledge_fabrication_count": 0
+  },
+  "feasibility": {
+    "onnx_runtime": {"available": true, "version": "1.28.0", "gpu_provider": false, "note": "cpu-only wheel; gpu requires onnxruntime-gpu + cuda/cudnn"},
+    "paddleocr": {"available": false, "note": "install >1GB; paddleocr 3.7.0 + paddlepaddle 3.3.1 fails on windows cpu (oneDNN/PIR NotImplementedError); requires version pinning"},
+    "omniparser": {"verdict": "NOT_USEFUL_FOR_GAME_HUD", "note": "web-ui screen parser; large model; stylized game font poor fit; not installed"},
+    "local_detector": {"verdict": "FEASIBILITY_ONLY", "note": "onnx cpu path viable; no model adopted this phase"}
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "overall_controlled_execution": "NOT_READY"
+  }
+}

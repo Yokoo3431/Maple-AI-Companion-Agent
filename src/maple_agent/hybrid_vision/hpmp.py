@@ -1,0 +1,179 @@
+"""HpMpGeometryExtractor:HP/MP 几何提取(主路径,不依赖数字 OCR)。"""
+
+from __future__ import annotations
+
+import os
+import time
+
+from maple_agent.hybrid_vision.models import HpMpGeometryResult
+
+try:
+    import cv2  # type: ignore[import-not-found]
+    import numpy as np  # type: ignore[import-not-found]
+
+    _CV2_AVAILABLE = True
+except ImportError:
+    cv2 = None
+    np = None
+    _CV2_AVAILABLE = False
+
+
+def _load_rgb(image):
+    if isinstance(image, os.PathLike):
+        image = str(image)
+    if _CV2_AVAILABLE:
+        if isinstance(image, str):
+            return cv2.imread(image)
+        if hasattr(image, "convert"):
+            return cv2.cvtColor(
+                np.asarray(image.convert("RGB")), cv2.COLOR_RGB2BGR
+            )
+        return image
+    from PIL import Image
+
+    if not hasattr(image, "convert"):
+        image = Image.open(image)
+    return image.convert("RGB")
+
+
+def _color_mask_cv2(rgb, kind: str):
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_BGR2HSV)
+    if kind == "hp":  # 红/橙/黄
+        lower1 = np.array([0, 80, 80])
+        upper1 = np.array([25, 255, 255])
+        lower2 = np.array([170, 80, 80])
+        upper2 = np.array([180, 255, 255])
+        mask = cv2.inRange(hsv, lower1, upper1) | cv2.inRange(
+            hsv, lower2, upper2
+        )
+    else:  # mp: 蓝
+        lower = np.array([90, 60, 60])
+        upper = np.array([135, 255, 255])
+        mask = cv2.inRange(hsv, lower, upper)
+    return mask
+
+
+def _color_mask_pil(pixels, width: int, height: int, kind: str):
+    """PIL 降级模式(CI 无 cv2),RGB 近似。"""
+    mask = bytearray(width * height)
+    for index, (r, g, b) in enumerate(pixels):
+        if kind == "hp":
+            red_like = r > 140 and g < 130 and b < 130
+            yellow_like = r > 160 and g > 130 and b < 120
+            mask[index] = 255 if (red_like or yellow_like) else 0
+        else:
+            blue_like = b > 140 and r < 130 and g < 160
+            mask[index] = 255 if blue_like else 0
+    return bytes(mask), width, height
+
+
+def _extract_ratio_cv2(mask, width: int, height: int) -> tuple[float, float]:
+    """返回 (fill_ratio, confidence)。fill = 彩色像素水平延伸 / 宽度。"""
+    columns = mask.any(axis=0)
+    colored = int(mask.sum() // 255)
+    density = colored / max(1, width * height)
+    if not columns.any():
+        return 0.0, 0.0
+    indices = columns.nonzero()[0]
+    extent = (int(indices[-1]) - int(indices[0]) + 1) / max(1, width)
+    continuity = float(columns.mean())
+    confidence = min(1.0, density * 4.0 + continuity * 0.5)
+    return round(min(1.0, max(0.0, extent)), 4), round(
+        min(1.0, confidence), 4
+    )
+
+
+def _extract_ratio_pil(
+    mask_bytes: bytes, width: int, height: int
+) -> tuple[float, float]:
+    """PIL 降级:逐列统计彩色像素。"""
+    row_has = [False] * width
+    colored = 0
+    for y in range(height):
+        base = y * width
+        for x in range(width):
+            if mask_bytes[base + x]:
+                colored += 1
+                row_has[x] = True
+    density = colored / max(1, width * height)
+    if not any(row_has):
+        return 0.0, 0.0
+    first = row_has.index(True)
+    last = len(row_has) - 1 - row_has[::-1].index(True)
+    extent = (last - first + 1) / max(1, width)
+    continuity = sum(row_has) / width
+    confidence = min(1.0, density * 4.0 + continuity * 0.5)
+    return round(min(1.0, max(0.0, extent)), 4), round(
+        min(1.0, confidence), 4
+    )
+
+
+class HpMpGeometryExtractor:
+    """基于颜色几何的 HP/MP 条填充率提取。
+
+    输出 hp_ratio / mp_ratio(0..1)与 confidence。数字 OCR 只是可选 secondary。
+    """
+
+    def __init__(self) -> None:
+        self.backend = "cv2" if _CV2_AVAILABLE else "pil"
+
+    def extract_ratio(
+        self,
+        image,
+        roi: dict,
+        *,
+        kind: str = "hp",
+    ) -> tuple[float | None, float]:
+        rgb = _load_rgb(image)
+        x = int(roi.get("x", 0))
+        y = int(roi.get("y", 0))
+        width = max(1, int(roi.get("width", 0)))
+        height = max(1, int(roi.get("height", 0)))
+        if _CV2_AVAILABLE:
+            crop = rgb[y : y + height, x : x + width]
+            if crop.size == 0:
+                return None, 0.0
+            mask = _color_mask_cv2(crop, kind)
+            ratio, confidence = _extract_ratio_cv2(
+                mask, crop.shape[1], crop.shape[0]
+            )
+        else:
+
+            crop = rgb.crop((x, y, x + width, y + height))
+            mask_bytes, w, h = _color_mask_pil(
+                crop.getdata(), width, height, kind
+            )
+            ratio, confidence = _extract_ratio_pil(mask_bytes, w, h)
+        if ratio == 0.0 and confidence < 0.3:
+            return None, 0.0
+        return ratio, confidence
+
+    def extract(
+        self,
+        image,
+        *,
+        hp_roi: dict,
+        mp_roi: dict,
+    ) -> HpMpGeometryResult:
+        start = time.perf_counter()
+        hp_ratio, hp_confidence = self.extract_ratio(
+            image, hp_roi, kind="hp"
+        )
+        mp_ratio, mp_confidence = self.extract_ratio(
+            image, mp_roi, kind="mp"
+        )
+        reasons: list[str] = []
+        if hp_ratio is None:
+            reasons.append("hp bar not found in ROI")
+        if mp_ratio is None:
+            reasons.append("mp bar not found in ROI")
+        latency = round((time.perf_counter() - start) * 1000, 3)
+        return HpMpGeometryResult(
+            hp_ratio=hp_ratio,
+            mp_ratio=mp_ratio,
+            hp_confidence=round(hp_confidence, 4),
+            mp_confidence=round(mp_confidence, 4),
+            method=f"color_geometry/{self.backend}",
+            latency_ms=latency,
+            reasons=reasons,
+        )
