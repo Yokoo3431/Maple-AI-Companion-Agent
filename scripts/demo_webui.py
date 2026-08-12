@@ -165,6 +165,13 @@ from maple_agent.quest_planner import (
     QuestPlanValidator,
     QuestResolver,
 )
+from maple_agent.quest_reasoning import (
+    QuestPlanner as QuestIntelligencePlanner,
+)
+from maple_agent.quest_reasoning import (
+    QuestReasoningValidator,
+    save_quest_reasoning_trace,
+)
 from maple_agent.reflection import (
     ReflectionEngine,
     ReflectionMemory,
@@ -1422,6 +1429,57 @@ def main() -> None:
         "retrieval": maple_knowledge_ref.model_dump(mode="json"),
         "validation": maple_knowledge_validation,
     }
+    quest_intelligence_planner = QuestIntelligencePlanner(
+        maple_knowledge_graph
+    )
+    quest_goal_reference = quest_intelligence_planner.plan(
+        context=maple_context_reference,
+        knowledge_reference=maple_knowledge_ref,
+        perception_reference=perception_reference,
+    )
+    quest_reasoning_validation = QuestReasoningValidator().validate(
+        quest_goal_reference
+    )
+    save_quest_reasoning_trace(
+        "sessions",
+        loop_trace_id,
+        quests=quest_goal_reference.active_quests,
+        progress=quest_goal_reference.quest_progress,
+        goals=(
+            quest_goal_reference.recommended_goals
+            + quest_goal_reference.blocked_goals
+        ),
+        dependencies=quest_goal_reference.dependencies,
+        validation=quest_reasoning_validation.verdict.value,
+    )
+    quest_reasoning_data = {
+        "active_quests": [
+            quest.model_dump(mode="json")
+            for quest in quest_goal_reference.active_quests
+        ],
+        "quest_progress": [
+            progress.model_dump(mode="json")
+            for progress in quest_goal_reference.quest_progress
+        ],
+        "recommended_goals": [
+            goal.model_dump(mode="json")
+            for goal in quest_goal_reference.recommended_goals
+        ],
+        "blocked_goals": [
+            goal.model_dump(mode="json")
+            for goal in quest_goal_reference.blocked_goals
+        ],
+        "dependencies": [
+            dependency.model_dump(mode="json")
+            for dependency in quest_goal_reference.dependencies
+        ],
+        "confidence": quest_goal_reference.confidence,
+        "reasoning": quest_goal_reference.reasoning,
+        "validation": quest_reasoning_validation.verdict.value,
+    }
+    maple_agent_context = maple_agent_context.model_copy(
+        update={"quest_goal_reference": quest_goal_reference}
+    )
     app = create_app(
         runtime=runtime,
         bus=bus,
@@ -1465,6 +1523,7 @@ def main() -> None:
         maple_context=maple_context_data,
         maple_knowledge=maple_knowledge_data,
         perception=perception_data,
+        quest_reasoning=quest_reasoning_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

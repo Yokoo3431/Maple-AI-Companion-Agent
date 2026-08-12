@@ -405,6 +405,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card bg-secondary text-white h-100">
+        <div class="card-header">Maple Quest Intelligence(只读)</div>
+        <div class="card-body">
+          <pre id="quest-reasoning-card-body" class="mb-0" style="white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3 d-flex gap-2">
@@ -507,6 +515,30 @@
     refreshMapleContext();
     refreshMapleKnowledge();
     refreshPerception();
+    refreshQuestReasoning();
+  }
+
+  async function refreshQuestReasoning() {
+    const res = await fetch('/api/quest-reasoning/state');
+    const data = await res.json();
+    const el = document.getElementById('quest-reasoning-card-body');
+    if (!data.enabled) {
+      el.textContent = '未接入';
+      return;
+    }
+    const active = data.active_quests || [];
+    const progress = data.quest_progress || [];
+    const goals = data.recommended_goals || [];
+    const pending = progress.flatMap(p => p.pending_requirements || []);
+    el.textContent = [
+      `ACTIVE QUESTS: ${active.map(q => q.quest_name).join(', ') || '-'}`,
+      `QUEST STATE: ${progress.map(p => `${p.quest_name}: ${p.state}`).join(', ') || '-'}`,
+      `PENDING REQUIREMENTS: ${pending.join(', ') || '-'}`,
+      `GOAL REFERENCES: ${goals.map(g => `${g.goal_type}: ${g.description}`).join(' | ') || '-'}`,
+      `DEPENDENCIES: ${(data.dependencies || []).length}`,
+      `CONFIDENCE: ${Math.round((data.confidence || 0) * 100)}%`,
+      `VALIDATION: ${data.validation || '-'}`,
+    ].join('\n');
   }
 
   async function refreshPerception() {
