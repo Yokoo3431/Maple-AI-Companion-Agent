@@ -7,6 +7,7 @@ from enum import StrEnum
 from pydantic import BaseModel, Field
 
 from maple_agent.action_plan.models import ActionPlan
+from maple_agent.action_proposal.models import ActionProposalReference
 from maple_agent.behavior.models import BehaviorReference
 from maple_agent.confirmation.models import (
     ConfirmationRequest,
@@ -145,4 +146,5 @@ class AgentLoopContext(BaseModel):
     spatial_world_reference: SpatialWorldReference | None = None
     navigation_reference: NavigationReference | None = None
     behavior_reference: BehaviorReference | None = None
+    action_proposal_reference: ActionProposalReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

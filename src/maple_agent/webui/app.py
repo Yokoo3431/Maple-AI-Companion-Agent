@@ -99,6 +99,7 @@ def create_app(
     spatial_world: dict | None = None,
     navigation: dict | None = None,
     behavior: dict | None = None,
+    action_proposal: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -509,6 +510,12 @@ def create_app(
         if behavior is None:
             return {"enabled": False}
         return {"enabled": True, **behavior}
+
+    @app.get("/api/action-proposal/state")
+    async def api_action_proposal_state():
+        if action_proposal is None:
+            return {"enabled": False}
+        return {"enabled": True, **action_proposal}
 
     @app.get("/api/context/state")
     async def api_context_state():

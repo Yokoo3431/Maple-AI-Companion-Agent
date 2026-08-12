@@ -9,6 +9,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import uvicorn
 
 from maple_agent.action_plan import ActionPlanner
+from maple_agent.action_proposal import (
+    ActionProposalMapper,
+    ActionProposalValidator,
+    save_action_proposal_trace,
+)
 from maple_agent.agent import AgentLoop
 from maple_agent.agent_loop import AgentLoopOrchestrator
 from maple_agent.architecture import (
@@ -1947,6 +1952,48 @@ def main() -> None:
             "validation": behavior_combat_validation.verdict.value,
         },
     }
+    action_mapper = ActionProposalMapper()
+    action_proposals = action_mapper.map(
+        behavior_npc,
+        game_state_reference=game_state_reference,
+        navigation_reference=navigation_npc,
+        reflex_reference=reflex_normal,
+    )
+    action_proposal_validation = ActionProposalValidator().validate_many(
+        action_proposals
+    )
+    action_proposals_combat = action_mapper.map(
+        behavior_combat,
+        game_state_reference=game_state_reference,
+        navigation_reference=navigation_map,
+        reflex_reference=reflex_normal,
+    )
+    action_proposal_combat_validation = (
+        ActionProposalValidator().validate_many(action_proposals_combat)
+    )
+    save_action_proposal_trace(
+        "sessions",
+        loop_trace_id,
+        actions=action_proposals,
+        validation=action_proposal_validation.verdict.value,
+    )
+    action_proposal_data = {
+        "actions": [
+            action.model_dump(mode="json")
+            for action in action_proposals
+        ],
+        "confidence": (
+            action_proposals[0].confidence if action_proposals else 0.0
+        ),
+        "validation": action_proposal_validation.verdict.value,
+        "combat_example": {
+            "actions": [
+                action.model_dump(mode="json")
+                for action in action_proposals_combat
+            ],
+            "validation": action_proposal_combat_validation.verdict.value,
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -1958,6 +2005,9 @@ def main() -> None:
             "spatial_world_reference": spatial_world_reference,
             "navigation_reference": navigation_npc,
             "behavior_reference": behavior_npc,
+            "action_proposal_reference": (
+                action_proposals[0] if action_proposals else None
+            ),
         }
     )
     app = create_app(
@@ -2012,6 +2062,7 @@ def main() -> None:
         spatial_world=spatial_world_data,
         navigation=navigation_data,
         behavior=behavior_data,
+        action_proposal=action_proposal_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

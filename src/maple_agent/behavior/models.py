@@ -24,6 +24,7 @@ class BehaviorStep(BaseModel):
 
     step_type: BehaviorStepType
     description: str = ""
+    target: str = ""
     metadata: dict = Field(default_factory=dict)
 
 

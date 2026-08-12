@@ -84,6 +84,11 @@ class BehaviorPlanner:
                         step_type,
                         goal.related_quest if goal is not None else "",
                     ),
+                    target=BehaviorPlanner._step_target(
+                        goal,
+                        step_type,
+                        target_hint,
+                    ),
                     metadata=metadata,
                 )
             )
@@ -95,6 +100,7 @@ class BehaviorPlanner:
                 BehaviorStep(
                     step_type=BehaviorStepType.WAIT_REFERENCE,
                     description="等待/恢复状态后再继续",
+                    target="",
                     metadata={
                         "danger_events": [
                             event.event_type.value
@@ -146,3 +152,26 @@ class BehaviorPlanner:
         }
         base = descriptions.get(step_type, step_type.value)
         return f"{base}: {quest_name}" if quest_name else base
+
+    @staticmethod
+    def _step_target(
+        goal,
+        step_type: BehaviorStepType,
+        target_hint: str,
+    ) -> str:
+        if goal is None:
+            return ""
+        if target_hint:
+            return target_hint
+        description = goal.description or ""
+        for marker, extract in (
+            ("与", lambda rest: rest.split("交互")[0].strip()),
+            ("击杀", lambda rest: rest.strip()),
+            ("击败", lambda rest: rest.strip()),
+            ("猎杀", lambda rest: rest.strip()),
+            ("收集", lambda rest: rest.strip()),
+            ("采集", lambda rest: rest.strip()),
+        ):
+            if description.startswith(marker):
+                return extract(description[len(marker):])
+        return goal.related_quest or ""
