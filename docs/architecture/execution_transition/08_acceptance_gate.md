@@ -23,11 +23,49 @@
 - 用户输入冲突 PAUSE/YIELD 实测
 - 长时间运行审计/回放完备
 
-## 3. 红线(任何阶段不可突破)
+## 3. Current v1 Restrictions(当前 main)
 
 ```text
-SAFETY_MODE = MOCK_ONLY(当前)
-无真实 Input / SendInput / Virtual HID
-无 Automation
+MOCK_ONLY
+NO REAL INPUT
+NO AUTOMATION
+NO VIRTUAL HID
+NO SENDINPUT
 Recovery 不得绕过 Safety Gate
 ```
+
+这是 Phase 7-A / Safety v1 / 当前 main 的绝对约束。
+
+## 4. Permanent Safety Invariants(未来跨版本永久)
+
+```text
+NO UNAUTHORIZED EXECUTION
+NO SAFETY BYPASS
+NO PERMISSION BYPASS
+NO WRONG WINDOW
+NO UNBOUNDED EXECUTION
+NO RECOVERY DIRECT EXECUTION
+NO LIVE DEFAULT
+NO UNRESTRICTED MODE
+```
+
+当前限制与永久不变量是不同概念:
+CONTROLLED_TEST 未来可在批准后合法存在,但永久不变量在任何版本都不可突破。
+
+## 5. CONTROLLED_TEST Entry Gates
+
+```text
+Safety vNext
+Real Vision
+Knowledge Quality
+Permission v2
+Window Binding
+Session
+Kill Switch
+Rate Limit
+Outcome Verification
+Threat Mitigation
+Explicit Enable
+```
+
+任何一项未满足一律 `BLOCKED`,禁止 fallback 绕过。

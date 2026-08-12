@@ -27,6 +27,7 @@
 | Phase 13B | Failure Recovery Foundation(失败检测与恢复建议,只读) | ✅ 已完成 |
 | Phase 13C | Action Outcome Verification(动作结果验证,只读) | ✅ 已完成 |
 | Phase 13D | Controlled Execution Architecture Review(受控执行架构评审) | ✅ 已完成 |
+| Phase 13E | Safety Contract vNext Formalization(安全契约 vNext 正式化) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -46,7 +47,10 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Action Outcome Verification(验证动作预期与实际状态变化,不执行动作)
 → Recovery Reference(检测失败并提出恢复建议,不执行)
 → Controlled Execution Architecture Review(仅评审,未启用真实输入)
-→ Future Safety Contract vNext
+→ Safety Contract vNext(仅契约,未启用)
+→ Real Vision Validation Gate
+→ Knowledge Quality Gate
+→ Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
 ```
 
@@ -179,6 +183,22 @@ Action Verification
 **Phase 13-D does not enable live input.** `SAFETY_MODE` 仍为 `MOCK_ONLY`,
 无真实 Input / SendInput / Virtual HID / Automation;只有未来 Architecture Review
 批准 Safety Contract vNext 后才允许受控原型。
+
+### Phase 13-E: Safety Contract vNext Formalization
+
+```text
+Controlled Execution Architecture Review
+↓ Safety Contract vNext(仅契约)
+↓ Real Vision Validation Gate
+↓ Knowledge Quality Gate
+↓ Future Controlled Execution Prerequisites
+↓ Future Isolated Input Prototype
+```
+
+**Safety vNext is contract only.** Runtime remains `MOCK_ONLY`.
+No real input is enabled.ADR-001 已批准**架构方向**,但不授权任何真实输入;
+Real Vision 当前 `NOT_READY`、Knowledge 当前 `FOUNDATION_ONLY`,
+整体 Controlled Execution readiness 当前 `NOT_READY`。
 
 ## 快速开始(Phase 0)
 

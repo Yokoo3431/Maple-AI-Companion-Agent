@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 状态 | **PROPOSED**(未经人类 Review 批准,不得视为 ACCEPTED) |
+| 状态 | **ACCEPTED**(仅批准架构方向;不等于 LIVE EXECUTION APPROVED) |
 | 日期 | 2026-08-12 |
 | 关联 | Phase 13-D Controlled Execution Architecture Review |
 
@@ -46,4 +46,10 @@ MOCK_ONLY(现状)
 
 ## Status
 
-**PROPOSED**。等待人工 Architecture Review 批准后再决定是否进入 Safety Contract vNext 阶段。
+**ACCEPTED(architecture direction)**。经 Phase 13-E Safety Contract vNext Formalization
+完成契约一致性审查后,批准本 ADR 的演进架构方向。
+
+> **ACCEPTED architecture direction ≠ LIVE EXECUTION APPROVED**
+>
+> 仅批准受控执行演进架构;不批准任何真实输入 / 执行实现。
+> Runtime 仍为 `SAFETY_MODE = MOCK_ONLY`,整体 readiness 仍为 `NOT_READY`。
