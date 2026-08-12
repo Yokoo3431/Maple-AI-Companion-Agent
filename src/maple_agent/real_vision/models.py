@@ -78,8 +78,17 @@ class RealVisionBenchmarkResult(BaseModel):
     capture_success_rate: float | None = None
     ocr_success_rate: float | None = None
     mean_capture_latency_ms: float | None = None
+    p50_capture_latency_ms: float | None = None
     p95_capture_latency_ms: float | None = None
     mean_ocr_latency_ms: float | None = None
+    p50_ocr_latency_ms: float | None = None
+    p95_ocr_latency_ms: float | None = None
+    mean_e2e_latency_ms: float | None = None
+    p50_e2e_latency_ms: float | None = None
+    p95_e2e_latency_ms: float | None = None
+    max_e2e_latency_ms: float | None = None
+    failure_taxonomy: dict[str, int] = Field(default_factory=dict)
+    confidence_calibration_status: str = "NOT_CALIBRATED"
     confidence_buckets: list[ConfidenceBucket] = Field(
         default_factory=list
     )

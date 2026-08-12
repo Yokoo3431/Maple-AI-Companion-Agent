@@ -1,0 +1,13 @@
+{
+  "profile_id": "home_pc_2560x1440",
+  "game_profile": "maple-classic-unity",
+  "server_profile": "nostalgic",
+  "resolution": "2560x1440",
+  "window_mode": "fullscreen-windowed",
+  "dpi_scale": 1.0,
+  "map_label_roi": { "x": 150, "y": 0, "width": 750, "height": 90 },
+  "hp_roi": { "x": 750, "y": 1210, "width": 750, "height": 120 },
+  "mp_roi": { "x": 750, "y": 1130, "width": 750, "height": 75 },
+  "quest_roi": { "x": 2150, "y": 50, "width": 410, "height": 90 },
+  "dialog_roi": { "x": 350, "y": 1000, "width": 1350, "height": 440 }
+}

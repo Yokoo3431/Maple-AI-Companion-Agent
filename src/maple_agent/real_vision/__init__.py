@@ -25,6 +25,11 @@ from maple_agent.real_vision.profile import (
     load_vision_profiles,
 )
 from maple_agent.real_vision.readiness import build_real_vision_readiness
+from maple_agent.real_vision.report import (
+    build_real_vision_client_benchmark_report,
+    build_real_vision_webui_state,
+    save_real_vision_client_benchmark,
+)
 
 
 def save_real_vision_validation_trace(
@@ -63,6 +68,8 @@ __all__ = [
     "RealVisionBenchmark",
     "RealVisionBenchmarkResult",
     "RealVisionReadinessPolicy",
+    "build_real_vision_client_benchmark_report",
+    "build_real_vision_webui_state",
     "TesseractOCRAdapter",
     "VisionGroundTruth",
     "VisionROIProfile",
@@ -73,4 +80,5 @@ __all__ = [
     "build_real_vision_readiness",
     "load_vision_profiles",
     "save_real_vision_validation_trace",
+    "save_real_vision_client_benchmark",
 ]

@@ -5,13 +5,13 @@ project:
 baseline:
   branch: main
   source_commit: a36532fe2a528f645f55cf4017ecd488d9d34083
-  commit: a36532fe2a528f645f55cf4017ecd488d9d34083
+  commit: PENDING
   previous_commit: 231725ea4f3314a0d70bead02dd77f54c3285bb0
 
 phase:
-  current: 13-H
+  current: 13-I
   status: COMPLETED
-  last_completed: 13-G
+  last_completed: 13-H
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -23,10 +23,10 @@ readiness:
 
 development:
   role: IMPLEMENTER
-  last_machine: unspecified
+  last_machine: HOME
   git_repository_expected: true
 
 handoff:
   status: READY
-  next_action: ""
+  next_action: "13-I.1 targeted calibration: map label OCR / HP-MP numeric extraction / Quest ROI; background capture requires non-ImageGrab method"
   blockers: []

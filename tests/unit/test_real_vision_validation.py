@@ -22,12 +22,16 @@ from maple_agent.real_vision import (
     RealOCRProvider,
     RealVisionBenchmark,
     RealVisionBenchmarkResult,
+    TesseractOCRAdapter,
     VisionGroundTruth,
     VisionValidationDataset,
     VisionValidationSample,
     WindowsScreenshotProvider,
+    build_real_vision_client_benchmark_report,
     build_real_vision_readiness,
+    build_real_vision_webui_state,
     load_vision_profiles,
+    save_real_vision_client_benchmark,
     save_real_vision_validation_trace,
 )
 from maple_agent.runtime import RuntimeManager
@@ -121,7 +125,8 @@ def test_real_provider_contract():
 
 def test_invalid_window():
     provider = WindowsScreenshotProvider()
-    assert provider.binding_status() == "NOT_FOUND"
+    # win32 可用时 binding 为 DISCOVERABLE,但指定窗口不存在时 capture 仍须失败安全
+    assert provider.binding_status() in ("NOT_FOUND", "DISCOVERABLE")
     frame = provider.capture()
     assert frame.confidence == 0.0
     assert "unavailable" in frame.image_reference
@@ -186,6 +191,56 @@ def test_headless_capture_failure_deterministic(monkeypatch):
     assert reference.confidence == 0.0
 
 
+def test_printwindow_fallback_to_imagegrab(monkeypatch):
+    provider = WindowsScreenshotProvider(
+        window_rect={
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 600,
+        }
+    )
+    monkeypatch.setattr(
+        provider,
+        "_printwindow",
+        lambda rect: (
+            "unavailable://printwindow-black",
+            CaptureStatus.UNAVAILABLE,
+        ),
+    )
+    reference, status = provider._capture_region(
+        {"left": 0, "top": 0, "width": 800, "height": 600}
+    )
+    assert status is CaptureStatus.OK
+    assert provider.capture_method == "imagegrab"
+    assert "imagegrab fallback" in provider.fallback_reason
+
+
+def test_printwindow_success_sets_method(monkeypatch):
+    provider = WindowsScreenshotProvider(
+        window_rect={
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 600,
+        }
+    )
+    monkeypatch.setattr(
+        provider,
+        "_printwindow",
+        lambda rect: (
+            "capture://printwindow/123",
+            CaptureStatus.OK,
+        ),
+    )
+    reference, status = provider._capture_region(
+        {"left": 0, "top": 0, "width": 800, "height": 600}
+    )
+    assert status is CaptureStatus.OK
+    assert reference == "capture://printwindow/123"
+    assert provider.capture_method == "printwindow"
+
+
 def test_win32_client_to_screen_coordinates():
     provider = WindowsScreenshotProvider(window_title="MapleStory")
     fake_win32 = SimpleNamespace(
@@ -205,13 +260,30 @@ def test_win32_client_to_screen_coordinates():
 
 def test_ocr_backend_adapter():
     provider = RealOCRProvider()
-    # 当前环境无 winrt/pytesseract -> 诚实不可用
-    assert provider.available is False
     from maple_agent.vision_runtime.models import VisionFrame
 
-    result = provider.recognize(VisionFrame(frame_id="f1"))
-    assert result.confidence == 0.0
-    assert result.source == "ocr-unavailable"
+    if provider.available:
+        capability = provider.capability()
+        assert capability["available"] is True
+        assert capability["backend"] in ("tesseract", "windows")
+    else:
+        result = provider.recognize(VisionFrame(frame_id="f1"))
+        assert result.confidence == 0.0
+        assert result.source == "ocr-unavailable"
+
+
+def test_ocr_capability_detection():
+    adapter = TesseractOCRAdapter()
+    capability = adapter.capability()
+    assert capability["backend"] == "tesseract"
+    assert capability["available"] is adapter.available
+    assert isinstance(capability["languages"], list)
+    if adapter.available:
+        assert capability["version"]
+        assert any(
+            language in capability["languages"]
+            for language in ("eng", "chi_sim")
+        )
 
 
 def test_ocr_failure():
@@ -323,6 +395,29 @@ def test_benchmark_latency_metrics():
     assert result.mean_ocr_latency_ms == 10.0
 
 
+def test_benchmark_latency_percentiles_and_taxonomy():
+    samples = [_sample("s1")]
+    result = RealVisionBenchmark().evaluate(
+        samples,
+        _predict,
+        capture_latencies_ms=[10.0, 20.0, 30.0, 40.0],
+        ocr_latencies_ms=[5.0, 15.0, 25.0],
+        e2e_latencies_ms=[15.0, 35.0, 55.0, 75.0],
+        capture_success_rate=1.0,
+        ocr_success_rate=1.0,
+        failure_taxonomy={"BLACK_FRAME": 1},
+    )
+    assert result.p50_capture_latency_ms == 25.0
+    assert result.p95_capture_latency_ms == 40.0
+    assert result.p50_ocr_latency_ms == 15.0
+    assert result.p95_ocr_latency_ms == 25.0
+    assert result.mean_e2e_latency_ms == 45.0
+    assert result.p95_e2e_latency_ms == 75.0
+    assert result.max_e2e_latency_ms == 75.0
+    assert result.failure_taxonomy == {"BLACK_FRAME": 1}
+    assert result.confidence_calibration_status == "CALIBRATED"
+
+
 def test_benchmark_confidence_calibration():
     samples = [_sample("s1"), _sample("s2")]
     result = RealVisionBenchmark().evaluate(
@@ -430,6 +525,68 @@ def test_replay_generation(tmp_path):
     assert replay["metrics"]["sample_count"] == 0
     assert replay["readiness"]["validation_status"] == "NOT_READY"
     assert replay["validation"] == "NOT_READY"
+
+
+def test_client_benchmark_report_builder(tmp_path):
+    metrics = RealVisionBenchmarkResult(sample_count=0)
+    readiness = build_real_vision_readiness(
+        metrics,
+        real_client_tested=False,
+    )
+    report = build_real_vision_client_benchmark_report(
+        machine_profile={"host": "home-pc"},
+        window={"binding": "NOT_FOUND"},
+        capture={"method": "imagegrab"},
+        ocr={"backend": "none"},
+        dataset={"sample_count": 0},
+        metrics=metrics,
+        readiness=readiness,
+        failures=[{"type": "WINDOW_NOT_FOUND", "message": "window missing"}],
+    )
+    assert report["schema_version"] == "1.0"
+    assert report["window"]["binding"] == "NOT_FOUND"
+    assert report["entity_metrics"]["npc"] == "NOT_SUPPORTED"
+    assert report["readiness"]["validation_status"] == "NOT_READY"
+    path = save_real_vision_client_benchmark(tmp_path, "trace-report", report)
+    loaded = json.loads(path.read_text(encoding="utf-8"))
+    assert loaded["machine_profile"]["host"] == "home-pc"
+    assert loaded["failure_taxonomy"] == {}
+
+
+def test_webui_state_mapper():
+    metrics = RealVisionBenchmarkResult(sample_count=0)
+    readiness = build_real_vision_readiness(
+        metrics,
+        real_client_tested=False,
+        capture_provider="windows",
+        ocr_provider="none",
+    )
+    state = build_real_vision_webui_state(
+        readiness,
+        metrics,
+        window={
+            "binding": "BOUND",
+            "window_title": "冒险岛怀旧服",
+            "resolution": "2560x1440",
+            "dpi_scale": 1.0,
+            "window_mode": "fullscreen-windowed",
+            "foreground": False,
+        },
+        ocr_capability={
+            "backend": "tesseract",
+            "available": True,
+            "version": "5.4.0",
+            "languages": ["eng"],
+            "chinese_support": False,
+            "english_support": True,
+        },
+    )
+    assert state["real_client_tested"] is False
+    assert state["window_binding"]["title"] == "冒险岛怀旧服"
+    assert state["window_binding"]["resolution"] == "2560x1440"
+    assert state["ocr_backend"]["backend"] == "tesseract"
+    assert state["entity_support"]["npc"] == "NOT_SUPPORTED"
+    assert state["confidence_calibration"] == "NOT_CALIBRATED"
 
 
 def test_webui_real_vision_endpoint():

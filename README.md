@@ -32,6 +32,7 @@
 | Phase 13F | Real Vision Validation(真实视觉验证基础) | ✅ Foundation implemented |
 | Phase 13G | Knowledge Acquisition & Quality Gate(知识获取与质量门) | ✅ Foundation implemented |
 | Phase 13H | Repository Governance & Multi-Machine Handoff(仓库治理与多机交接) | ✅ 已完成 |
+| Phase 13I | Real Vision Client Benchmark & Calibration Baseline(真实客户端 Benchmark 与校准基线) | ✅ Phase COMPLETED / Real Vision = NOT_READY |
 
 当前架构路线:
 
@@ -55,6 +56,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Gate Enforcement Hardening(文档 Gate == 代码 Gate == 测试 Gate)
 → Real Vision Validation Gate(readiness 当前 NOT_READY,未虚报)
 → Knowledge Quality Gate(readiness 当前 FOUNDATION_ONLY,未虚报)
+→ Real Vision Client Benchmark(13-I 真实客户端数据校准基线,readiness 不虚报)
 → Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
 ```
@@ -255,6 +257,26 @@ unknown relation 不静默 PORTAL)、拓扑校验、KnowledgeQualityBenchmark、
 
 **阶段完成 ≠ Knowledge Gate READY**:Knowledge Readiness 当前为 `FOUNDATION_ONLY`
 (demo 数据 canonical 未全覆盖、无 production denominator),不虚报。
+
+### Phase 13-I: Real Vision Client Benchmark & Calibration Baseline
+
+```text
+13-F Real Vision Foundation
+↓ 13-I Real Client Benchmark(真实窗口发现 / ImageGrab 截图 / Tesseract OCR)
+↓ Real Dataset(LOCAL ONLY,manifest + hashes)
+↓ Map / HP/MP / Quest 实测指标
+↓ Calibration Baseline(ROI / OCR / latency / confidence)
+↓ Real Vision Gate(自动生成,禁止手工 PASSED)
+```
+
+已实现:只读窗口发现(`scripts/list_windows.py`)、真实截图 + OCR 校验脚本
+(`scripts/validate_real_vision.py`,支持 `--window-title / --profile / --frames /
+--interval / --dataset-dir / --capture-samples / --ground-truth / --ocr-lang`)、
+Tesseract 真实 OCR 桥接(chi_sim+eng)、ROI 裁剪 OCR、LOCAL dataset manifest +
+suggested labels、`real_vision_client_benchmark.json` 报告、WebUI 状态映射。
+
+**阶段完成 ≠ Real Vision PASSED**:Real Vision Readiness 由真实数据自动生成,
+本阶段输出以实际 Home PC 实测为准(遮挡/前台条件分别记录),不虚报。
 
 ## Multi-machine Development
 

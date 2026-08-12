@@ -229,6 +229,7 @@ from maple_agent.quest_reasoning import (
 from maple_agent.real_vision import (
     RealVisionBenchmarkResult,
     build_real_vision_readiness,
+    build_real_vision_webui_state,
 )
 from maple_agent.recovery import (
     FailureDetector,
@@ -2397,30 +2398,10 @@ def main() -> None:
         capture_available=False,
         ocr_available=False,
     )
-    real_vision_data = {
-        "capture_provider": real_vision_readiness.capture_provider,
-        "ocr_provider": real_vision_readiness.ocr_provider,
-        "real_client_tested": real_vision_readiness.real_client_tested,
-        "sample_count": real_vision_readiness.sample_count,
-        "capture_success_rate": real_vision_metrics.capture_success_rate,
-        "map_accuracy": real_vision_readiness.map_detection_accuracy,
-        "hp_mp_accuracy": real_vision_readiness.hp_mp_accuracy,
-        "quest_state_accuracy": (
-            real_vision_readiness.quest_state_accuracy
-        ),
-        "npc_precision": real_vision_metrics.npc_precision,
-        "npc_recall": real_vision_metrics.npc_recall,
-        "mean_capture_latency_ms": (
-            real_vision_metrics.mean_capture_latency_ms
-        ),
-        "mean_ocr_latency_ms": real_vision_metrics.mean_ocr_latency_ms,
-        "validation_status": real_vision_readiness.validation_status.value,
-        "reasons": [
-            "real client not tested",
-            "capture provider unavailable",
-            "OCR provider unavailable",
-        ],
-    }
+    real_vision_data = build_real_vision_webui_state(
+        real_vision_readiness,
+        real_vision_metrics,
+    )
     knowledge_mapper = CanonicalMapper.from_maple_graph(
         maple_knowledge_graph,
         game_profile="maple-v113",

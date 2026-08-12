@@ -36,8 +36,10 @@ class RealVisionBenchmark:
         *,
         capture_latencies_ms: list[float] | None = None,
         ocr_latencies_ms: list[float] | None = None,
+        e2e_latencies_ms: list[float] | None = None,
         capture_success_rate: float | None = None,
         ocr_success_rate: float | None = None,
+        failure_taxonomy: dict[str, int] | None = None,
     ) -> RealVisionBenchmarkResult:
         reasons: list[str] = []
         total = len(samples)
@@ -171,6 +173,13 @@ class RealVisionBenchmark:
             ocr_success_rate = (
                 round(ocr_ok_count / total, 4) if total else None
             )
+        if failure_taxonomy is None:
+            failure_taxonomy = {}
+        if not failure_taxonomy:
+            failure_taxonomy = {"UNKNOWN": 0}
+        calibration_status = (
+            "NOT_CALIBRATED" if not bucket_map else "CALIBRATED"
+        )
         buckets = [
             ConfidenceBucket(
                 bucket=name,
@@ -211,8 +220,17 @@ class RealVisionBenchmark:
                 else None
             ),
             mean_capture_latency_ms=self._mean(capture_latencies_ms),
+            p50_capture_latency_ms=self._p50(capture_latencies_ms),
             p95_capture_latency_ms=self._p95(capture_latencies_ms),
             mean_ocr_latency_ms=self._mean(ocr_latencies_ms),
+            p50_ocr_latency_ms=self._p50(ocr_latencies_ms),
+            p95_ocr_latency_ms=self._p95(ocr_latencies_ms),
+            mean_e2e_latency_ms=self._mean(e2e_latencies_ms),
+            p50_e2e_latency_ms=self._p50(e2e_latencies_ms),
+            p95_e2e_latency_ms=self._p95(e2e_latencies_ms),
+            max_e2e_latency_ms=self._max(e2e_latencies_ms),
+            failure_taxonomy=dict(failure_taxonomy),
+            confidence_calibration_status=calibration_status,
             confidence_buckets=buckets,
             reasons=reasons,
         )
@@ -230,3 +248,15 @@ class RealVisionBenchmark:
         ordered = sorted(values)
         index = max(0, min(len(ordered) - 1, int(0.95 * len(ordered))))
         return round(ordered[index], 4)
+
+    @staticmethod
+    def _p50(values: list[float] | None) -> float | None:
+        if not values:
+            return None
+        return round(statistics.median(values), 4)
+
+    @staticmethod
+    def _max(values: list[float] | None) -> float | None:
+        if not values:
+            return None
+        return round(max(values), 4)
