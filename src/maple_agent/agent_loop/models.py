@@ -53,6 +53,7 @@ from maple_agent.planning_optimizer.models import (
 )
 from maple_agent.quest_reasoning.models import QuestGoalReference
 from maple_agent.reflection.models import ReflectionResult
+from maple_agent.reflex.models import ReflexReference
 from maple_agent.task_planning.models import (
     LongHorizonGoal,
     TaskExecutionState,
@@ -131,4 +132,5 @@ class AgentLoopContext(BaseModel):
     perception_reference: MaplePerceptionReference | None = None
     quest_goal_reference: QuestGoalReference | None = None
     perception_fusion_reference: PerceptionFusionReference | None = None
+    reflex_reference: ReflexReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED

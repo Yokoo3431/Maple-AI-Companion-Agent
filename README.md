@@ -14,7 +14,7 @@
 | Phase 7B-8F | 长期规划 / 环境理解 / 决策参考 / 人类对齐 | ✅ 已完成 |
 | Phase 9A-9F | 记忆图谱 / 语义记忆 / Maple 上下文 / 领域知识 / 感知绑定 / 任务推理 | ✅ 已完成 |
 | Phase 10A | Perception Fusion(多源感知融合,只读) | ✅ 已完成 |
-| Phase 10B | L1 Reflex Foundation(HP/MP/UI 状态与危险事件快速感知) | 规划中 |
+| Phase 10B | L1 Reflex Foundation(HP/MP/UI 状态与危险事件快速感知,只读) | ✅ 已完成 |
 | Phase 10C | Virtual Keyboard Isolation Layer(未来隔离虚拟输入层) | 规划中 |
 
 当前架构路线:
@@ -23,6 +23,7 @@
 Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Human Confirmation → Permission Sandbox(MOCK_ONLY) → Reflection → Evaluation
 → Memory / Semantic Memory → Maple Context → Quest Reasoning → Perception Fusion
+→ L1 Reflex(状态感知参考)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。

@@ -92,6 +92,7 @@ def create_app(
     perception: dict | None = None,
     quest_reasoning: dict | None = None,
     perception_fusion: dict | None = None,
+    reflex: dict | None = None,
 ) -> FastAPI:
     """构建 Phase 0 WebUI 控制台应用。"""
     providers = providers or {}
@@ -460,6 +461,12 @@ def create_app(
         if perception_fusion is None:
             return {"enabled": False}
         return {"enabled": True, **perception_fusion}
+
+    @app.get("/api/reflex/state")
+    async def api_reflex_state():
+        if reflex is None:
+            return {"enabled": False}
+        return {"enabled": True, **reflex}
 
     @app.get("/api/context/state")
     async def api_context_state():

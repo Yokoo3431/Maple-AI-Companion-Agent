@@ -183,6 +183,13 @@ from maple_agent.reflection import (
     ReflectionTrigger,
 )
 from maple_agent.reflection.models import FailureType, ReflectionResult
+from maple_agent.reflex import (
+    HpMpReference,
+    ReflexStateDetector,
+    ReflexThresholds,
+    ReflexValidator,
+    save_reflex_trace,
+)
 from maple_agent.runtime import RuntimeManager
 from maple_agent.task_planning import (
     LongHorizonGoal,
@@ -1522,10 +1529,104 @@ def main() -> None:
         "reasoning": perception_fusion_reference.reasoning,
         "validation": perception_fusion_validation.verdict.value,
     }
+    reflex_thresholds = ReflexThresholds.from_dict(
+        {
+            "low_hp_threshold": 0.4,
+            "low_mp_threshold": 0.2,
+        }
+    )
+    reflex_detector = ReflexStateDetector(thresholds=reflex_thresholds)
+    reflex_low_hp = reflex_detector.detect(
+        fusion_reference=perception_fusion_reference,
+        context_reference=maple_context_reference,
+        hp_reference=HpMpReference(
+            current_value=350,
+            max_value=1000,
+            ratio=0.35,
+            confidence=0.9,
+            source="mock",
+        ),
+        mp_reference=HpMpReference(
+            current_value=800,
+            max_value=1000,
+            ratio=0.8,
+            confidence=0.9,
+            source="mock",
+        ),
+        death_signal=False,
+    )
+    reflex_low_hp_validation = ReflexValidator().validate(reflex_low_hp)
+    reflex_low_hp = reflex_low_hp.model_copy(
+        update={
+            "validation": reflex_low_hp_validation.verdict.value,
+        }
+    )
+    save_reflex_trace(
+        "sessions",
+        loop_trace_id,
+        state=reflex_low_hp,
+        hp_reference=reflex_low_hp.hp_reference,
+        mp_reference=reflex_low_hp.mp_reference,
+        danger_events=reflex_low_hp.danger_events,
+        thresholds=reflex_thresholds.to_dict(),
+        validation=reflex_low_hp_validation.verdict.value,
+    )
+    reflex_death = reflex_detector.detect(
+        fusion_reference=perception_fusion_reference,
+        context_reference=maple_context_reference,
+        hp_reference=HpMpReference(
+            current_value=0,
+            max_value=1000,
+            ratio=0.0,
+            confidence=0.9,
+            source="mock",
+        ),
+        mp_reference=HpMpReference(
+            current_value=500,
+            max_value=1000,
+            ratio=0.5,
+            confidence=0.9,
+            source="mock",
+        ),
+        death_signal=True,
+    )
+    reflex_death_validation = ReflexValidator().validate(reflex_death)
+    assert 0 <= reflex_death.confidence <= 1
+    reflex_data = {
+        "state": reflex_low_hp.state.value,
+        "hp": (
+            reflex_low_hp.hp_reference.model_dump(mode="json")
+            if reflex_low_hp.hp_reference is not None
+            else {}
+        ),
+        "mp": (
+            reflex_low_hp.mp_reference.model_dump(mode="json")
+            if reflex_low_hp.mp_reference is not None
+            else {}
+        ),
+        "danger_events": [
+            event.model_dump(mode="json")
+            for event in reflex_low_hp.danger_events
+        ],
+        "ui_alerts": reflex_low_hp.ui_alerts,
+        "confidence": reflex_low_hp.confidence,
+        "reasoning": reflex_low_hp.reasoning,
+        "validation": reflex_low_hp_validation.verdict.value,
+        "death_example": {
+            "state": reflex_death.state.value,
+            "danger_events": [
+                event.model_dump(mode="json")
+                for event in reflex_death.danger_events
+            ],
+            "confidence": reflex_death.confidence,
+            "validation": reflex_death_validation.verdict.value,
+        },
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
             "perception_fusion_reference": perception_fusion_reference,
+            "reflex_reference": reflex_low_hp,
         }
     )
     app = create_app(
@@ -1573,6 +1674,7 @@ def main() -> None:
         perception=perception_data,
         quest_reasoning=quest_reasoning_data,
         perception_fusion=perception_fusion_data,
+        reflex=reflex_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())
