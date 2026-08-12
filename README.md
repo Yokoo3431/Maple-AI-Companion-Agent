@@ -18,6 +18,7 @@
 | Phase 10C | Virtual Keyboard Isolation Layer(未来隔离虚拟输入层) | 规划中 |
 | Phase 11A | Vision Runtime Foundation(窗口视觉读取 -> 结构化观察,只读) | ✅ 已完成 |
 | Phase 11B | Game State Understanding(结构化 Maple 游戏状态,只读) | ✅ 已完成 |
+| Phase 11C | World Knowledge Foundation(Maple 世界知识图谱,只读) | ✅ 已完成 |
 
 当前架构路线:
 
@@ -28,9 +29,23 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → L1 Reflex(状态感知参考)
 → Vision Runtime(窗口视觉读取,结构化观察)
 → Game State Understanding(玩家/地图/实体/任务状态建模)
+→ World Knowledge(外部知识 -> 地图图谱 -> 世界模型参考)
 ```
 
 保持:`READ_ONLY_FIRST / DATA_DRIVEN / MOCK_EXECUTOR_ONLY`,禁止真实键鼠控制与输入注入。
+
+### Phase 11-C: World Knowledge Foundation
+
+```text
+External Game Knowledge
+        ↓
+Map Graph
+        ↓
+World Model Reference
+```
+
+当前阶段只建立世界理解(地图节点/连接/关联查询),为未来 Navigation Planner 提供只读基础。
+**未实现**:Navigation、Input、Automation、路径跟随、移动控制。
 
 ## 快速开始(Phase 0)
 

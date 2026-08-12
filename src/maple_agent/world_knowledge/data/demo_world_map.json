@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "source": "manual-dataset",
+  "maps": [
+    {
+      "map_id": "map_100000000",
+      "name": "射手村",
+      "aliases": ["Henesys", "射手"],
+      "region": "维多利亚岛",
+      "type": "TOWN",
+      "description": "冒险岛新手村之一",
+      "npcs": ["赫丽娜"],
+      "monsters": ["绿水灵"],
+      "quests": ["新手任务"],
+      "confidence": 0.95
+    },
+    {
+      "map_id": "map_100000001",
+      "name": "东部森林",
+      "aliases": ["East Forest"],
+      "region": "维多利亚岛",
+      "type": "FIELD",
+      "description": "射手村附近训练地图",
+      "monsters": ["绿水灵"],
+      "confidence": 0.9
+    },
+    {
+      "map_id": "map_101000000",
+      "name": "魔法密林",
+      "aliases": ["Ellinia", "魔法"],
+      "region": "维多利亚岛",
+      "type": "TOWN",
+      "description": "法师职业相关地图",
+      "confidence": 0.95
+    }
+  ],
+  "connections": [
+    {
+      "from": "射手村",
+      "to": "东部森林",
+      "type": "PORTAL",
+      "confidence": 0.95
+    },
+    {
+      "from": "东部森林",
+      "to": "魔法密林",
+      "type": "PORTAL",
+      "confidence": 0.9
+    }
+  ]
+}

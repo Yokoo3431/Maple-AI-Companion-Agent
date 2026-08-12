@@ -230,6 +230,13 @@ from maple_agent.webui.app import create_app
 from maple_agent.window import MockWindowDetector, WindowBindingService
 from maple_agent.window.models import WindowInfo as BoundWindowInfo
 from maple_agent.window.models import WindowRect as BoundWindowRect
+from maple_agent.world_knowledge import (
+    WorldKnowledgeImporter,
+    WorldKnowledgeResolver,
+    WorldKnowledgeValidator,
+    load_demo_world_map,
+    save_world_knowledge_trace,
+)
 from maple_agent.world_model import (
     EnvironmentEventDetector,
     EnvironmentHistoryManager,
@@ -1728,6 +1735,41 @@ def main() -> None:
         "reasoning": game_state_reference.reasoning,
         "validation": game_state_validation.verdict.value,
     }
+    world_graph = WorldKnowledgeImporter().import_data(
+        load_demo_world_map()
+    )
+    world_knowledge_reference = WorldKnowledgeResolver(
+        world_graph
+    ).resolve(
+        game_state_reference=game_state_reference,
+        maple_knowledge_reference=maple_knowledge_ref,
+    )
+    world_knowledge_validation = WorldKnowledgeValidator().validate(
+        world_knowledge_reference
+    )
+    save_world_knowledge_trace(
+        "sessions",
+        loop_trace_id,
+        current_map=world_knowledge_reference.current_map,
+        known_maps=world_knowledge_reference.known_maps,
+        connections=world_knowledge_reference.map_connections,
+        validation=world_knowledge_validation.verdict.value,
+    )
+    world_knowledge_data = {
+        "current_map": world_knowledge_reference.current_map,
+        "known_maps": world_knowledge_reference.known_maps,
+        "reachable_maps": world_knowledge_reference.reachable_maps,
+        "map_connections": [
+            connection.model_dump(mode="json")
+            for connection in world_knowledge_reference.map_connections
+        ],
+        "related_npcs": world_knowledge_reference.related_npcs,
+        "related_monsters": world_knowledge_reference.related_monsters,
+        "related_quests": world_knowledge_reference.related_quests,
+        "confidence": world_knowledge_reference.confidence,
+        "reasoning": world_knowledge_reference.reasoning,
+        "validation": world_knowledge_validation.verdict.value,
+    }
     maple_agent_context = maple_agent_context.model_copy(
         update={
             "quest_goal_reference": quest_goal_reference,
@@ -1735,6 +1777,7 @@ def main() -> None:
             "reflex_reference": reflex_low_hp,
             "vision_reference": vision_observation,
             "game_state_reference": game_state_reference,
+            "world_knowledge_reference": world_knowledge_reference,
         }
     )
     app = create_app(
@@ -1785,6 +1828,7 @@ def main() -> None:
         reflex=reflex_data,
         vision_runtime=vision_runtime_data,
         game_state=game_state_data,
+        world_knowledge=world_knowledge_data,
     )
     runtime.start()  # 启动后默认 READY,禁止自动进入 RUNNING
     runtime.bind_window(bound_window, trace_id=new_id())

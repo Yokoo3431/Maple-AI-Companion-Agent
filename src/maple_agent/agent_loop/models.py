@@ -62,6 +62,7 @@ from maple_agent.task_planning.models import (
 )
 from maple_agent.vision_eval.models import VisionEvaluationResult
 from maple_agent.vision_runtime.models import ScreenObservation
+from maple_agent.world_knowledge.models import WorldKnowledgeReference
 from maple_agent.world_model.models import (
     EnvironmentHistory,
     EnvironmentTransition,
@@ -137,4 +138,5 @@ class AgentLoopContext(BaseModel):
     reflex_reference: ReflexReference | None = None
     vision_reference: ScreenObservation | None = None
     game_state_reference: GameStateReference | None = None
+    world_knowledge_reference: WorldKnowledgeReference | None = None
     status: AgentLoopStatus = AgentLoopStatus.CREATED
