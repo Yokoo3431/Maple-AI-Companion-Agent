@@ -44,6 +44,16 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _imread_unicode(path) -> object | None:
+    """支持 Windows Unicode 路径的 cv2 读取(imread 对中文路径失败)。"""
+    if _CV2_AVAILABLE:
+        data = np.fromfile(str(path), dtype=np.uint8)
+        if data.size == 0:
+            return None
+        return cv2.imdecode(data, cv2.IMREAD_COLOR)
+    return None
+
+
 class MapleVisualTemplateLibrary:
     """模板注册表 + OpenCV 匹配。
 
@@ -116,7 +126,10 @@ class MapleVisualTemplateLibrary:
         path = self.local_dir / f"{template_id}.png"
         if not path.is_file():
             raise FileNotFoundError(path)
-        return cv2.imread(str(path), cv2.IMREAD_COLOR)
+        image = _imread_unicode(path)
+        if image is None:
+            raise FileNotFoundError(path)
+        return image
 
     def match(
         self,
@@ -138,7 +151,9 @@ class MapleVisualTemplateLibrary:
         if isinstance(image, (str, os.PathLike)):
             image = str(image)
         if isinstance(image, str):
-            scene = cv2.imread(image)
+            scene = _imread_unicode(image)
+            if scene is None:
+                raise FileNotFoundError(image)
         elif hasattr(image, "convert"):
             scene = cv2.cvtColor(
                 np.asarray(image.convert("RGB")), cv2.COLOR_RGB2BGR
@@ -150,7 +165,7 @@ class MapleVisualTemplateLibrary:
         latency = round((time.perf_counter() - start) * 1000, 3)
         return TemplateMatch(
             template_id=template_id,
-            score=round(float(max_value), 4),
+            score=round(max(0.0, float(max_value)), 4),
             location={
                 "x": int(max_location[0]),
                 "y": int(max_location[1]),

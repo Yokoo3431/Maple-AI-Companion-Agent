@@ -3,11 +3,12 @@
   "game_profile": "maple-classic-unity",
   "server_profile": "nostalgic",
   "base_profile": "maple_classic_default",
-  "resolution": "1920x1080",
+  "resolution": "1366x768",
+  "display_resolution": "1920x1080",
   "window_mode": "windowed",
   "dpi_scale": 1.0,
   "normalized_rois": {},
   "calibration_overlay": {
-    "notes": "仅保存机器特异差异;ROI 布局继承 maple_classic_default 归一化值"
+    "notes": "仅保存机器特异差异;ROI 布局继承 maple_classic_default 归一化值。resolution=GAME CLIENT(1366x768, transform 目标);display_resolution=显示器(1920x1080, 仅元数据)"
   }
 }

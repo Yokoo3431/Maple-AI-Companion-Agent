@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "privacy": "REPOSITORY SAFE - no raw screenshots, no absolute paths, no PID/HWND",
+  "phase": "13-I.3",
+  "cross_machine": {
+    "schema_version": "1.0",
+    "entries": [
+      {
+        "machine": "HOME",
+        "resolution": "2560x1440",
+        "dpi": 1.0,
+        "capture_provider": "wgc+imagegrab",
+        "hp_error": 0.8716,
+        "mp_error": 0.9261,
+        "map_top1_accuracy": 1.0,
+        "template_margin": null,
+        "capture_latency_ms": 169.0,
+        "geometry_latency_ms": 145.289,
+        "template_latency_ms": null,
+        "ocr_latency_ms": 719.226,
+        "profile_transform_status": "OK"
+      },
+      {
+        "machine": "OFFICE",
+        "resolution": "1366x768",
+        "dpi": 1.0,
+        "capture_provider": "wgc",
+        "hp_error": null,
+        "mp_error": null,
+        "map_top1_accuracy": null,
+        "template_margin": null,
+        "capture_latency_ms": 405.0,
+        "geometry_latency_ms": null,
+        "template_latency_ms": null,
+        "ocr_latency_ms": null,
+        "profile_transform_status": "OK"
+      }
+    ],
+    "generalization": {
+      "resolution": "PASS",
+      "dpi": "PASS",
+      "capture_provider": "PASS",
+      "hp_error": "N/A",
+      "mp_error": "N/A",
+      "map_top1_accuracy": "N/A",
+      "template_margin": "N/A",
+      "capture_latency_ms": "DEGRADED",
+      "geometry_latency_ms": "N/A",
+      "template_latency_ms": "N/A",
+      "ocr_latency_ms": "N/A",
+      "profile_transform": "PASS"
+    },
+    "generated_at": "2026-08-13T15:17:07.928362Z"
+  },
+  "capture_conditions": {
+    "HOME": {
+      "FOREGROUND": {
+        "status": "OK",
+        "latency_ms": 165.6
+      },
+      "BACKGROUND_VISIBLE": {
+        "status": "OK",
+        "latency_ms": 388.5
+      },
+      "BACKGROUND_OCCLUDED": {
+        "status": "OK",
+        "latency_ms": 392.4
+      },
+      "MINIMIZED": {
+        "status": "NOT_SUPPORTED",
+        "frames": 0
+      }
+    },
+    "OFFICE": {
+      "FOREGROUND": {
+        "status": "OK",
+        "latency_ms": 405.0
+      },
+      "MINIMIZED": {
+        "status": "NOT_SUPPORTED",
+        "frames": 25,
+        "note": "25 frames all WINDOW_INVALID"
+      }
+    }
+  },
+  "generalization": {
+    "PROFILE_TRANSFORM": "PASS",
+    "WGC": "PASS",
+    "HP": "FAIL",
+    "MP": "FAIL",
+    "MAP": "PASS",
+    "EVENT_SCHEDULER": "PASS"
+  },
+  "hp_mp": {
+    "HOME": {
+      "evidence_provenance": "REAL_HOME",
+      "color_mode": "green",
+      "hp_gt": 1.0,
+      "hp_mean": 0.1284,
+      "hp_error": 0.8716,
+      "mp_gt": 1.0,
+      "mp_mean": 0.0739,
+      "mp_error": 0.9261,
+      "blocker": "segmented green bar model: median-row-extent reads segment length, not fill ratio; requires 13-I.4 bar-model calibration (no post-hoc compensation)"
+    },
+    "OFFICE": {
+      "evidence_provenance": "N/A",
+      "note": "no real HP/MP dataset collected on OFFICE"
+    }
+  },
+  "map": {
+    "HOME": {
+      "evidence_provenance": "REAL_HOME",
+      "real_maps": [
+        "射手村",
+        "射手村集市"
+      ],
+      "queries": 28,
+      "top1_accuracy": 1.0,
+      "unknown_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "margin_mean": null,
+      "ocr_accuracy": 0.0
+    },
+    "OFFICE": {
+      "evidence_provenance": "N/A",
+      "note": "no real map dataset collected on OFFICE"
+    }
+  },
+  "event_scheduler": {
+    "ocr_triggers": 1,
+    "geometry_triggers": 8,
+    "template_triggers": 1,
+    "ocr_skipped_frames": 7,
+    "selective_scheduling": true
+  },
+  "latency": {
+    "HOME": {
+      "wgc_foreground_ms": 165.6,
+      "imagegrab_foreground_ms": 335.5,
+      "change_detector_ms": 80.8371,
+      "geometry_ms": 145.289,
+      "template_ms": null,
+      "ocr_ms": 719.226
+    },
+    "OFFICE": {
+      "wgc_foreground_ms": 405.0
+    }
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "overall_controlled_execution": "NOT_READY",
+    "reasons": []
+  }
+}

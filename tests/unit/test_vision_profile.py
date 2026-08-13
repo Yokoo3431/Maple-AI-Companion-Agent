@@ -106,22 +106,38 @@ def test_base_profile_2560x1440():
         client_width=2560,
         client_height=1440,
     )
-    assert hp["x"] == 750
-    assert hp["y"] == 1210
-    assert hp["width"] == 750
+    # 13-I.3 实测修正:HP 绿色条位于底部中央(y≈1390-1440,x≈575-1985)
+    expected = VisionProfileTransformer.to_pixel(
+        base.normalized_rois["hp"],
+        client_width=2560,
+        client_height=1440,
+    )
+    assert hp == expected
+    assert hp["y"] >= 1380
+    assert hp["width"] >= 1000
 
 
-def test_office_profile_1920x1080_inherits_base():
+def test_office_profile_client_1366x768_inherits_base():
     registry = VisionProfileRegistry()
     office = registry.resolved("office_pc_1920x1080")
     assert office.base_profile == "maple_classic_default"
+    # 语义修正:resolution = GAME CLIENT(transform 目标),display = 显示器元数据
+    assert office.resolution == "1366x768"
+    assert office.display_resolution == "1920x1080"
     assert "hp" in office.normalized_rois
     hp = VisionProfileTransformer.to_pixel(
         office.normalized_rois["hp"],
-        client_width=1920,
-        client_height=1080,
+        client_width=1366,
+        client_height=768,
     )
-    assert abs(hp["x"] - 562) <= 2
+    # 继承 base 归一化 ROI(13-I.3 修正),transform 到 OFFICE client 1366x768
+    expected = VisionProfileTransformer.to_pixel(
+        office.normalized_rois["hp"],
+        client_width=1366,
+        client_height=768,
+    )
+    assert abs(hp["x"] - expected["x"]) <= 2
+    assert hp["y"] >= 740
 
 
 def test_dpi_metadata_handling():
@@ -347,7 +363,7 @@ def test_cross_machine_benchmark():
         "profile_transform_status": "OK",
     }
     office = {
-        "resolution": "1920x1080",
+        "resolution": "1366x768",
         "dpi": 1.0,
         "capture_provider": "wgc-deps-ok;window-minimized",
         "hp_error": None,

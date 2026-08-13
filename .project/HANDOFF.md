@@ -1,25 +1,32 @@
-# Handoff(13-I.2 → 13-I.3,IN_PROGRESS 快照)
+# Handoff(13-I.2 → 13-I.3,COMPLETED)
 
 - **Last completed phase**:13-I.2 Cross-Machine Perception Calibration & Profile Generalization
-- **Current phase**:13-I.3 Office Real Vision Validation & Cross-Machine Evidence Gate(IN_PROGRESS)
-- **Baseline**:`1892e023fedb8a2ad0dd97be96ccb0a05fd07b68`(pause checkpoint;source=eaed0de7)
-- **13-I.3 已完成的探测(OFFICE 实测)**:
-  - Maple 窗口发现:title `冒险岛怀旧服` / UnityWndClass / hwnd+PID 仅本地记录
-  - 窗口可见时:client 1366×768、DPI 1.0、windowed、foreground=true、rect 在主屏(副屏负坐标场景已由 client-local ROI 架构覆盖)
-  - WGC 单帧 FOREGROUND 捕获:OK,~405ms,帧非黑(1368×800)
-  - 窗口最小化后:WGC 25 帧全部 WINDOW_INVALID → MINIMIZED=NOT_SUPPORTED(与 13-I.1 一致)
-  - 能力:pywin32 / OpenCV 5.0 / pytesseract / onnxruntime CPU / windows-capture 可用;Tesseract 二进制不可用(OCR auxiliary)
-- **等待用户操作**:用户手动恢复 Maple 窗口到可见/前台后,运行:
-  - 采集:`scripts/collect_office_frames.py`(待实现)或复用 WGC provider 循环采集 20–30 帧到 sessions/office_13i3_frames/
-  - 评估:`scripts/benchmark_hybrid_vision.py`(待补 profile transform 到 1366×768)
-  - 汇总:CrossMachineVisionBenchmark + `real_vision_13i3_public.json` + RealVisionReadinessReference
-- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Overall=NOT_READY(13-I.3 完成时按真实结果更新,不虚报)
-- **Tests / CI**:13-I.2 基线全绿(940 passed / CI 3.11+3.12 success);13-I.3 追加测试待补
+- **Current phase**:13-I.3 Cross-Machine Evidence Gate(COMPLETED,从 OFFICE pause `8f41cb7` 恢复)
+- **Baseline**:`a05acd017dd7c5c870d20cc73d8800b94b64266b`(source;13-I.3 主提交 hash 见 BASELINE)
+- **Office evidence(REAL_OFFICE,原样保留)**:
+  - Maple 窗口发现:title 冒险岛怀旧服 / UnityWndClass;client≈1366×768、DPI 1.0、windowed
+  - WGC 单帧 FOREGROUND:OK ~405ms;最小化:25 帧全部 WINDOW_INVALID → MINIMIZED=NOT_SUPPORTED
+  - Tesseract 二进制不可用(OCR auxiliary)
+- **Home evidence(REAL_HOME,2026-08-13 新采集)**:
+  - 四条件:FG(WGC 166ms / ImageGrab 335ms,20 帧)、BV(WGC 388ms,10 帧)、
+    OCC(WGC 392ms,10 帧)、MINIMIZED=NOT_SUPPORTED(0 帧)
+  - Map:2 地图(射手村 / 射手村集市)28 查询 top1=1.0、unknown=0、FP=0、margin≈0.86
+  - HP/MP:绿色分段条读取 0.128/0.074 vs 真值 1.0 → FAIL(blocker:分段条模型,需 13-I.4)
+  - Event scheduler:idle 7 帧跳过 OCR,变化触发 template+OCR
+  - 窗口模式切换实测:WGC 帧 1922×1112(client≈1920×1080 windowed),ROI 按实际尺寸换算
+- **Profile 修正**:`office_pc_1920x1080.json` resolution 改为 GAME CLIENT 1366×768,
+  `display_resolution=1920×1080`(仅元数据);base `maple_classic_default` HP/MP ROI 按
+  绿色条位置更新(底部中央)
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
+  Overall=NOT_READY(自动生成,不虚报)
+- **Tests / CI**:13-I.3 追加测试(display/client 分离、provenance、public report 隐私、
+  条件矩阵、N/A 不伪造);本地全绿;CI 3.11/3.12 以 push 后实际为准
 - **Open issues / blockers**:
-  - Maple 窗口 minimized(user action required;禁止自动恢复)
-  - 真实 HP/MP/map 样本与 ground truth 待采集(需用户配合 HP/MP 状态与多地图切换)
-  - background-visible/occluded 条件测试需用户手动切换窗口状态
-- **Next action(恢复后)**:真实帧采集 → benchmark(profile transform)→ 跨机对比 → repository-safe 报告 → readiness → commit/push/CI
-- **Files most relevant(下一 Agent)**:`src/maple_agent/real_vision/capture_manager.py`、`wgc.py`、
-  `src/maple_agent/hybrid_vision/profile.py`、`hpmp.py`、`template.py`、`cross_machine.py`、
-  `scripts/benchmark_hybrid_vision.py`、`.project/CURRENT_STATE.yaml`、`docs/architecture/vision/*`
+  - HP/MP 绿色分段条 bar-model 校准(13-I.4 focused visual fix)
+  - minimized 捕获(VM/Virtual Display 独立阶段)
+- **Next action**:A. 13-I.4 focused visual fix / B. Knowledge Dataset Expansion /
+  C. VM / Virtual Display Capture Feasibility(禁止 Input Provider)
+- **Files most relevant**:`scripts/collect_real_vision_frames.py`、
+  `scripts/benchmark_hybrid_vision.py`、`scripts/trace_event_driven_vision.py`、
+  `scripts/build_cross_machine_summary.py`、`src/maple_agent/hybrid_vision/*`、
+  `configs/vision_profiles/*`、`docs/architecture/vision/*`、`.project/CURRENT_STATE.yaml`

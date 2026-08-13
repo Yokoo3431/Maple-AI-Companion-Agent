@@ -46,10 +46,16 @@ def _color_mask_cv2(rgb, kind: str):
         mask = cv2.inRange(hsv, lower1, upper1) | cv2.inRange(
             hsv, lower2, upper2
         )
-    else:  # mp: 蓝
+    elif kind == "mp":  # 蓝
         lower = np.array([90, 60, 60])
         upper = np.array([135, 255, 255])
         mask = cv2.inRange(hsv, lower, upper)
+    elif kind in ("green", "hp_green", "mp_green"):  # 该 Unity 客户端的绿色条
+        lower = np.array([70, 60, 60])
+        upper = np.array([130, 255, 255])
+        mask = cv2.inRange(hsv, lower, upper)
+    else:
+        mask = np.zeros(rgb.shape[:2], dtype=np.uint8)
     return mask
 
 
@@ -194,6 +200,7 @@ class HpMpGeometryExtractor:
         roi: dict,
         *,
         kind: str = "hp",
+        color_mode: str | None = None,
     ) -> tuple[float | None, float]:
         rgb = _load_rgb(image)
         x = int(roi.get("x", 0))
@@ -204,7 +211,7 @@ class HpMpGeometryExtractor:
             crop = rgb[y : y + height, x : x + width]
             if crop.size == 0:
                 return None, 0.0
-            mask = _color_mask_cv2(crop, kind)
+            mask = _color_mask_cv2(crop, color_mode or kind)
             ratio, confidence = _extract_ratio_cv2(
                 mask, crop.shape[1], crop.shape[0]
             )
@@ -225,13 +232,14 @@ class HpMpGeometryExtractor:
         *,
         hp_roi: dict,
         mp_roi: dict,
+        color_mode: str | None = None,
     ) -> HpMpGeometryResult:
         start = time.perf_counter()
         hp_ratio, hp_confidence = self.extract_ratio(
-            image, hp_roi, kind="hp"
+            image, hp_roi, kind="hp", color_mode=color_mode or "hp"
         )
         mp_ratio, mp_confidence = self.extract_ratio(
-            image, mp_roi, kind="mp"
+            image, mp_roi, kind="mp", color_mode=color_mode or "mp"
         )
         reasons: list[str] = []
         if hp_ratio is None:

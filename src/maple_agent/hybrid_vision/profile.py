@@ -28,7 +28,10 @@ class VisionProfile(BaseModel):
     game_profile: str = ""
     server_profile: str = ""
     base_profile: str = ""
+    # 明确区分 DISPLAY RESOLUTION 与 GAME CLIENT RESOLUTION:
+    # resolution = game client(transform 目标);display_resolution = 显示器(仅元数据)
     resolution: str = ""
+    display_resolution: str = ""
     window_mode: str = ""
     dpi_scale: float = Field(default=1.0, ge=0)
     normalized_rois: dict[str, NormalizedROI] = Field(
@@ -184,6 +187,7 @@ class VisionProfileRegistry:
             server_profile=data.get("server_profile", ""),
             base_profile=data.get("base_profile", ""),
             resolution=data.get("resolution", ""),
+            display_resolution=data.get("display_resolution", ""),
             window_mode=data.get("window_mode", ""),
             dpi_scale=float(data.get("dpi_scale", 1.0)),
             normalized_rois=normalized,
@@ -219,3 +223,60 @@ class VisionProfileRegistry:
                 "legacy_pixel_rois": {},
             }
         )
+
+
+def parse_resolution(value: str) -> tuple[int, int]:
+    """解析 'WxH' -> (width, height);失败返回 (0, 0)。"""
+    parts = (value or "").lower().split("x")
+    if len(parts) == 2:
+        try:
+            return int(parts[0]), int(parts[1])
+        except ValueError:
+            pass
+    return 0, 0
+
+
+def resolve_pixel_rois_for(
+    registry: VisionProfileRegistry,
+    profile_id: str,
+    *,
+    client_width: int,
+    client_height: int,
+    dpi_scale: float | None = None,
+) -> dict[str, dict]:
+    """base 归一化/legacy pixel -> 目标 client 分辨率像素 ROI。
+
+    兼容两类 profile:含 normalized_rois(含 base 继承)与旧 pixel 格式
+    (home_pc_2560x1440,自动迁移)。transform 一律基于 GAME CLIENT 分辨率。
+    """
+    profile = registry.get(profile_id)
+    if profile is None:
+        raise KeyError(profile_id)
+    scale = dpi_scale if dpi_scale is not None else profile.dpi_scale
+    base = (
+        registry.get(profile.base_profile)
+        if profile.base_profile
+        else None
+    )
+    normalized = profile.resolved_rois(base)
+    if not normalized and profile.legacy_pixel_rois:
+        own_width, own_height = parse_resolution(
+            profile.resolution or f"{client_width}x{client_height}"
+        )
+        migrated = VisionProfileTransformer.migrate_legacy(
+            profile,
+            client_width=own_width or client_width,
+            client_height=own_height or client_height,
+        )
+        normalized = migrated.normalized_rois
+        if base:
+            normalized = {**base.normalized_rois, **normalized}
+    return {
+        name: VisionProfileTransformer.to_pixel(
+            roi,
+            client_width=client_width,
+            client_height=client_height,
+            dpi_scale=scale,
+        )
+        for name, roi in normalized.items()
+    }

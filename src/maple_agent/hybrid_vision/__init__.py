@@ -33,6 +33,8 @@ from maple_agent.hybrid_vision.profile import (
     VisionProfile,
     VisionProfileRegistry,
     VisionProfileTransformer,
+    parse_resolution,
+    resolve_pixel_rois_for,
 )
 from maple_agent.hybrid_vision.sanitizer import (
     BenchmarkPrivacySanitizer,
@@ -67,5 +69,7 @@ __all__ = [
     "VisionScheduler",
     "build_cross_machine_benchmark",
     "classify_window_state",
+    "parse_resolution",
+    "resolve_pixel_rois_for",
     "window_state_from_provider",
 ]

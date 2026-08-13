@@ -34,6 +34,8 @@
 | Phase 13H | Repository Governance & Multi-Machine Handoff(仓库治理与多机交接) | ✅ 已完成 |
 | Phase 13I | Real Vision Client Benchmark & Calibration Baseline(真实客户端 Benchmark 与校准基线) | ✅ Phase COMPLETED / Real Vision = NOT_READY |
 | Phase 13I.1 | Hybrid Local Perception & Background Capture Feasibility(混合本地感知与后台捕获可行性) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
+| Phase 13I.2 | Cross-Machine Perception Calibration & Profile Generalization(跨机校准与 Profile 泛化) | ✅ Phase COMPLETED |
+| Phase 13I.3 | Cross-Machine Evidence Gate(Office 暂停检查点恢复;HOME/OFFICE 证据门) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 | Phase 13I.2 | Cross-Machine Perception Calibration & Profile Generalization(跨机感知校准与 Profile 泛化) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 
 当前架构路线:
@@ -61,6 +63,7 @@ Observation → Vision Evaluation → Knowledge → Decision → Planning
 → Real Vision Client Benchmark(13-I 真实客户端数据校准基线,readiness 不虚报)
 → Hybrid Local Perception(13-I.1:change detection / geometry / template / selective OCR)
 → WGC Background Capture Feasibility(13-I.1:后台/遮挡可用,minimized 不支持)
+→ Cross-Machine Profile & Evidence Gate(13-I.2/13-I.3:归一化 profile、display/client 分辨率分离、HOME+OFFICE 证据)
 → Future Controlled Execution Prerequisites
 → Future Isolated Input Prototype
 ```
@@ -313,6 +316,30 @@ KnowledgeGuidedResolver / BenchmarkPrivacySanitizer)、
 
 **Readiness 不虚报**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
 Overall=NOT_READY;原始截图与真实数据仅存本地 sessions/。
+
+### Phase 13-I.3: Cross-Machine Evidence Gate(HOME 恢复 Office 暂停检查点)
+
+```text
+13-I.2 Profile 泛化(归一化 ROI + display/client 分辨率分离)
+↓ 13-I.3(Office pause 8f41cb7 → HOME resume)
+↓ HOME 真实采集:FOREGROUND/BACKGROUND_VISIBLE/BACKGROUND_OCCLUDED/MINIMIZED
+↓ HOME HP/MP/map 实测 + 跨机对比 + repository-safe public report
+```
+
+本轮 HOME 实测:
+
+- 四条件:FG(WGC 166ms/ImageGrab 335ms)、BV(WGC 388ms)、OCC(WGC 392ms)、
+  MINIMIZED=NOT_SUPPORTED(0 帧,与 OFFICE 25 帧 WINDOW_INVALID 一致)
+- Map 判别:2 地图(射手村/射手村集市)28 查询 top1=100%、unknown=0、FP=0、
+  margin≈0.86(跨分辨率归一化模板匹配)
+- HP/MP:绿色分段条读取 0.128/0.074 vs 真值 1.0 → **FAIL(13-I.4 分段条模型校准)**
+- Event scheduler:idle 跳过 OCR(7 帧),变化触发 template+OCR
+- OFFICE evidence 原样保留(1366×768 client、WGC fg 405ms、MINIMIZED NOT_SUPPORTED、
+  HP/MP/map=N/A)
+
+公开报告:`docs/architecture/vision/real_vision_13i3_public.json`(隐私安全)。
+Readiness:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
+Overall=NOT_READY(不虚报)。
 
 ## Multi-machine Development
 

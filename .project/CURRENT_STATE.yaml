@@ -10,7 +10,7 @@ baseline:
 
 phase:
   current: 13-I.3
-  status: IN_PROGRESS
+  status: COMPLETED
   last_completed: 13-I.2
 
 runtime:
@@ -23,11 +23,10 @@ readiness:
 
 development:
   role: IMPLEMENTER
-  last_machine: OFFICE
+  last_machine: HOME
   git_repository_expected: true
 
 handoff:
   status: READY
-  next_action: "用户手动恢复 Maple 窗口到可见/前台后,运行 OFFICE 真实帧采集与 benchmark(命令见 HANDOFF.md)"
-  blockers:
-    - "Maple window minimized (user action required); 禁止自动恢复窗口"
+  next_action: "13-I.4 focused visual fix: segmented green HP/MP bar model calibration; 或 Knowledge Dataset Expansion; 或 VM/Virtual Display Capture Feasibility"
+  blockers: []
