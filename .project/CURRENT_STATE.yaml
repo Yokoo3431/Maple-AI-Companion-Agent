@@ -5,13 +5,13 @@ project:
 baseline:
   branch: main
   source_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
-  commit: 9774e9bc4f6f98abd0459ce0cf5a0d803e94edf8
-  previous_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
+  commit: eaed0de7bd3b005de53c10580566c269687afb28
+  previous_commit: 9774e9bc4f6f98abd0459ce0cf5a0d803e94edf8
 
 phase:
-  current: 13-I.2
-  status: COMPLETED
-  last_completed: 13-I.1
+  current: 13-I.3
+  status: IN_PROGRESS
+  last_completed: 13-I.2
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -28,5 +28,6 @@ development:
 
 handoff:
   status: READY
-  next_action: "Real Vision Client Benchmark(OFFICE 窗口恢复后采集前台/后台/遮挡真实帧)或 Knowledge Dataset Expansion;MINIMIZED 捕获留待 VM/Virtual Display 独立阶段"
-  blockers: []
+  next_action: "用户手动恢复 Maple 窗口到可见/前台后,运行 OFFICE 真实帧采集与 benchmark(命令见 HANDOFF.md)"
+  blockers:
+    - "Maple window minimized (user action required); 禁止自动恢复窗口"
