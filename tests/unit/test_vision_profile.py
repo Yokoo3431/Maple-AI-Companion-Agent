@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from PIL import Image, ImageDraw
 
 from maple_agent.hybrid_vision import (
@@ -15,6 +16,13 @@ from maple_agent.hybrid_vision.hpmp import HpMpGeometryExtractor
 from maple_agent.hybrid_vision.models import CaptureCondition
 from maple_agent.hybrid_vision.template import MapleVisualTemplateLibrary
 from maple_agent.real_vision.capture_manager import CaptureManager
+
+try:
+    import cv2  # noqa: F401
+
+    _CV2_AVAILABLE = True
+except ImportError:
+    _CV2_AVAILABLE = False
 
 
 def _draw_bar(
@@ -247,6 +255,10 @@ def test_confidence_semantics_separate_from_ratio():
     assert 0 < confidence <= 1
 
 
+@pytest.mark.skipif(
+    not _CV2_AVAILABLE,
+    reason="opencv required for template matching",
+)
 def test_template_multi_class_discrimination(tmp_path):
     library = MapleVisualTemplateLibrary(
         manifest_path=tmp_path / "manifest.json",
@@ -282,6 +294,10 @@ def test_template_multi_class_discrimination(tmp_path):
         assert result.margin > 0
 
 
+@pytest.mark.skipif(
+    not _CV2_AVAILABLE,
+    reason="opencv required for template matching",
+)
 def test_template_false_positive_protection(tmp_path):
     library = MapleVisualTemplateLibrary(
         manifest_path=tmp_path / "manifest.json",
