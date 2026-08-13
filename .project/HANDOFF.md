@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-I.2 Cross-Machine Perception Calibration & Profile Generalization
 - **Current phase**:13-I.3 Cross-Machine Evidence Gate(COMPLETED,从 OFFICE pause `8f41cb7` 恢复)
-- **Baseline**:`a05acd017dd7c5c870d20cc73d8800b94b64266b`(source;13-I.3 主提交 hash 见 BASELINE)
+- **Baseline**:`bf83ba028211c810159678644fdb281b15224923`(source)
 - **Office evidence(REAL_OFFICE,原样保留)**:
   - Maple 窗口发现:title 冒险岛怀旧服 / UnityWndClass;client≈1366×768、DPI 1.0、windowed
   - WGC 单帧 FOREGROUND:OK ~405ms;最小化:25 帧全部 WINDOW_INVALID → MINIMIZED=NOT_SUPPORTED
