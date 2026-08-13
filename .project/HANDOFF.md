@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-I.2 Cross-Machine Perception Calibration & Profile Generalization
 - **Current phase**:13-I.3 Office Real Vision Validation & Cross-Machine Evidence Gate(IN_PROGRESS)
-- **Baseline**:`eaed0de7bd3b005de53c10580566c269687afb28`(source)
+- **Baseline**:`1892e023fedb8a2ad0dd97be96ccb0a05fd07b68`(pause checkpoint;source=eaed0de7)
 - **13-I.3 已完成的探测(OFFICE 实测)**:
   - Maple 窗口发现:title `冒险岛怀旧服` / UnityWndClass / hwnd+PID 仅本地记录
   - 窗口可见时:client 1366×768、DPI 1.0、windowed、foreground=true、rect 在主屏(副屏负坐标场景已由 client-local ROI 架构覆盖)

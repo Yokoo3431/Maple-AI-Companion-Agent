@@ -5,8 +5,8 @@ project:
 baseline:
   branch: main
   source_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
-  commit: eaed0de7bd3b005de53c10580566c269687afb28
-  previous_commit: 9774e9bc4f6f98abd0459ce0cf5a0d803e94edf8
+  commit: 1892e023fedb8a2ad0dd97be96ccb0a05fd07b68
+  previous_commit: eaed0de7bd3b005de53c10580566c269687afb28
 
 phase:
   current: 13-I.3
