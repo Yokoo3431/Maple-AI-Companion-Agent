@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-I.3 Cross-Machine Evidence Gate
 - **Current phase**:13-I.4 Segmented HP/MP Bar Perception Calibration(COMPLETED)
-- **Baseline**:`bf83ba028211c810159678644fdb281b15224923`(source;13-I.4 主提交 hash 见 BASELINE)
+- **Baseline**:`61e3cf8bcd3b5a2d262e8a15090b38848e438188`(source)
 - **What changed**:
   - `BarFillModel`(`hybrid_vision/bar_model.py`):AUTO/CONTINUOUS/SEGMENTED 策略、
     段检测(run-length/gap 规律)、partial segment、confidence 与 ratio 分离、
