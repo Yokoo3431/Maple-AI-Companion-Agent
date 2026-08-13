@@ -2,7 +2,7 @@
 
 - **Last completed phase**:13-I.1 Hybrid Local Perception & Background Capture Feasibility
 - **Current phase**:13-I.2 Cross-Machine Perception Calibration & Profile Generalization(COMPLETED)
-- **Baseline**:`25e8e198ffcc22f354fdf348f59ab4d01d22fdc0`(source)
+- **Baseline**:`9774e9bc4f6f98abd0459ce0cf5a0d803e94edf8`(source)
 - **What changed**:
   - Normalized ROI + VisionProfileTransformer + Base/Machine Profile 继承(`hybrid_vision/profile.py`)
   - `maple_classic_default`(归一化)+ `office_pc_1920x1080`(继承,不复制坐标)+ home 迁移兼容

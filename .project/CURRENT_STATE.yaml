@@ -5,7 +5,7 @@ project:
 baseline:
   branch: main
   source_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
-  commit: 25e8e198ffcc22f354fdf348f59ab4d01d22fdc0
+  commit: 9774e9bc4f6f98abd0459ce0cf5a0d803e94edf8
   previous_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
 
 phase:
