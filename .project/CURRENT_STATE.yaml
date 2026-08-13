@@ -9,9 +9,9 @@ baseline:
   previous_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
 
 phase:
-  current: 13-I.3
+  current: 13-I.4
   status: COMPLETED
-  last_completed: 13-I.2
+  last_completed: 13-I.3
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -28,5 +28,5 @@ development:
 
 handoff:
   status: READY
-  next_action: "13-I.4 focused visual fix: segmented green HP/MP bar model calibration; 或 Knowledge Dataset Expansion; 或 VM/Virtual Display Capture Feasibility"
+  next_action: "VISION_CAN_PAUSE:优先 Knowledge Dataset Expansion;HP/MP 低状态覆盖与数字 OCR 延迟(1.65s)为已知限制;minimized 场景留 VM/Virtual Display 独立阶段"
   blockers: []

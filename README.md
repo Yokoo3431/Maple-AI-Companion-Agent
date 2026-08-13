@@ -36,7 +36,7 @@
 | Phase 13I.1 | Hybrid Local Perception & Background Capture Feasibility(混合本地感知与后台捕获可行性) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 | Phase 13I.2 | Cross-Machine Perception Calibration & Profile Generalization(跨机校准与 Profile 泛化) | ✅ Phase COMPLETED |
 | Phase 13I.3 | Cross-Machine Evidence Gate(Office 暂停检查点恢复;HOME/OFFICE 证据门) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
-| Phase 13I.2 | Cross-Machine Perception Calibration & Profile Generalization(跨机感知校准与 Profile 泛化) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
+| Phase 13I.4 | Segmented HP/MP Bar Perception Calibration(分段 HP/MP 条感知校准) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 
 当前架构路线:
 
@@ -340,6 +340,30 @@ Overall=NOT_READY;原始截图与真实数据仅存本地 sessions/。
 公开报告:`docs/architecture/vision/real_vision_13i3_public.json`(隐私安全)。
 Readiness:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
 Overall=NOT_READY(不虚报)。
+
+### Phase 13-I.4: Segmented HP/MP Bar Perception Calibration
+
+```text
+13-I.3 证实 HP/MP blocker(绿色分段条读取 0.128/0.074 vs 真值 1.0)
+↓ 13-I.4 真实校准
+```
+
+真实发现:该 Unity 客户端的 HP/MP 显示实为 **cur/max 数字**(底部中央,
+如 `472/472`、`MP 273/273`),而非可几何量化的条。
+
+- 实现 `BarFillModel`(AUTO/CONTINUOUS/SEGMENTED 策略 + 段检测 + partial +
+  confidence 分离 + failure taxonomy),合成测试覆盖 0/25/50/75/100/
+  partial/gap/noise/border/多分辨率
+- 实现 `HpMpNumericExtractor`(多尺度数字 OCR + 多数投票,真实主路径)
+- 真实 HOME 结果:HP MAE=0.023(full 1.0 / mid 0.547 vs GT 1.0/0.5)、
+  MP MAE=0.022(full 0.979)、检出率 100%;低状态 coverage=INSUFFICIENT(用户无法制造)
+- 对比:旧 median-row 绿条误差 0.87/0.93 → 新数字路径 0.023/0.022
+- 无 post-hoc 补偿、无机器名硬编码、AUTO 依据 gap 规律选择
+
+**Readiness 不虚报**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
+Overall=NOT_READY。公开报告:`docs/architecture/vision/real_vision_13i4_public.json`。
+Vision closure:**VISION_CAN_PAUSE**(HP/MP 稳定可用,低状态覆盖与数字 OCR
+延迟为已知限制)。
 
 ## Multi-machine Development
 

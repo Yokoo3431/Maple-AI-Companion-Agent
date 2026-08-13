@@ -1,5 +1,10 @@
 """Hybrid Local Perception(Phase 13-I.1,只读,OCR 只是其中一种证据)。"""
 
+from maple_agent.hybrid_vision.bar_model import (
+    BarFailure,
+    BarFillModel,
+    BarFillResult,
+)
 from maple_agent.hybrid_vision.capture_condition import (
     classify_window_state,
     window_state_from_provider,
@@ -13,7 +18,10 @@ from maple_agent.hybrid_vision.cross_machine import (
     CrossMachineVisionBenchmark,
     build_cross_machine_benchmark,
 )
-from maple_agent.hybrid_vision.hpmp import HpMpGeometryExtractor
+from maple_agent.hybrid_vision.hpmp import (
+    HpMpGeometryExtractor,
+    HpMpNumericExtractor,
+)
 from maple_agent.hybrid_vision.knowledge_resolution import (
     KnowledgeGuidedResolver,
 )
@@ -46,6 +54,9 @@ from maple_agent.hybrid_vision.template import (
 
 __all__ = [
     "BenchmarkPrivacySanitizer",
+    "BarFailure",
+    "BarFillModel",
+    "BarFillResult",
     "CaptureCondition",
     "ChangeDetectorBenchmark",
     "ChangeResult",
@@ -53,6 +64,7 @@ __all__ = [
     "CrossMachineVisionBenchmark",
     "FrameChangeDetector",
     "HpMpGeometryExtractor",
+    "HpMpNumericExtractor",
     "HpMpGeometryResult",
     "KnowledgeGuidedResolver",
     "MapleVisualTemplateLibrary",

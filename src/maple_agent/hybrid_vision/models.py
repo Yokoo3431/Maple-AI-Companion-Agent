@@ -66,6 +66,16 @@ class HpMpGeometryResult(BaseModel):
     method: str = "color_geometry"
     latency_ms: float | None = None
     reasons: list[str] = Field(default_factory=list)
+    hp_strategy: str = ""
+    mp_strategy: str = ""
+    hp_segment_count: int = 0
+    mp_segment_count: int = 0
+    hp_active_segments: int = 0
+    mp_active_segments: int = 0
+    hp_partial_fraction: float = Field(default=0.0, ge=0, le=1)
+    mp_partial_fraction: float = Field(default=0.0, ge=0, le=1)
+    hp_failure: str = ""
+    mp_failure: str = ""
 
 
 class TemplateMatch(BaseModel):

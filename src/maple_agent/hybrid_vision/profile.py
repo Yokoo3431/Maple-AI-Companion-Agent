@@ -124,6 +124,8 @@ class VisionProfileTransformer:
             "map_label_roi": "map_label",
             "hp_roi": "hp",
             "mp_roi": "mp",
+            "hp_numeric_roi": "hp_numeric",
+            "mp_numeric_roi": "mp_numeric",
             "quest_roi": "quest",
             "dialog_roi": "dialog",
         }

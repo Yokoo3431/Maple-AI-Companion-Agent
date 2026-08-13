@@ -8,6 +8,8 @@
   "map_label_roi": { "x": 150, "y": 0, "width": 750, "height": 90 },
   "hp_roi": { "x": 575, "y": 1390, "width": 1410, "height": 50 },
   "mp_roi": { "x": 570, "y": 1366, "width": 1420, "height": 14 },
+  "hp_numeric_roi": { "x": 1052, "y": 1386, "width": 160, "height": 36 },
+  "mp_numeric_roi": { "x": 1185, "y": 1379, "width": 186, "height": 52 },
   "quest_roi": { "x": 2150, "y": 50, "width": 410, "height": 90 },
   "dialog_roi": { "x": 350, "y": 1000, "width": 1350, "height": 440 }
 }

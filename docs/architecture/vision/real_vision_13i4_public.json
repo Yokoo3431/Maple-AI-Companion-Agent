@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "privacy": "REPOSITORY SAFE - aggregate metrics only",
+  "phase": "13-I.4",
+  "method": {
+    "primary": "NUMERIC_OCR",
+    "bar_model": {
+      "strategies": [
+        "AUTO",
+        "CONTINUOUS",
+        "SEGMENTED"
+      ],
+      "note": "SegmentedBarModel implemented for clients with segmented bars; this Unity client displays HP/MP as cur/max numbers, so numeric OCR is the primary real path"
+    },
+    "no_post_hoc_compensation": true,
+    "no_machine_hardcode": true
+  },
+  "samples": {
+    "hp": {
+      "states": [
+        "full",
+        "mid"
+      ],
+      "count": 10,
+      "ground_truth_coverage": "full=1.0(user confirmed); mid=0.5(user approximate ~50%); low=INSUFFICIENT(user could not produce)"
+    },
+    "mp": {
+      "states": [
+        "full",
+        "mid"
+      ],
+      "count": 10,
+      "ground_truth_coverage": "full=1.0(user confirmed); mid=UNKNOWN(user did not confirm; excluded from MAE)"
+    }
+  },
+  "hp_metrics": {
+    "old_prediction_full": 0.128,
+    "new_prediction_full": 1.0,
+    "new_prediction_mid": 0.5466,
+    "mae": 0.0233,
+    "median_error": 0.0233,
+    "max_error": 0.046599999999999975,
+    "detection_success_rate": 1.0,
+    "confidence_mean": 0.875
+  },
+  "mp_metrics": {
+    "old_prediction_full": 0.074,
+    "new_prediction_full": 0.9785,
+    "new_prediction_mid": 0.7584,
+    "mae": 0.0215,
+    "median_error": 0.0215,
+    "max_error": 0.021499999999999964,
+    "detection_success_rate": 1.0,
+    "confidence_mean": 0.7,
+    "note": "mid GT UNKNOWN; detection-only sample"
+  },
+  "performance_ms": {
+    "numeric_ocr": {
+      "mean": 1650.49,
+      "p50": 1634.331,
+      "p95": 1649.601,
+      "max": 1725.106
+    },
+    "geometry_green": {
+      "mean": 145.3,
+      "note": "cheaper but wrong for numeric display"
+    }
+  },
+  "failure_taxonomy": {
+    "real_failures": {
+      "HP": "",
+      "MP": "",
+      "note": "numeric OCR detection 100% on full+mid samples"
+    },
+    "supported": [
+      "SEGMENTS_NOT_FOUND",
+      "SEGMENT_COUNT_UNSTABLE",
+      "ACTIVE_STATE_AMBIGUOUS",
+      "PARTIAL_SEGMENT_AMBIGUOUS",
+      "ROI_MISMATCH",
+      "COLOR_MODEL_MISMATCH",
+      "INSUFFICIENT_GROUND_TRUTH",
+      "UNKNOWN"
+    ]
+  },
+  "provenance": {
+    "REAL_HOME": [
+      "full HP/MP",
+      "mid HP/MP (detection)"
+    ],
+    "REAL_OFFICE": "N/A (no real HP/MP dataset)",
+    "SYNTHETIC": "segmented bar algorithm tests only (not readiness)"
+  },
+  "vision_closure": "VISION_CAN_PAUSE",
+  "vision_closure_reason": "HP/MP numeric OCR stable on full+mid (detection 100%, MAE<0.03); MAP/WGC/EVENT_SCHEDULER PASS; remaining limits: low-state GT coverage INSUFFICIENT, numeric OCR latency ~1.65s, bar geometry N/A for this client (numeric display)",
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "overall_controlled_execution": "NOT_READY"
+  }
+}

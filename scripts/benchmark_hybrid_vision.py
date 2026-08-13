@@ -21,6 +21,7 @@ from maple_agent.hybrid_vision import (  # noqa: E402
     ChangeDetectorBenchmark,
     FrameChangeDetector,
     HpMpGeometryExtractor,
+    HpMpNumericExtractor,
     KnowledgeGuidedResolver,
     MapleVisualTemplateLibrary,
     parse_resolution,
@@ -99,6 +100,12 @@ def main() -> int:
         help="HP/MP 条颜色模型:red_blue(默认)或 green(该 Unity 客户端)",
     )
     parser.add_argument(
+        "--hpmp-mode",
+        default="geometry",
+        choices=("geometry", "numeric", "auto"),
+        help="HP/MP 提取模式:geometry(条)/numeric(该 Unity 客户端为 cur/max 数字)",
+    )
+    parser.add_argument(
         "--output", default="sessions/hybrid_benchmark_13i3"
     )
     parser.add_argument("--ground-truth-map", default="射手村")
@@ -126,6 +133,13 @@ def main() -> int:
     if not frames:
         print("NO SAMPLES")
         return 1
+    from PIL import Image
+
+    actual_size = Image.open(frames[0]).size
+    print(
+        f"ACTUAL FRAME SIZE: {actual_size[0]}x{actual_size[1]} "
+        f"({len(frames)} frames)"
+    )
     crops_dir = (
         Path(args.crops_dir)
         if args.crops_dir
@@ -136,8 +150,10 @@ def main() -> int:
     if profile is None:
         print(f"PROFILE NOT FOUND: {args.profile}")
         return 1
-    client_width, client_height = parse_resolution(
-        args.client_resolution or profile.resolution
+    client_width, client_height = (
+        parse_resolution(args.client_resolution)
+        if args.client_resolution
+        else (actual_size[0], actual_size[1])
     )
     if client_width <= 0 or client_height <= 0:
         print(
@@ -153,6 +169,8 @@ def main() -> int:
     )
     hp_roi = pixel_rois.get("hp", {})
     mp_roi = pixel_rois.get("mp", {})
+    hp_numeric_roi = pixel_rois.get("hp_numeric", {})
+    mp_numeric_roi = pixel_rois.get("mp_numeric", {})
     map_roi = pixel_rois.get("map_label", {})
     aliases = [item.strip() for item in args.aliases.split(",") if item.strip()]
     display_resolution = (
@@ -171,8 +189,16 @@ def main() -> int:
         detector=detector,
     )
 
-    # 2) HP/MP geometry
+    # 2) HP/MP(geometry 或 numeric)
+    hpmp_mode = args.hpmp_mode
+    if hpmp_mode == "auto":
+        hpmp_mode = (
+            "numeric"
+            if hp_numeric_roi and mp_numeric_roi
+            else "geometry"
+        )
     extractor = HpMpGeometryExtractor()
+    numeric_extractor = HpMpNumericExtractor()
     hp_values: list[float | None] = []
     mp_values: list[float | None] = []
     hp_conf: list[float] = []
@@ -180,16 +206,25 @@ def main() -> int:
     hpmp_latencies: list[float] = []
     hpmp_failures = 0
     for path in frames:
-        result = extractor.extract(
-            str(path),
-            hp_roi=hp_roi,
-            mp_roi=mp_roi,
-            color_mode=(
-                "green"
-                if args.color_mode == "green"
-                else None
-            ),
-        )
+        if hpmp_mode == "numeric":
+            from PIL import Image
+
+            result = numeric_extractor.extract(
+                Image.open(path),
+                hp_box=hp_numeric_roi,
+                mp_box=mp_numeric_roi,
+            )
+        else:
+            result = extractor.extract(
+                str(path),
+                hp_roi=hp_roi,
+                mp_roi=mp_roi,
+                color_mode=(
+                    "green"
+                    if args.color_mode == "green"
+                    else None
+                ),
+            )
         hpmp_latencies.append(result.latency_ms or 0.0)
         hp_values.append(result.hp_ratio)
         mp_values.append(result.mp_ratio)
@@ -389,7 +424,12 @@ def main() -> int:
                 "samples": len(frames),
             },
             "hpmp_geometry": {
-                "backend": extractor.backend,
+                "backend": (
+                    numeric_extractor.backend
+                    if hpmp_mode == "numeric"
+                    else extractor.backend
+                ),
+                "mode": hpmp_mode,
                 "color_mode": args.color_mode,
                 "hp_present": len(present_hp),
                 "mp_present": len(present_mp),
