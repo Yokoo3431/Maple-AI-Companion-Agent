@@ -196,6 +196,7 @@ def test_confidence_separate_from_ratio():
 
 def test_numeric_extractor_max_group_heuristic(monkeypatch):
     extractor = HpMpNumericExtractor()
+    extractor.available = True  # CI 无 pytesseract;只测启发式逻辑
 
     def fake_candidates_full(image, box):
         return [(92, 472), (492, 472), (2, 472), (472, 472)]
