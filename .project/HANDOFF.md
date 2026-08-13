@@ -1,31 +1,23 @@
-# Handoff(13-I → 13-I.1)
+# Handoff(13-I.1 → 13-I.2)
 
-- **Last completed phase**:13-I Real Vision Client Benchmark & Calibration Baseline
-- **Current phase**:13-I.1 Hybrid Local Perception & Background Capture Feasibility(COMPLETED)
-- **Baseline**:`a05acd017dd7c5c870d20cc73d8800b94b64266b`(source)
+- **Last completed phase**:13-I.1 Hybrid Local Perception & Background Capture Feasibility
+- **Current phase**:13-I.2 Cross-Machine Perception Calibration & Profile Generalization(COMPLETED)
+- **Baseline**:`8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b`(source;commit 待 follow-up 更新)
 - **What changed**:
-  - `hybrid_vision` 模块:PerceptionEvidence / FrameChangeDetector / VisionScheduler /
-    HpMpGeometryExtractor / MapleVisualTemplateLibrary / KnowledgeGuidedResolver /
-    BenchmarkPrivacySanitizer / CaptureCondition
-  - `WindowsGraphicsCaptureProvider`(WGC,后台/遮挡窗口捕获,复用 ScreenshotProvider 契约)
-  - 脚本:`benchmark_hybrid_vision.py`、`probe_capture_conditions.py`、
-    `probe_windows_graphics_capture.py`、`probe_onnx_runtime.py`
-  - 文档:`docs/architecture/vision/hybrid_local_perception.md` +
-    `real_vision_13i1_public.json`(repository-safe)
-- **Real Home PC 验证**:
-  - HP geometry:40/40 找到,均值 0.987(真值 1.0);MP 均值 0.747(ROI 需校准)
-  - change detection 80ms(false/missed=0);template 4ms;Tesseract ROI 760ms(0%)
-  - WGC:FOREGROUND/BACKGROUND_VISIBLE/BACKGROUND_OCCLUDED 可用(~150-180ms);
-    MINIMIZED=NOT_SUPPORTED(0 帧/20s)
-  - PaddleOCR 未采用(paddleocr 3.7+paddle 3.3 Windows CPU 运行时错误,>1GB)
-  - OmniParser NOT_USEFUL_FOR_GAME_HUD;ONNX CPU 路径可行(GPU 需 onnxruntime-gpu)
-  - Knowledge resolution 实测 0 伪造(OCR 乱码未解析任何候选)
-- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY /
-  Overall=NOT_READY(不虚报,未调阈值)
-- **Tests / CI**:本地全绿;GitHub Actions 3.11/3.12 以 push 后实际为准
-- **Open issues**:MP ROI、HP/MP confidence 启发式、模板多地图区分性、
-  minimized 捕获(Virtual Display/VM 独立阶段)
-- **Next action**:13-I.2 targeted perception calibration 或 Knowledge Dataset Expansion
-- **Files most relevant**:`src/maple_agent/hybrid_vision/*`、
-  `src/maple_agent/real_vision/wgc.py`、`scripts/benchmark_hybrid_vision.py`、
-  `docs/architecture/vision/*`、`.project/CURRENT_STATE.yaml`
+  - Normalized ROI + VisionProfileTransformer + Base/Machine Profile 继承(`hybrid_vision/profile.py`)
+  - `maple_classic_default`(归一化)+ `office_pc_1920x1080`(继承,不复制坐标)+ home 迁移兼容
+  - HP/MP 几何增强:median-row extent 抗边框污染;confidence 与 ratio 语义分离(无结果补偿)
+  - 多地图模板判别:`discriminate()` top1/top2/margin + 误报保护
+  - `CaptureManager`:WGC 优先 + 条件感知 failover(occluded 不静默 fallback;MINIMIZED=NOT_SUPPORTED)
+  - 双显示器 client-local 坐标;window_mode 判定不再硬编码 2560 宽度
+  - CrossMachineVisionBenchmark + docs(`cross_machine_vision_profile.md`)
+- **OFFICE 环境**:pywin32 / opencv-python / pytesseract / onnxruntime(CPU)/ windows-capture 已装;
+  Tesseract 二进制不可用(OCR 为 auxiliary);Maple 窗口当前 minimized → WGC EMPTY(MINIMIZED=NOT_SUPPORTED)
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Overall=NOT_READY
+- **Tests / CI**:本地全绿;GitHub Actions 3.11/3.12 待 push 后确认
+- **Open issues**:OFFICE 前台/后台/遮挡真实帧采集(需用户恢复窗口);MP 真实校准;
+  MINIMIZED 捕获留待 VM/Virtual Display 独立阶段
+- **Next action**:Real Vision Client Benchmark(OFFICE)或 Knowledge Dataset Expansion
+- **Files most relevant**:`src/maple_agent/hybrid_vision/profile.py`、`hpmp.py`、`template.py`、
+  `src/maple_agent/real_vision/capture_manager.py`、`configs/vision_profiles/*`、
+  `docs/architecture/vision/cross_machine_vision_profile.md`

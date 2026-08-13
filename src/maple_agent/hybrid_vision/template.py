@@ -9,7 +9,10 @@ import shutil
 import time
 from pathlib import Path
 
-from maple_agent.hybrid_vision.models import TemplateMatch
+from maple_agent.hybrid_vision.models import (
+    TemplateDiscrimination,
+    TemplateMatch,
+)
 
 try:
     import cv2  # type: ignore[import-not-found]
@@ -171,3 +174,49 @@ class MapleVisualTemplateLibrary:
                 self.match(image, template_id, threshold=threshold)
             )
         return sorted(results, key=lambda item: item.score, reverse=True)
+
+    def discriminate(
+        self,
+        image,
+        *,
+        kind: str | None = None,
+        threshold: float = 0.75,
+        min_margin: float = 0.05,
+        query_id: str = "",
+    ) -> TemplateDiscrimination:
+        """多模板判别:返回 top1/top2/margin;margin 不足不宣布匹配(防误报)。"""
+        results = self.match_all(image, kind=kind, threshold=threshold)
+        top1 = results[0] if results else None
+        top2 = results[1] if len(results) > 1 else None
+        margin = (
+            round(top1.score - top2.score, 4)
+            if top1 is not None and top2 is not None
+            else (round(top1.score, 4) if top1 is not None else 0.0)
+        )
+        if top1 is None or top1.score < threshold:
+            return TemplateDiscrimination(
+                query_id=query_id,
+                top1=top1,
+                top2=top2,
+                margin=margin,
+                matched=False,
+                reason="no template above threshold",
+            )
+        if margin < min_margin:
+            return TemplateDiscrimination(
+                query_id=query_id,
+                top1=top1,
+                top2=top2,
+                margin=margin,
+                matched=False,
+                reason="top margin too small (ambiguous)",
+            )
+        return TemplateDiscrimination(
+            query_id=query_id,
+            top1=top1,
+            top2=top2,
+            margin=margin,
+            matched=True,
+            canonical_candidate_id=top1.template_id,
+            reason="top1 above threshold with sufficient margin",
+        )

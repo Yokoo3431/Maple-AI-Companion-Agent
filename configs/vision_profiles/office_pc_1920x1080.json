@@ -1,0 +1,13 @@
+{
+  "profile_id": "office_pc_1920x1080",
+  "game_profile": "maple-classic-unity",
+  "server_profile": "nostalgic",
+  "base_profile": "maple_classic_default",
+  "resolution": "1920x1080",
+  "window_mode": "windowed",
+  "dpi_scale": 1.0,
+  "normalized_rois": {},
+  "calibration_overlay": {
+    "notes": "仅保存机器特异差异;ROI 布局继承 maple_classic_default 归一化值"
+  }
+}

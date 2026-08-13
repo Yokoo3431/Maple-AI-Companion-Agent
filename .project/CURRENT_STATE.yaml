@@ -4,14 +4,14 @@ project:
 
 baseline:
   branch: main
-  source_commit: a05acd017dd7c5c870d20cc73d8800b94b64266b
-  commit: a05acd017dd7c5c870d20cc73d8800b94b64266b
-  previous_commit: ed1f87919a648a0e43cf9b1a61a5c35fdfa1139a
+  source_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
+  commit: PENDING
+  previous_commit: 8ee8a71a3c4fef04dcb947903d4481ef76b5fd3b
 
 phase:
-  current: 13-I.1
+  current: 13-I.2
   status: COMPLETED
-  last_completed: 13-I
+  last_completed: 13-I.1
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -23,10 +23,10 @@ readiness:
 
 development:
   role: IMPLEMENTER
-  last_machine: HOME
+  last_machine: OFFICE
   git_repository_expected: true
 
 handoff:
   status: READY
-  next_action: "13-I.2 targeted perception calibration: MP ROI, HP/MP confidence heuristic, multi-map template discrimination, WGC provider integration; or Knowledge Dataset Expansion"
+  next_action: "Real Vision Client Benchmark(OFFICE 窗口恢复后采集前台/后台/遮挡真实帧)或 Knowledge Dataset Expansion;MINIMIZED 捕获留待 VM/Virtual Display 独立阶段"
   blockers: []

@@ -78,6 +78,18 @@ class TemplateMatch(BaseModel):
     matched: bool = False
 
 
+class TemplateDiscrimination(BaseModel):
+    """多模板判别(top1/top2/margin,防误报)。"""
+
+    query_id: str = ""
+    top1: TemplateMatch | None = None
+    top2: TemplateMatch | None = None
+    margin: float = Field(default=0.0, ge=0, le=1)
+    matched: bool = False
+    canonical_candidate_id: str = ""
+    reason: str = ""
+
+
 class ResolutionResult(BaseModel):
     """Knowledge-guided canonical resolution(Knowledge 不能伪造观察)。"""
 

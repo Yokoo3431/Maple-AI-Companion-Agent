@@ -34,6 +34,7 @@
 | Phase 13H | Repository Governance & Multi-Machine Handoff(仓库治理与多机交接) | ✅ 已完成 |
 | Phase 13I | Real Vision Client Benchmark & Calibration Baseline(真实客户端 Benchmark 与校准基线) | ✅ Phase COMPLETED / Real Vision = NOT_READY |
 | Phase 13I.1 | Hybrid Local Perception & Background Capture Feasibility(混合本地感知与后台捕获可行性) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
+| Phase 13I.2 | Cross-Machine Perception Calibration & Profile Generalization(跨机感知校准与 Profile 泛化) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 
 当前架构路线:
 

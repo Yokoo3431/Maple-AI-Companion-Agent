@@ -158,14 +158,19 @@ class WindowsScreenshotProvider:
             info["resolution"] = f"{width}x{height}"
         window_rect = info.get("window_rect") or {}
         if window_rect:
-            info["window_mode"] = (
-                "fullscreen-windowed"
-                if (
-                    window_rect.get("left", 0) == 0
-                    and window_rect.get("top", 0) == 0
-                    and window_rect.get("width", 0) >= 2560
+            try:
+                import ctypes
+
+                screen_width = ctypes.windll.user32.GetSystemMetrics(0)
+                screen_height = ctypes.windll.user32.GetSystemMetrics(1)
+                fullscreen = (
+                    window_rect.get("width", 0) >= screen_width
+                    and window_rect.get("height", 0) >= screen_height
                 )
-                else "windowed"
+            except Exception:
+                fullscreen = False
+            info["window_mode"] = (
+                "fullscreen-windowed" if fullscreen else "windowed"
             )
         try:
             import ctypes

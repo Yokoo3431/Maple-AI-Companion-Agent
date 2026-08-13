@@ -133,3 +133,60 @@ HP/MP geometry 提升不等于 PASSED;完整 RealVisionReadinessPolicy 未调整
   模板多地图区分性验证、WGC provider 正式接入
 - 或 Knowledge Dataset Expansion
 - 或 VM / Virtual Display Capture Feasibility(minimized 场景)
+
+## 12. Cross-Machine Generalization(Phase 13-I.2)
+
+### Profile 架构(不再无限设备硬编码)
+
+```text
+Base Profile(maple_classic_default,归一化 ROI)
+↓ VisionProfileTransformer(resolution/DPI transform)
+↓ Machine Profile(仅 resolution / window_mode / calibration overlay)
+```
+
+详见 `cross_machine_vision_profile.md`。旧 pixel profile(如 `home_pc_2560x1440`)
+通过迁移 loader 自动转为 normalized,向后兼容。
+
+### OFFICE PC 环境(13-I.2 实测)
+
+- 已 bootstrap:pywin32 / opencv-python / pytesseract / onnxruntime(CPU)/
+  windows-capture(WGC);
+- Tesseract 二进制:当前 OFFICE 不可用 → OCR 保持 auxiliary,不阻塞主路径;
+- 窗口状态:Maple 窗口(`冒险岛怀旧服`,UnityWndClass)当前 **minimized**;
+  WGC probe = `WGC_EMPTY`(0 帧)→ 与 13-I.1 结论一致:`MINIMIZED = NOT_SUPPORTED`;
+- 前台 / 后台可见 / 后台遮挡真实捕获:待用户恢复窗口后验证(禁止自动激活窗口)。
+
+### WGC Provider Preference + Failover
+
+`CaptureManager`(real_vision/capture_manager.py):
+
+```text
+Windows 且 WGC available → 首选 WGC;
+WGC failure + FOREGROUND/BACKGROUND_VISIBLE → ImageGrab fallback;
+WGC failure + BACKGROUND_OCCLUDED → 不静默 fallback(ImageGrab 可能捕获遮挡内容);
+MINIMIZED → NOT_SUPPORTED;
+WGC unavailable → ImageGrab(明确标记可能 occluded)。
+```
+
+### HP/MP 几何增强(不写结果补偿)
+
+- `mp_ratio += 0.2533` 这类补偿**禁止**;
+- 提取逻辑改为「每行最长连续彩色段的中位数 / 宽度」,抗左右边框列污染;
+- confidence 与 ratio **分离**:ratio=填充值,confidence=几何检测可信度
+  (密度/连续性/边缘一致/边框惩罚),不人为拉高。
+
+### 多地图模板判别
+
+`MapleVisualTemplateLibrary.discriminate()`:
+
+- 返回 top1 / top2 / margin;
+- margin 低于阈值 → 不宣布匹配(防误报);
+- 模板图片保持 local-only,GitHub 只存元数据/哈希。
+
+### Readiness(不变,不虚报)
+
+```text
+Real Vision = FOUNDATION_ONLY
+Knowledge   = FOUNDATION_ONLY
+Overall     = NOT_READY
+```

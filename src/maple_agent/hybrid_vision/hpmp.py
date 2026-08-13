@@ -67,45 +67,116 @@ def _color_mask_pil(pixels, width: int, height: int, kind: str):
     return bytes(mask), width, height
 
 
-def _extract_ratio_cv2(mask, width: int, height: int) -> tuple[float, float]:
-    """返回 (fill_ratio, confidence)。fill = 彩色像素水平延伸 / 宽度。"""
-    columns = mask.any(axis=0)
-    colored = int(mask.sum() // 255)
+def _row_longest_extents(mask) -> list[int]:
+    """每行最长连续彩色段长度;抗左侧/右侧单列边框污染。"""
+    extents: list[int] = []
+    for row in mask:
+        longest = 0
+        current = 0
+        for value in row:
+            if value:
+                current += 1
+                if current > longest:
+                    longest = current
+            else:
+                current = 0
+        if longest:
+            extents.append(longest)
+    return extents
+
+
+def _confidence_from_mask(
+    *,
+    width: int,
+    height: int,
+    colored: int,
+    extents: list[int],
+    mask,
+) -> float:
+    """几何检测可信度(与 ratio 分离,不代表 ratio 精确度)。
+
+    考虑:掩码密度、彩色行连续性、边缘一致性、边框污染惩罚。
+    """
+    if not extents:
+        return 0.0
     density = colored / max(1, width * height)
-    if not columns.any():
-        return 0.0, 0.0
-    indices = columns.nonzero()[0]
-    extent = (int(indices[-1]) - int(indices[0]) + 1) / max(1, width)
-    continuity = float(columns.mean())
-    confidence = min(1.0, density * 4.0 + continuity * 0.5)
-    return round(min(1.0, max(0.0, extent)), 4), round(
-        min(1.0, confidence), 4
+    continuity = len(extents) / max(1, height)
+    edge_consistency = 1.0 - min(
+        1.0,
+        abs(max(extents) - min(extents)) / max(1, width),
     )
+    # 边框污染惩罚:左右边缘列若全部彩色,说明可能包含装饰/边框
+    left_column = int(mask[:, 0].sum() // 255) if mask.shape[1] > 0 else 0
+    right_column = (
+        int(mask[:, -1].sum() // 255) if mask.shape[1] > 0 else 0
+    )
+    border_penalty = (
+        min(1.0, left_column / max(1, height))
+        + min(1.0, right_column / max(1, height))
+    ) * 0.25
+    confidence = (
+        density * 3.0
+        + continuity * 0.3
+        + edge_consistency * 0.4
+        - border_penalty
+    )
+    return round(min(1.0, max(0.0, confidence)), 4)
+
+
+def _extract_ratio_cv2(mask, width: int, height: int) -> tuple[float, float]:
+    """返回 (fill_ratio, confidence)。
+
+    fill_ratio = 彩色行最长连续段长度的中位数 / 宽度(抗边框)。
+    confidence = 几何检测可信度(与 ratio 分离)。
+    """
+    colored = int(mask.sum() // 255)
+    extents = _row_longest_extents(mask)
+    if not extents:
+        return 0.0, 0.0
+    median_extent = sorted(extents)[len(extents) // 2] / max(1, width)
+    ratio = round(min(1.0, max(0.0, median_extent)), 4)
+    confidence = _confidence_from_mask(
+        width=width,
+        height=height,
+        colored=colored,
+        extents=extents,
+        mask=mask,
+    )
+    return ratio, confidence
 
 
 def _extract_ratio_pil(
     mask_bytes: bytes, width: int, height: int
 ) -> tuple[float, float]:
-    """PIL 降级:逐列统计彩色像素。"""
-    row_has = [False] * width
+    """PIL 降级:逐行最长连续彩色段中位数(与 cv2 语义一致)。"""
+    extents: list[int] = []
     colored = 0
     for y in range(height):
         base = y * width
+        longest = 0
+        current = 0
         for x in range(width):
             if mask_bytes[base + x]:
                 colored += 1
-                row_has[x] = True
-    density = colored / max(1, width * height)
-    if not any(row_has):
+                current += 1
+                if current > longest:
+                    longest = current
+            else:
+                current = 0
+        if longest:
+            extents.append(longest)
+    if not extents:
         return 0.0, 0.0
-    first = row_has.index(True)
-    last = len(row_has) - 1 - row_has[::-1].index(True)
-    extent = (last - first + 1) / max(1, width)
-    continuity = sum(row_has) / width
-    confidence = min(1.0, density * 4.0 + continuity * 0.5)
-    return round(min(1.0, max(0.0, extent)), 4), round(
-        min(1.0, confidence), 4
+    median_extent = sorted(extents)[len(extents) // 2] / max(1, width)
+    ratio = round(min(1.0, max(0.0, median_extent)), 4)
+    density = colored / max(1, width * height)
+    continuity = len(extents) / max(1, height)
+    edge_consistency = 1.0 - min(
+        1.0,
+        abs(max(extents) - min(extents)) / max(1, width),
     )
+    confidence = density * 3.0 + continuity * 0.3 + edge_consistency * 0.4
+    return ratio, round(min(1.0, max(0.0, confidence)), 4)
 
 
 class HpMpGeometryExtractor:
