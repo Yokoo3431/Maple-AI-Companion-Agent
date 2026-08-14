@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 from maple_agent.hybrid_vision.models import (
+    EvidenceResolution,
+    PerceptionEvidence,
+    ResolutionCandidate,
+    ResolutionMatchType,
     ResolutionResult,
 )
 
@@ -187,3 +191,89 @@ class KnowledgeGuidedResolver:
             evidence_confidence=evidence_confidence,
             candidates=candidates,
         )
+
+
+class EvidenceResolver:
+    """Resolve PerceptionEvidence deterministically against a canonical graph."""
+
+    _MATCH_SCORES = {
+        ResolutionMatchType.EXACT_ID: 1.0,
+        ResolutionMatchType.EXACT_NAME: 1.0,
+        ResolutionMatchType.ALIAS: 0.95,
+    }
+
+    def resolve(
+        self,
+        evidence: PerceptionEvidence,
+        graph,
+        *,
+        knowledge_type: str | None = None,
+    ) -> EvidenceResolution:
+        observed = str(evidence.value if evidence.value is not None else evidence.raw_value)
+        normalized = _normalize(observed)
+        result = EvidenceResolution(
+            evidence_id=evidence.evidence_id,
+            observed_value=observed,
+            evidence_confidence=evidence.confidence,
+        )
+        if not normalized:
+            result.reasoning.append("empty observed value; unresolved")
+            return result
+
+        candidates: list[ResolutionCandidate] = []
+        for entity in graph.all_entities():
+            entity_type = entity.knowledge_type.value
+            if knowledge_type and entity_type != knowledge_type:
+                continue
+            match_type = self._match(entity, normalized)
+            if match_type is None:
+                continue
+            match_score = self._MATCH_SCORES[match_type]
+            candidates.append(
+                ResolutionCandidate(
+                    evidence_id=evidence.evidence_id,
+                    canonical_id=entity.knowledge_id,
+                    entity_type=entity_type,
+                    display_name=entity.name,
+                    match_type=match_type,
+                    match_score=match_score,
+                    resolution_confidence=round(
+                        evidence.confidence * match_score, 4
+                    ),
+                    source=entity.provenance.source_id or entity.source,
+                    version=entity.version or entity.provenance.data_version,
+                )
+            )
+        candidates.sort(
+            key=lambda item: (
+                -item.match_score,
+                -item.resolution_confidence,
+                item.canonical_id,
+            )
+        )
+        result.candidates = candidates
+        if not candidates:
+            result.reasoning.append("observed value not found; unresolved")
+            return result
+        best_score = candidates[0].match_score
+        top = [item for item in candidates if item.match_score == best_score]
+        if len(top) > 1:
+            result.conflict = True
+            result.reasoning.append("multiple canonical candidates share the best match")
+            return result
+        result.selected = candidates[0]
+        result.resolved = True
+        result.reasoning.append(
+            f"{candidates[0].match_type.value.lower()} match; evidence preserved"
+        )
+        return result
+
+    @staticmethod
+    def _match(entity, normalized: str) -> ResolutionMatchType | None:
+        if _normalize(entity.knowledge_id) == normalized:
+            return ResolutionMatchType.EXACT_ID
+        if _normalize(entity.name) == normalized:
+            return ResolutionMatchType.EXACT_NAME
+        if any(_normalize(alias) == normalized for alias in entity.aliases):
+            return ResolutionMatchType.ALIAS
+        return None

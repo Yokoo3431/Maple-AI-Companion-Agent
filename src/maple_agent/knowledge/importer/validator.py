@@ -26,12 +26,18 @@ class DatasetValidator:
             "npc": dataset.npcs,
             "monster": dataset.monsters,
             "item": dataset.items,
+            "equipment": dataset.equipment,
+            "quest": dataset.quests,
+            "story_lore": dataset.story_lore,
         }
         id_field = {
             "map": "map_id",
             "npc": "npc_id",
             "monster": "monster_id",
             "item": "item_id",
+            "equipment": "equipment_id",
+            "quest": "quest_id",
+            "story_lore": "lore_id",
         }
         for entity_type, entities in entities_by_type.items():
             ids: set[str] = set()

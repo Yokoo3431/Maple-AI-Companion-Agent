@@ -1,3 +1,22 @@
+# Handoff(13-J,COMPLETED)
+
+- **Last completed phase**:13-I.4 Segmented HP/MP Perception Calibration
+- **Current phase**:13-J Knowledge Graph & Semantic State Foundation(COMPLETED)
+- **Baseline semantics**:`.project/BASELINE.json` remains on its 13-I.4 source commit; no recursive metadata commit created
+- **What changed**:
+  - canonical Map/NPC/Monster/Item/Equipment/Quest/Story-Lore entities with aliases, version and Phase 13-G-aligned provenance
+  - deterministic `Perception Evidence → Resolution Candidate` resolver; observations remain immutable and unresolved/conflict cases remain explicit
+  - read-only `CurrentObservation` and `SemanticGameState`, with location/player status/nearby entities/quest context/inventory references
+  - Phase 4-E generic importer extended for the new entity types; no second importer framework
+  - sanitized Phase 13-J fixture, semantic quality metrics and automatic readiness evaluation
+  - design record: `docs/architecture/knowledge/phase13j_design.md`
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Overall=NOT_READY(自动生成)
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input provider, keyboard/mouse control, automation, hooks, injection or memory reading
+- **Tests**:定向 Phase 13-J tests、architecture contract、full pytest 与 Ruff 均在项目 `.venv` 中验证
+- **Next action**:停止在 Phase 13-J；后续阶段需显式授权
+
+---
+
 # Handoff(13-I.3 → 13-I.4,COMPLETED)
 
 - **Last completed phase**:13-I.3 Cross-Machine Evidence Gate

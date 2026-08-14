@@ -3,12 +3,14 @@
 from maple_agent.maple_knowledge.entities import (
     KnowledgeImporter,
     load_demo_knowledge,
+    load_phase13j_fixture,
 )
 from maple_agent.maple_knowledge.knowledge_base import (
     MapleKnowledgeBase,
     MapleKnowledgeGraph,
 )
 from maple_agent.maple_knowledge.models import (
+    KnowledgeEntityProvenance,
     KnowledgeRelation,
     KnowledgeRelationType,
     MapleKnowledgeEntity,
@@ -29,6 +31,7 @@ from maple_agent.maple_knowledge.validator import (
 __all__ = [
     "KnowledgeImporter",
     "KnowledgeRelation",
+    "KnowledgeEntityProvenance",
     "KnowledgeRelationBuilder",
     "KnowledgeRelationType",
     "MapleKnowledgeBase",
@@ -41,5 +44,6 @@ __all__ = [
     "MapleKnowledgeValidator",
     "MapleKnowledgeVerdict",
     "load_demo_knowledge",
+    "load_phase13j_fixture",
     "save_maple_knowledge_trace",
 ]

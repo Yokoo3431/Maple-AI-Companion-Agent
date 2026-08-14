@@ -8,14 +8,21 @@ from maple_agent.game_state.entity import EntityStateParser
 from maple_agent.game_state.extractor import GameStateExtractor
 from maple_agent.game_state.map import MapStateParser
 from maple_agent.game_state.models import (
+    CurrentObservation,
     EntityStateReference,
     GameStateReference,
     MapStateReference,
     PlayerStateReference,
     QuestStateSnapshot,
+    SemanticEntityReference,
+    SemanticGameState,
 )
 from maple_agent.game_state.player import PlayerStateParser
 from maple_agent.game_state.quest import QuestStateParser
+from maple_agent.game_state.semantic import (
+    SemanticStateResolver,
+    save_semantic_state_trace,
+)
 from maple_agent.game_state.validator import (
     GameStateValidationResult,
     GameStateValidator,
@@ -67,6 +74,7 @@ def save_game_state_trace(
 __all__ = [
     "EntityStateParser",
     "EntityStateReference",
+    "CurrentObservation",
     "GameStateExtractor",
     "GameStateReference",
     "GameStateValidationResult",
@@ -78,5 +86,9 @@ __all__ = [
     "PlayerStateReference",
     "QuestStateParser",
     "QuestStateSnapshot",
+    "SemanticEntityReference",
+    "SemanticGameState",
+    "SemanticStateResolver",
+    "save_semantic_state_trace",
     "save_game_state_trace",
 ]

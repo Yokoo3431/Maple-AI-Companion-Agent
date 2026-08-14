@@ -15,8 +15,16 @@ class MapleKnowledgeBase:
     def __init__(self) -> None:
         self._entities: dict[str, MapleKnowledgeEntity] = {}
         self._relations: list[KnowledgeRelation] = []
+        self._conflicts: list[str] = []
 
     def add_entity(self, entity: MapleKnowledgeEntity) -> None:
+        existing = self._entities.get(entity.knowledge_id)
+        if existing is not None:
+            if existing.model_dump(mode="json") != entity.model_dump(mode="json"):
+                self._conflicts.append(
+                    f"duplicate canonical id: {entity.knowledge_id}"
+                )
+            return
         self._entities[entity.knowledge_id] = entity
 
     def add_relation(self, relation: KnowledgeRelation) -> None:
@@ -36,6 +44,9 @@ class MapleKnowledgeBase:
 
     def relation_count(self) -> int:
         return len(self._relations)
+
+    def conflicts(self) -> list[str]:
+        return list(self._conflicts)
 
 
 class MapleKnowledgeGraph:
@@ -90,3 +101,6 @@ class MapleKnowledgeGraph:
 
     def all_relations(self) -> list[KnowledgeRelation]:
         return self.base.relations()
+
+    def conflicts(self) -> list[str]:
+        return self.base.conflicts()

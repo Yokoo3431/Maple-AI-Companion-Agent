@@ -10,12 +10,16 @@ from maple_agent.knowledge.importer.normalizer import (
     normalize_relation,
 )
 from maple_agent.knowledge_graph.models import (
+    EquipmentNode,
     ItemNode,
+    KnowledgeEntityProvenance,
     MapNode,
     MonsterNode,
     NPCNode,
+    QuestNode,
     Relation,
     RelationType,
+    StoryLoreNode,
 )
 
 
@@ -31,6 +35,9 @@ def build_dataset(
     npcs: list[NPCNode] = []
     monsters: list[MonsterNode] = []
     items: list[ItemNode] = []
+    equipment: list[EquipmentNode] = []
+    quests: list[QuestNode] = []
+    story_lore: list[StoryLoreNode] = []
     relations: list[Relation] = []
 
     seen_ids: dict[str, set[str]] = {
@@ -38,13 +45,28 @@ def build_dataset(
         "npc": set(),
         "monster": set(),
         "item": set(),
+        "equipment": set(),
+        "quest": set(),
+        "story_lore": set(),
     }
     seen_names: dict[str, dict[str, str]] = {
         "map": {},
         "npc": {},
         "monster": {},
         "item": {},
+        "equipment": {},
+        "quest": {},
+        "story_lore": {},
     }
+
+    def provenance(item: dict) -> KnowledgeEntityProvenance:
+        data = {
+            "source_id": source,
+            "source_type": "IMPORT",
+            "data_version": version,
+        }
+        data.update(item.get("provenance", {}) or {})
+        return KnowledgeEntityProvenance.model_validate(data)
 
     def add_entity(entity_type: str, entity_id, name: str, node) -> None:
         key = str(entity_id)
@@ -64,6 +86,9 @@ def build_dataset(
             "npc": npcs,
             "monster": monsters,
             "item": items,
+            "equipment": equipment,
+            "quest": quests,
+            "story_lore": story_lore,
         }[entity_type]
         nodes.append(node)
 
@@ -79,6 +104,9 @@ def build_dataset(
                 for connection in item.get("connections", [])
                 if connection is not None
             ],
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
         )
         add_entity("map", node.map_id, node.name, node)
     for item in source_data.get("npcs", []):
@@ -88,6 +116,9 @@ def build_dataset(
             aliases=normalize_alias(item.get("aliases", [])),
             location=item.get("map_id"),
             description=normalize_name(item.get("description", "")),
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
         )
         add_entity("npc", node.npc_id, node.name, node)
     for item in source_data.get("monsters", []):
@@ -98,6 +129,9 @@ def build_dataset(
             location=item.get("map_id"),
             level=item.get("level"),
             drops=[drop for drop in item.get("drops", []) if drop is not None],
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
         )
         add_entity("monster", node.monster_id, node.name, node)
     for item in source_data.get("items", []):
@@ -105,8 +139,56 @@ def build_dataset(
             item_id=item.get("item_id"),
             name=normalize_name(item.get("name", "")),
             aliases=normalize_alias(item.get("aliases", [])),
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
         )
         add_entity("item", node.item_id, node.name, node)
+
+    for item in source_data.get("equipment", []):
+        node = EquipmentNode(
+            equipment_id=item.get("equipment_id"),
+            name=normalize_name(item.get("name", "")),
+            aliases=normalize_alias(item.get("aliases", [])),
+            slot=normalize_name(item.get("slot", "")),
+            level=item.get("level"),
+            attributes=item.get("attributes", {}) or {},
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
+        )
+        add_entity("equipment", node.equipment_id, node.name, node)
+
+    for item in source_data.get("quests", []):
+        node = QuestNode(
+            quest_id=item.get("quest_id"),
+            name=normalize_name(item.get("name", "")),
+            aliases=normalize_alias(item.get("aliases", [])),
+            description=normalize_name(item.get("description", "")),
+            npc_ids=[value for value in item.get("npc_ids", []) if value is not None],
+            map_ids=[value for value in item.get("map_ids", []) if value is not None],
+            item_ids=[value for value in item.get("item_ids", []) if value is not None],
+            monster_ids=[
+                value for value in item.get("monster_ids", []) if value is not None
+            ],
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
+        )
+        add_entity("quest", node.quest_id, node.name, node)
+
+    for item in source_data.get("story_lore", []):
+        node = StoryLoreNode(
+            lore_id=item.get("lore_id"),
+            name=normalize_name(item.get("name", "")),
+            aliases=normalize_alias(item.get("aliases", [])),
+            description=normalize_name(item.get("description", "")),
+            topic=normalize_name(item.get("topic", "")),
+            provenance=provenance(item),
+            confidence=item.get("confidence", 0.0),
+            version=item.get("version", version),
+        )
+        add_entity("story_lore", node.lore_id, node.name, node)
 
     for item in source_data.get("relations", []):
         relation_type = normalize_relation(item.get("relation_type", ""))
@@ -140,6 +222,9 @@ def build_dataset(
         npcs=npcs,
         monsters=monsters,
         items=items,
+        equipment=equipment,
+        quests=quests,
+        story_lore=story_lore,
         relations=relations,
     )
     result = ImportResult(

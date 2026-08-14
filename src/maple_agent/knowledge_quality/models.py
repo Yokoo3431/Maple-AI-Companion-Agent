@@ -111,6 +111,8 @@ class KnowledgeQualityBenchmarkResult(BaseModel):
     monster_count: int = 0
     quest_count: int = 0
     item_count: int = 0
+    equipment_count: int = 0
+    story_lore_count: int = 0
     canonical_id_coverage: float | None = None
     provenance_coverage: float | None = None
     profile_binding_coverage: float | None = None

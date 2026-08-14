@@ -19,6 +19,24 @@ class MapleKnowledgeType(StrEnum):
     JOB = "JOB"
     SKILL = "SKILL"
     GAME_RULE = "GAME_RULE"
+    EQUIPMENT = "EQUIPMENT"
+    STORY_LORE = "STORY_LORE"
+
+
+class KnowledgeEntityProvenance(BaseModel):
+    """Canonical entity provenance aligned with the Phase 13-G source contract."""
+
+    source_id: str = ""
+    source_type: str = ""
+    source_reference: str = ""
+    source_name: str = ""
+    game_profile: str = ""
+    server_profile: str = ""
+    data_version: str = ""
+    snapshot_version: str = ""
+    content_hash: str = ""
+    adapter_name: str = ""
+    adapter_version: str = ""
 
 
 class MapleKnowledgeEntity(BaseModel):
@@ -32,6 +50,10 @@ class MapleKnowledgeEntity(BaseModel):
     attributes: dict = Field(default_factory=dict)
     source: str = ""
     confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
+    provenance: KnowledgeEntityProvenance = Field(
+        default_factory=KnowledgeEntityProvenance
+    )
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
@@ -45,6 +67,14 @@ class KnowledgeRelationType(StrEnum):
     BELONGS_TO = "BELONGS_TO"
     UNLOCKS = "UNLOCKS"
     RELATED_TO = "RELATED_TO"
+    CONTAINS = "CONTAINS"
+    SPAWNS = "SPAWNS"
+    CONNECTED_TO = "CONNECTED_TO"
+    USES = "USES"
+    EQUIPPED_BY = "EQUIPPED_BY"
+    PART_OF = "PART_OF"
+    ADVANCES = "ADVANCES"
+    REVEALS = "REVEALS"
 
 
 class KnowledgeRelation(BaseModel):

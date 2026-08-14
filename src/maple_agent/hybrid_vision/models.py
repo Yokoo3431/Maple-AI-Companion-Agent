@@ -112,6 +112,41 @@ class ResolutionResult(BaseModel):
     reasoning: list[str] = Field(default_factory=list)
 
 
+class ResolutionMatchType(StrEnum):
+    """Deterministic evidence-to-canonical match category."""
+
+    EXACT_ID = "EXACT_ID"
+    EXACT_NAME = "EXACT_NAME"
+    ALIAS = "ALIAS"
+
+
+class ResolutionCandidate(BaseModel):
+    """Candidate produced from evidence without changing the evidence."""
+
+    evidence_id: str
+    canonical_id: str
+    entity_type: str
+    display_name: str
+    match_type: ResolutionMatchType
+    match_score: float = Field(default=0.0, ge=0, le=1)
+    resolution_confidence: float = Field(default=0.0, ge=0, le=1)
+    source: str = ""
+    version: str = ""
+
+
+class EvidenceResolution(BaseModel):
+    """Resolution result retaining the observed value and evidence identity."""
+
+    evidence_id: str
+    observed_value: str = ""
+    evidence_confidence: float = Field(default=0.0, ge=0, le=1)
+    candidates: list[ResolutionCandidate] = Field(default_factory=list)
+    selected: ResolutionCandidate | None = None
+    resolved: bool = False
+    conflict: bool = False
+    reasoning: list[str] = Field(default_factory=list)
+
+
 class PlannedVisionTask(BaseModel):
     """事件驱动调度产出:哪个 ROI 用哪个方法运行。"""
 

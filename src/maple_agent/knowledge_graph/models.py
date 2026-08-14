@@ -17,6 +17,27 @@ class RelationType(StrEnum):
     REWARD = "REWARD"
     DROPS = "DROPS"
     CONNECTED_TO = "CONNECTED_TO"
+    USES = "USES"
+    EQUIPPED_BY = "EQUIPPED_BY"
+    PART_OF = "PART_OF"
+    ADVANCES = "ADVANCES"
+    REVEALS = "REVEALS"
+
+
+class KnowledgeEntityProvenance(BaseModel):
+    """Per-entity provenance carried through the generic import pipeline."""
+
+    source_id: str = ""
+    source_type: str = ""
+    source_reference: str = ""
+    source_name: str = ""
+    game_profile: str = ""
+    server_profile: str = ""
+    data_version: str = ""
+    snapshot_version: str = ""
+    content_hash: str = ""
+    adapter_name: str = ""
+    adapter_version: str = ""
 
 
 class MapNode(BaseModel):
@@ -28,6 +49,9 @@ class MapNode(BaseModel):
     region: str = ""
     parent_region: str = ""
     connections: list[int | str] = Field(default_factory=list)
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
 
 
 class NPCNode(BaseModel):
@@ -38,6 +62,9 @@ class NPCNode(BaseModel):
     aliases: list[str] = Field(default_factory=list)
     location: int | str | None = None
     description: str = ""
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
 
 
 class MonsterNode(BaseModel):
@@ -49,6 +76,9 @@ class MonsterNode(BaseModel):
     location: int | str | None = None
     level: int | None = None
     drops: list[int | str] = Field(default_factory=list)
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
 
 
 class ItemNode(BaseModel):
@@ -57,6 +87,52 @@ class ItemNode(BaseModel):
     item_id: int | str
     name: str
     aliases: list[str] = Field(default_factory=list)
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
+
+
+class EquipmentNode(BaseModel):
+    """Equipment entity for the semantic graph foundation."""
+
+    equipment_id: int | str
+    name: str
+    aliases: list[str] = Field(default_factory=list)
+    slot: str = ""
+    level: int | None = None
+    attributes: dict[str, str | int | float | bool] = Field(default_factory=dict)
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
+
+
+class QuestNode(BaseModel):
+    """Quest entity for semantic context references."""
+
+    quest_id: int | str
+    name: str
+    aliases: list[str] = Field(default_factory=list)
+    description: str = ""
+    npc_ids: list[int | str] = Field(default_factory=list)
+    map_ids: list[int | str] = Field(default_factory=list)
+    item_ids: list[int | str] = Field(default_factory=list)
+    monster_ids: list[int | str] = Field(default_factory=list)
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
+
+
+class StoryLoreNode(BaseModel):
+    """Sanitized story/lore entity for contextual resolution."""
+
+    lore_id: int | str
+    name: str
+    aliases: list[str] = Field(default_factory=list)
+    description: str = ""
+    topic: str = ""
+    provenance: KnowledgeEntityProvenance = Field(default_factory=KnowledgeEntityProvenance)
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    version: str = ""
 
 
 class Relation(BaseModel):

@@ -9,11 +9,14 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 
 from maple_agent.knowledge_graph.models import (
+    EquipmentNode,
     ItemNode,
     MapNode,
     MonsterNode,
     NPCNode,
+    QuestNode,
     Relation,
+    StoryLoreNode,
 )
 
 logger = logging.getLogger("maple_agent.knowledge")
@@ -27,6 +30,9 @@ class KnowledgeDataset(BaseModel):
     npcs: list[NPCNode] = Field(default_factory=list)
     monsters: list[MonsterNode] = Field(default_factory=list)
     items: list[ItemNode] = Field(default_factory=list)
+    equipment: list[EquipmentNode] = Field(default_factory=list)
+    quests: list[QuestNode] = Field(default_factory=list)
+    story_lore: list[StoryLoreNode] = Field(default_factory=list)
     relations: list[Relation] = Field(default_factory=list)
 
 
