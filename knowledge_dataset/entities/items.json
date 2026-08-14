@@ -1,0 +1,2802 @@
+[
+  {
+    "item_id": 2000000,
+    "name": "红色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000003,
+    "name": "蓝色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000004,
+    "name": "特殊药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000005,
+    "name": "超级药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000013,
+    "name": "初级冒险家的红色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000014,
+    "name": "初级冒险家的蓝色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010000,
+    "name": "苹果",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010001,
+    "name": "烤肉",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010002,
+    "name": "鸡蛋",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010003,
+    "name": "橙子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010004,
+    "name": "柠檬",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010007,
+    "name": "罗杰的苹果",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010009,
+    "name": "青苹果",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020000,
+    "name": "沙拉",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022000,
+    "name": "矿泉水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022253,
+    "name": "蘑菇棒棒糖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2040804,
+    "name": "手套攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2040805,
+    "name": "手套攻击卷轴10%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043001,
+    "name": "单手剑攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043101,
+    "name": "单手斧攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043201,
+    "name": "单手钝器攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043301,
+    "name": "短刀攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043701,
+    "name": "短杖魔力卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2043801,
+    "name": "长杖魔力卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044001,
+    "name": "双手剑攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044101,
+    "name": "双手斧攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044201,
+    "name": "双手钝器攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044301,
+    "name": "枪攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044401,
+    "name": "矛攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044501,
+    "name": "弓攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044601,
+    "name": "弩攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044701,
+    "name": "拳套攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044801,
+    "name": "拳甲攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2044901,
+    "name": "短枪攻击卷轴60%",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000000,
+    "name": "蓝色蜗牛壳",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000001,
+    "name": "花蘑菇盖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000003,
+    "name": "树枝",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000004,
+    "name": "绿液球",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000005,
+    "name": "叶子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000006,
+    "name": "三眼章鱼触角",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000007,
+    "name": "火独眼兽之尾",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000008,
+    "name": "道符",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000011,
+    "name": "蘑菇芽孢",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000012,
+    "name": "绿蘑菇盖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000015,
+    "name": "刺蘑菇盖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000020,
+    "name": "野猪尖牙",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000021,
+    "name": "动物皮",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000029,
+    "name": "香蕉",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000030,
+    "name": "龙皮",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000034,
+    "name": "蛇皮",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000036,
+    "name": "奇妙的药",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000037,
+    "name": "蓝水灵大水珠",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000040,
+    "name": "蘑菇王芽孢",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000041,
+    "name": "巫婆的试验用青蛙",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4000042,
+    "name": "蝙蝠翅膀",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4001000,
+    "name": "玻璃鞋",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4003002,
+    "name": "冰块",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4003003,
+    "name": "妖精之翼",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4003004,
+    "name": "粗羽毛",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4003005,
+    "name": "柔软羽毛",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4011000,
+    "name": "青铜",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4011001,
+    "name": "钢铁",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4011007,
+    "name": "月石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021000,
+    "name": "石榴石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021001,
+    "name": "紫水晶",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021002,
+    "name": "海蓝宝石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021003,
+    "name": "祖母绿",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021004,
+    "name": "蛋白石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021005,
+    "name": "蓝宝石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021006,
+    "name": "黄晶",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4021007,
+    "name": "钻石",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031000,
+    "name": "玛丽亚的信件",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031003,
+    "name": "莎丽的镜子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031005,
+    "name": "变异蘑菇的血",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031014,
+    "name": "丽娜的特制烤鳗鱼",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031015,
+    "name": "新鲜的牛奶",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031016,
+    "name": "神秘书",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031556,
+    "name": "玛丽亚的营养饮料",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031683,
+    "name": "玛亚的爱的见证",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031684,
+    "name": "罗雯的爱的见证",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031792,
+    "name": "蘑菇糖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 4031800,
+    "name": "玛丽亚的信",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802000,
+    "name": "红丝带",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802001,
+    "name": "黄色帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802002,
+    "name": "红色帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802003,
+    "name": "黑色帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802004,
+    "name": "粉红花边帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802005,
+    "name": "淡蓝花边帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802006,
+    "name": "蓝魔术帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802007,
+    "name": "红魔术帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802008,
+    "name": "圣诞鹿帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802009,
+    "name": "圣诞树帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802010,
+    "name": "猪猪蘑菇帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802011,
+    "name": "雪犬防寒服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802012,
+    "name": "熊猫狗皮帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802013,
+    "name": "兔子头巾",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802014,
+    "name": "小怪猫蝙蝠翼",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802015,
+    "name": "恐龙皇冠套装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802016,
+    "name": "李小龙服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802017,
+    "name": "猴子头巾",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802018,
+    "name": "熊猫小丑装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802019,
+    "name": "麋鹿雪橇",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802020,
+    "name": "盗侠白虎服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802021,
+    "name": "大象帽子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802022,
+    "name": "阿拉丁马甲",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802023,
+    "name": "摇滚型男假发",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802024,
+    "name": "魔法白虎服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802025,
+    "name": "粉红兔子雪犬服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802026,
+    "name": "小企鹅王",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802027,
+    "name": "骨头领带服",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802028,
+    "name": "幽灵头巾",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802029,
+    "name": "熊猫南瓜帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802030,
+    "name": "企鹅围巾耳罩",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802031,
+    "name": "牛仔套装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802032,
+    "name": "滑雪套装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802033,
+    "name": "蝙蝠怪斗士套装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802034,
+    "name": "天使的翅膀",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802035,
+    "name": "流浪儿套装",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802036,
+    "name": "招财进宝袋",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802037,
+    "name": "粉粉猪披肩",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802038,
+    "name": "如意金箍棒",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802042,
+    "name": "火鸡宝宝",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802045,
+    "name": "吉他镰刀",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802047,
+    "name": "刺猬的太阳镜",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802053,
+    "name": "雪娃娃防寒衣",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802054,
+    "name": "嫩绿蘑菇帽",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802062,
+    "name": "永恒品克缤耳机",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802082,
+    "name": "懒虫",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802083,
+    "name": "雪见墨镜",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802084,
+    "name": "红宝石象鼻王冠",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 1802100,
+    "name": "宠物项圈",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000001,
+    "name": "橙色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000002,
+    "name": "白色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000006,
+    "name": "活力神水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000007,
+    "name": "红色药丸",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000008,
+    "name": "橙色药丸",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000009,
+    "name": "白色药丸",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000010,
+    "name": "蓝色药丸",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000011,
+    "name": "活力神药",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000020,
+    "name": "高级职业红色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000021,
+    "name": "高级职业蓝色药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000022,
+    "name": "里恩特制红药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000023,
+    "name": "里恩特制蓝药水",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000078,
+    "name": "炸鸡",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000079,
+    "name": "蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000080,
+    "name": "披萨",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000081,
+    "name": "汉堡",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000082,
+    "name": "大热狗",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000083,
+    "name": "热狗堡",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000084,
+    "name": "巧克力",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000086,
+    "name": "棒棒冰",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2000087,
+    "name": "红豆刨冰",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2001000,
+    "name": "西瓜",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010005,
+    "name": "蜂蜜",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2010006,
+    "name": "蜂蜜罐",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020007,
+    "name": "鱿鱼干",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020008,
+    "name": "香肠",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020009,
+    "name": "橙汁",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020010,
+    "name": "葡萄汁",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020011,
+    "name": "兰州拉面",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020012,
+    "name": "酥干酪",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020013,
+    "name": "驯鹿奶",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020014,
+    "name": "清晨之露",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020015,
+    "name": "黄昏之露",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020016,
+    "name": "干酪蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020017,
+    "name": "草莓奶油蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020018,
+    "name": "巧克力奶油蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020019,
+    "name": "巧克力蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020020,
+    "name": "水果奶油蛋糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020021,
+    "name": "乃米的饭盒",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020022,
+    "name": "白巧克力",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020023,
+    "name": "黑巧克力",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020024,
+    "name": "巧克力盒子",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020025,
+    "name": "波罗糖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020026,
+    "name": "草莓糖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020027,
+    "name": "糖包",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020031,
+    "name": "可口可乐",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020033,
+    "name": "姜饼先生饼干",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020034,
+    "name": "姜饼女士饼干",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2020035,
+    "name": "拐杖棒棒糖",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022001,
+    "name": "绿豆粥",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022002,
+    "name": "雪碧",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022003,
+    "name": "烤鳗鱼",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022004,
+    "name": "松糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022005,
+    "name": "韩果",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022006,
+    "name": "汤年糕",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022007,
+    "name": "饭团(水果)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022008,
+    "name": "饭团(青鱼)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022009,
+    "name": "饭团(蟹肉)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022010,
+    "name": "饭团(明太鱼子)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022011,
+    "name": "饭团(蘑菇)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022012,
+    "name": "寿司",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022013,
+    "name": "寿司(青鱼子)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022014,
+    "name": "糖膏",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022015,
+    "name": "蘑菇特制拉面",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022016,
+    "name": "枫叶特制便当",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022017,
+    "name": "拉面",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022018,
+    "name": "日式拉面(烤肉)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022019,
+    "name": "日式拉面(猪排)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  },
+  {
+    "item_id": 2022020,
+    "name": "日式拉面(海鲜)",
+    "aliases": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "server_profile": "cn-nostalgic-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "source_id": "mxdc-cn-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "game_profile": "maple-cms-classic-community"
+    }
+  }
+]

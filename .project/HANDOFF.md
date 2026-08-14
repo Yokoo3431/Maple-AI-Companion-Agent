@@ -1,3 +1,26 @@
+# Handoff(13-M,COMPLETED)
+
+- **Last completed phase**:13-L Knowledge Acquisition Pipeline & Dataset Foundation
+- **Current phase**:13-M Real Knowledge Dataset Acquisition & Validation(COMPLETED)
+- **Source qualification**:使用 [冒险岛怀旧服小册子](https://mxdc.dvg.cn/) 的公开中文资料，登记为 `COMMUNITY_DATABASE`；这是社区整理资料，不宣称为官方腾讯/Nexon 数据，也不把它当作现有 `maple-v113` profile
+- **Dataset package**:`knowledge_dataset/`，版本 `mxdc-cn-community-20260814-v1`，server profile `cn-nostalgic-community`，内容 hash `3563ca50e176b8eec534a5fd15a0d16c073045b04400761d77ae80fa460ead27`
+- **Dataset scope**:50 maps / 100 NPCs / 50 quests / 200 items；monsters/equipment/story_lore/relations 当前为空数组，属于有限验证切片而非完整生产库
+- **Validation**:计数覆盖率均为 `1.0`，provenance coverage `1.0`，duplicate IDs `0`，alias conflicts `0`，bounded-snapshot missing references `129`（作为有限切片警告保留，未伪装为全量覆盖），invalid relations `0`
+- **Architecture**:
+  - `KnowledgeDatasetPackage` 读取 manifest、实体文件、canonical index 并校验 hash、计数、ID、别名、引用和 provenance
+  - `KnowledgeDatasetPackageAdapter` 复用现有 Phase 13-G `KnowledgeSourceAdapter`；导入仍进入唯一的 Phase 4-E Generic Import Pipeline
+  - source-ID→canonical-ID 映射解决跨类型同名歧义，不新增 resolver；CLI 同时验证 Phase 13-J resolver 与 Phase 13-K temporal memory 兼容性
+  - `scripts/validate_phase13m_dataset.py` 输出 package validation、import manifest、benchmark 和 readiness
+- **Benchmark**:实际导入 400 entities；entity coverage `1.0`，canonical ID coverage `1.0`，provenance/profile/version binding 均 `1.0`，unresolved reference rate `0.0`，validation score `0.9886`；alias coverage 为 `N/A`，因为快照没有可信别名分母
+- **Privacy**:仅提交结构化 ID、中文名称、最小语义引用、canonical index 和 provenance；不含截图、图标/资源 URL、客户端文件、原始会话、日志、私有路径或个人数据
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Overall=`NOT_READY`；readiness 由现有门自动保持，未因有限数据包虚报 READY
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input provider, keyboard/mouse control, automation, hooks, DLL injection or memory reading
+- **Tests**:full pytest `993 passed, 1 warning`; architecture contract `10 passed, 1 warning`; Phase 13-M tests `6 passed`; Ruff `All checks passed`
+- **Known limitations**:社区来源的确切服务器构建未被官方证明；地图/NPC/任务/道具只是定量切片；缺失引用 129 个；没有生产级全量知识、爬虫、逆向、客户端提取或运行时网络 adapter
+- **Next action**:停止在 Phase 13-M；后续阶段需显式授权
+
+---
+
 # Handoff(13-L,COMPLETED)
 
 - **Last completed phase**:13-K Temporal Memory & Semantic State Evolution

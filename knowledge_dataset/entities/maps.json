@@ -1,0 +1,852 @@
+[
+  {
+    "map_id": 101020001,
+    "name": "北部森林通道",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020010,
+    "name": "北部森林训练场9",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020002,
+    "name": "北部森林训练场Ⅰ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020003,
+    "name": "北部森林训练场Ⅱ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020004,
+    "name": "北部森林训练场Ⅲ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020005,
+    "name": "北部森林训练场Ⅳ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020006,
+    "name": "北部森林训练场Ⅴ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020007,
+    "name": "北部森林训练场Ⅵ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020008,
+    "name": "北部森林训练场Ⅶ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020009,
+    "name": "北部森林训练场Ⅷ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1010000,
+    "name": "彩虹村",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1020000,
+    "name": "彩虹村东郊平原",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1010002,
+    "name": "彩虹村民宅",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1010001,
+    "name": "彩虹村武器店",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1000000,
+    "name": "彩虹村西郊平原",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1010003,
+    "name": "彩虹村杂货店",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1000005,
+    "name": "草丛打猎场Ⅰ",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1000006,
+    "name": "草丛打猎场Ⅱ",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 50000,
+    "name": "岔道（通往南港和彩虹村）",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100000202,
+    "name": "宠物公园",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1000002,
+    "name": "大蘑菇",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101010103,
+    "name": "大木林上层",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101010100,
+    "name": "大木林Ⅰ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101010101,
+    "name": "大木林Ⅱ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101010102,
+    "name": "大木林Ⅲ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 1020001,
+    "name": "番茄田",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100000204,
+    "name": "弓箭手的殿堂",
+    "aliases": [],
+    "region": "射手村",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100000201,
+    "name": "弓箭手培训中心",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040102,
+    "name": "猴林迷宫I",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040104,
+    "name": "猴子迷宫Ⅱ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040101,
+    "name": "猴子森林I",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040103,
+    "name": "猴子森林Ⅱ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100000002,
+    "name": "花蘑菇",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100010100,
+    "name": "可疑的小山",
+    "aliases": [],
+    "region": "隐藏地图",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 10000,
+    "name": "蘑菇村",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 20001,
+    "name": "蘑菇村村民家",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 30000,
+    "name": "蘑菇村东入口",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 0,
+    "name": "蘑菇村西入口",
+    "aliases": [],
+    "region": "彩虹岛",
+    "parent_region": "Map0",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101000000,
+    "name": "魔法密林",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101020000,
+    "name": "魔法密林北部",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101010000,
+    "name": "魔法密林北郊",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100050000,
+    "name": "魔法密林南郊",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101000003,
+    "name": "魔法密林图书馆",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101000001,
+    "name": "魔法密林武器店",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101000002,
+    "name": "魔法密林杂货店",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040000,
+    "name": "魔法森林南部",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 101000004,
+    "name": "魔法师的殿堂",
+    "aliases": [],
+    "region": "魔法密林",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040001,
+    "name": "南部森林训练场1",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040002,
+    "name": "南部森林训练场Ⅱ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "map_id": 100040003,
+    "name": "南部森林训练场Ⅲ",
+    "aliases": [],
+    "region": "金银岛",
+    "parent_region": "Map1",
+    "connections": [],
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  }
+]

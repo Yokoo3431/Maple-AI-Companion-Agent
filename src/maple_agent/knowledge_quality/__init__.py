@@ -24,6 +24,12 @@ from maple_agent.knowledge_quality.models import (
     MergeOutcome,
     MergeRecord,
 )
+from maple_agent.knowledge_quality.package import (
+    DatasetPackageValidation,
+    KnowledgeDatasetPackage,
+    KnowledgeDatasetPackageAdapter,
+    KnowledgeDatasetPackageManifest,
+)
 from maple_agent.knowledge_quality.readiness import build_knowledge_readiness
 from maple_agent.knowledge_quality.source import (
     KnowledgeSourceAdapter,
@@ -79,6 +85,10 @@ __all__ = [
     "CanonicalMapper",
     "KnowledgeAcquisitionManifest",
     "KnowledgeCoverageDenominator",
+    "KnowledgeDatasetPackage",
+    "KnowledgeDatasetPackageAdapter",
+    "KnowledgeDatasetPackageManifest",
+    "DatasetPackageValidation",
     "KnowledgeDatasetMetadata",
     "KnowledgeImportOrchestrator",
     "KnowledgeQualityBenchmark",

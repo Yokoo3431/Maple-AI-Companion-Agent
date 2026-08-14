@@ -49,11 +49,24 @@ class KnowledgeQualityBenchmark:
         canonical_coverage = (
             round(mapped / total_entities, 4) if total_entities else None
         )
+        entities = (
+            list(dataset.maps)
+            + list(dataset.npcs)
+            + list(dataset.monsters)
+            + list(dataset.items)
+            + list(dataset.equipment)
+            + list(dataset.quests)
+            + list(dataset.story_lore)
+        )
+        provenance_count = sum(
+            1
+            for entity in entities
+            if entity.provenance.source_id
+            and entity.provenance.source_type
+            and entity.provenance.data_version
+        )
         provenance_coverage = (
-            round(
-                min(1.0, manifest.canonical_mapped_count / total_entities),
-                4,
-            )
+            round(provenance_count / total_entities, 4)
             if total_entities
             else None
         )
@@ -142,19 +155,7 @@ class KnowledgeQualityBenchmark:
             if expected_total
             else None
         )
-        alias_entities = sum(
-            1
-            for entity in (
-                list(dataset.maps)
-                + list(dataset.npcs)
-                + list(dataset.monsters)
-                + list(dataset.items)
-                + list(dataset.equipment)
-                + list(dataset.quests)
-                + list(dataset.story_lore)
-            )
-            if entity.aliases
-        )
+        alias_entities = sum(1 for entity in entities if entity.aliases)
         alias_coverage = (
             round(alias_entities / total_entities, 4)
             if total_entities and alias_entities

@@ -1,0 +1,1228 @@
+[
+  {
+    "quest_id": 2014,
+    "name": "阿勒斯的拜托",
+    "aliases": [],
+    "description": "在废弃都市见到了叫阿勒斯的男孩子。他说几天前因为和严历的父亲闹别扭他离家出走了，此后就在废弃都市游荡。现在不但钱也都花光了，而且已经觉得无聊了... 但是现在回家可能父亲要打他…他拜托我说服射手村的长老(他父亲)同意他回家。他还说如果我成功说服他父亲，就拿着母亲的遗物-金表过来，他才可以相信。我不知道他为什么离家出走~！",
+    "npc_ids": [
+      1052000
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2017,
+    "name": "艾温的玻璃鞋",
+    "aliases": [],
+    "description": "魔法密林叫艾温的妖精告诉我，她几天前去勇士部落的路上受到了全身都是火焰的怪物的攻击。那怪物抢走了她贵重的玻璃鞋。妖精族非常喜欢那样闪闪发光的东西，所以她很想找回来。在勇士部落打怪物的话，说不定可以找回艾温的玻璃鞋。",
+    "npc_ids": [
+      1032100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4001000,
+      4003002,
+      4003003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2031,
+    "name": "安德里亚的拜托",
+    "aliases": [],
+    "description": "接受内拉的第三次委托。因为美容的助手安德里亚是老小伙儿，每顿都吃得不好， 所以她想要做海鲜汤吃… 为了做海鲜汤需要100个三眼章鱼触角和1个矿泉水。所以你要找到这些材料并交给内拉。",
+    "npc_ids": [
+      1052103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1082002,
+      1082004,
+      1082013,
+      1082020,
+      1082032,
+      1082183,
+      2022000,
+      4000006
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1045,
+    "name": "白瑞德的测试",
+    "aliases": [],
+    "description": "白瑞德说麦加让他帮着测试我的实力，让我去击退冒险岛最强的怪物花蘑菇，并把1个花蘑菇盖带回去交给他。",
+    "npc_ids": [
+      20001
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000001
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1037,
+    "name": "帮助打猎蜗牛",
+    "aliases": [],
+    "description": "叁让我帮玛丽亚击退蜗牛。击退10只蜗牛，然后告诉玛丽亚蜗牛已经没有了，可以放心了。",
+    "npc_ids": [
+      2005
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1039,
+    "name": "帮助尤娜",
+    "aliases": [],
+    "description": "尤娜说自己到村外后，因为怪物突然变多而进退不得。她让我帮她击退蓝蜗牛和蘑菇仔，让她可以回到村里。",
+    "npc_ids": [
+      20100
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1046,
+    "name": "比格斯的金银岛故事",
+    "aliases": [],
+    "description": "比格斯向我介绍了金银岛的基本情况，并告诉我刚到冒险岛来旅行的人，最好去见见坤。到了金银岛之后，先去见见明珠港的坤吧。",
+    "npc_ids": [
+      20002
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2000013,
+      2000014
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1007,
+    "name": "比格斯的物品收集",
+    "aliases": [],
+    "description": "在南港见了叫比格斯的年轻水手。他跟我约好，我帮他收集1个花蘑菇的盖和5个蓝蜗牛的壳，他就给我好道具。他好像不相信我能做到… 郁闷。其实这个任务还是很容易完成的。",
+    "npc_ids": [
+      20002
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      1332005,
+      1332007,
+      4000000,
+      4000001
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2005,
+    "name": "变异蘑菇的血1",
+    "aliases": [],
+    "description": "在勇士部落见到了麦吉。不过他也说不能白白给我那变异蘑菇的血。他说要是我在这个岛的中央地下洞穴收集40个道符的话，他就可以给我。不过他有点小看我，现在我有点后悔了。",
+    "npc_ids": [
+      1022002
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000008
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2006,
+    "name": "变异蘑菇的血2",
+    "aliases": [],
+    "description": "在地下洞穴收集40个道符后回勇士部落给麦吉。那家伙……还是那么傲慢，但他说他一言为定，给我变异蘑菇的血。虽然他说话那么骄傲，但说不定他是个好人。我要快点收集50个绿液球，50个叶子，20个三眼章鱼触角，一瓶变异蘑菇的血去找索非亚。",
+    "npc_ids": [
+      1022002
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000004,
+      4000005,
+      4000006,
+      4031005
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1005,
+    "name": "传递信件",
+    "aliases": [],
+    "description": "在蘑菇村见到了玛利亚。 她在找人替她把一封信件送给长老。",
+    "npc_ids": [
+      2103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      4031000
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1201,
+    "name": "第一次同行",
+    "aliases": [],
+    "description": "相互合作，解开问题，然后把绿水灵王打败吧！ 执行记录 完成/挑战 完成次数 / 挑战次数 最短记录 最短分钟 分钟最短秒数 秒( 记录日期 ) 绿黏液鞋子 当前数量 成绩 排名 RANK",
+    "npc_ids": [
+      9020000
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2020,
+    "name": "肚子饿得洛尼",
+    "aliases": [],
+    "description": "在魔法密林的树林通道里找到了泰素夫的儿子洛尼。第一次他跟我说他绝不能给我那本红色的书。不过他看起来很饿？最后跟我约好，要是我给他50个猴子的香蕉和丽娜的特质烤鳗鱼和新鲜的牛奶，就给我书。按照露妮说的，丽娜在射手村可以找到，新鲜的牛奶从魔法密林的妖精可以得到。虽然有点麻烦，但我还是要去…",
+    "npc_ids": [
+      1061004
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000029,
+      4031014,
+      4031015
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2029,
+    "name": "防具店老板的拜托",
+    "aliases": [],
+    "description": "约定好给废弃都市的内拉1000金币，每当居民需要帮助时就委托她找人。首先防御具店老板为制造新的防具，需要收集50个绿蘑菇的盖和50个蓝水灵大水珠。绿蘑菇在工地或草丛里很常见而蓝水灵在地铁站内也很多。怎么样，不太难吧？",
+    "npc_ids": [
+      1052103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2010004,
+      4000012,
+      4000037
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1052,
+    "name": "飞侠转职",
+    "aliases": [],
+    "description": "他说会把我送到废都，让我可以转职为飞侠。",
+    "npc_ids": [
+      9010000
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1026,
+    "name": "给桑克斯送营养饮料",
+    "aliases": [],
+    "description": "玛丽亚说要把做完的营养饮料传给地图 60000的船长桑克斯。恩……难道两个人是恋人？",
+    "npc_ids": [
+      2103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      2000000,
+      2000003,
+      4031556
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1001,
+    "name": "给希娜弄来镜子",
+    "aliases": [],
+    "description": "找到正在晾衣的莎丽借到了镜子。现在要把这个镜子拿给希娜。",
+    "npc_ids": [
+      2100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      4031003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1051,
+    "name": "弓箭手转职",
+    "aliases": [],
+    "description": "他说会把我送到射手村，让我可以转职为弓箭手。",
+    "npc_ids": [
+      9010000
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1047,
+    "name": "怪物手册指定怪物效果",
+    "aliases": [],
+    "description": "搜集地图 1047 卡片 5张就可以在打猎中获得额外奖励经验值。 地图 1047 打猎时追加经验值 获得",
+    "npc_ids": [
+      2006
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1053,
+    "name": "海盗转职",
+    "aliases": [],
+    "description": "他说会把我送到诺特勒斯号，让我可以转职为海盗。",
+    "npc_ids": [
+      9010000
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1034,
+    "name": "好吃的蘑菇棒棒糖",
+    "aliases": [],
+    "description": "告诉妮娜，珊想吃蘑菇棒棒糖。妮娜从口袋里掏出了10个蘑菇棒棒糖，让我帮她给珊送过去。再去见见珊吧。",
+    "npc_ids": [
+      2102
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2022253,
+      4031792
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1004,
+    "name": "回到妮娜的住所",
+    "aliases": [],
+    "description": "珊想要吃的原来是蘑菇汤。现在该去找找妮娜了吧？",
+    "npc_ids": [
+      2001
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1023,
+    "name": "击退猪猪",
+    "aliases": [],
+    "description": "比格斯听说自己长得像猪猪很生气。说实话，确实还有点像…… 反正为了 比格斯 击退猪猪 2只吧。 猪猪 已击败数",
+    "npc_ids": [
+      20002
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      2000000,
+      2000003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2012,
+    "name": "简的第二次挑战",
+    "aliases": [],
+    "description": "简说这次能够做更好的，拜托我收集来1个蘑菇王的芽孢，3个龙血，100个奇怪的药，30个巫婆的试验用青蛙来了。她能够做同时恢复血量和魔量的超级药水...",
+    "npc_ids": [
+      1002100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2000005,
+      2012000,
+      4000036,
+      4000040,
+      4000041
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2011,
+    "name": "简的第一次挑战",
+    "aliases": [],
+    "description": "在明珠港又见到了简。但她说我以前为她收集来的那些东西，被爸爸发现那不是她自己收集来的。所以她放弃了去冒险。 但是她最近有另外的梦想，那就是当炼金术士。她说为了做炼金术实验需要多种的材料，又拜托我收集1瓶矿泉水和30个奇秒的药和20个巫婆的试验用青蛙。她保证，有这些材料能够做特殊药水，这次我相信她吧。",
+    "npc_ids": [
+      1002100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2000004,
+      2022000,
+      4000036,
+      4000041
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2013,
+    "name": "简的最后挑战",
+    "aliases": [],
+    "description": "最后简拜托我收集为做神秘的卷轴需要的材料。那就是1个月石，20个龙皮，10个古木树液。关于月石，魔法密林的妖精们可能知道吧？",
+    "npc_ids": [
+      1002100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2012002,
+      2040804,
+      2040805,
+      4000030,
+      4011007
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2010,
+    "name": "简和野猪",
+    "aliases": [],
+    "description": "在明珠港的金银号旁边见到了带着兔子发箍的简。简正在苦闷，因为她想去冒险看看更多地方，但她父亲不允许她去。所以她拜托我收集来80个野猪尖牙和100个刺蘑菇盖。她说有这么多的证据，她的父亲也许会允许她去冒险。但是这样的证据不是要她去自己收集的吗？不过那到不是很难的事情，这次我要去高原打野猪啦…",
+    "npc_ids": [
+      1002100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2043001,
+      2043101,
+      2043201,
+      2043301,
+      2043701,
+      2043801,
+      2044001,
+      2044101,
+      2044201,
+      2044301,
+      2044401,
+      2044501,
+      2044601,
+      2044701,
+      2044801,
+      2044901,
+      4000015,
+      4000020
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1024,
+    "name": "解决爱情的烦恼？！",
+    "aliases": [],
+    "description": "叁说在帮 地图 60000的船员白瑞德，找给他女友的礼物材料，找3个树枝 送给 白瑞德。树枝？抓住长得像树桩的怪兽木妖就可以得到。",
+    "npc_ids": [
+      2005
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      2010002,
+      2010003,
+      4000003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1000,
+    "name": "借来莎丽的镜子",
+    "aliases": [],
+    "description": "在菇菇村见到了希娜，她正在担心太阳会把她的皮肤给晒伤。所以希娜要从她姐姐莎丽那里借来镜子。",
+    "npc_ids": [
+      2101
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2033,
+    "name": "克利思",
+    "aliases": [],
+    "description": "接受内拉的第二次委托。听说铁器店的皮奥最爱用的枕头最近被偷了， 所以一直没有睡好… 为了做一个新枕头需要50个硬羽毛和20个动物的皮革。 取得后交给内拉。",
+    "npc_ids": [
+      1052103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000021,
+      4003004,
+      4011000,
+      4011001
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1029,
+    "name": "老师的建议",
+    "aliases": [],
+    "description": "老师教过每次升级时可获得的能力点和能力点的用法。根据能力点的投资方向，可获得力量、智力、敏捷、运气等属性，根据各自的选择，也可将能力点用于提升血量和魔量。",
+    "npc_ids": [
+      2005
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1022,
+    "name": "路卡斯可爱的女儿",
+    "aliases": [],
+    "description": "路卡斯担心在地图 60000的女儿，为了让女儿安全地回到家，希望抓住危险的红蜗牛。是 红蜗牛 ？恩～是个难缠的对手? 那抓住 红蜗牛后去看望 尤娜吗？ 红蜗牛 已击败数",
+    "npc_ids": [
+      12000
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      2010000,
+      2010009
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1021,
+    "name": "罗杰和苹果",
+    "aliases": [],
+    "description": "按快捷键I，使用消耗窗里的罗杰的苹果，再与 罗杰对话。",
+    "npc_ids": [
+      2000
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2010007
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1116,
+    "name": "罗雯的爱的证物",
+    "aliases": [],
+    "description": "妖精罗雯说要我证明我的爱，让我带来20个柔软羽毛。",
+    "npc_ids": [
+      1032101
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4003005,
+      4031684
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1030,
+    "name": "玛丽亚的查看地图",
+    "aliases": [],
+    "description": "玛丽亚亲切地说明了查看世界地图的方法。点击W键后出现的世界地图啊……还没去过的冒险岛世界许多地方都一目了然。",
+    "npc_ids": [
+      2103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1038,
+    "name": "玛丽亚的信",
+    "aliases": [],
+    "description": "玛丽亚说没有了蜗牛，自己可以放心地采蘑菇了。她说可能会晚一点回去，怕彩虹村的长老路卡斯为她担心，让我帮她送一封信给路卡斯。",
+    "npc_ids": [
+      2103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2000000,
+      2000003,
+      4031800
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1025,
+    "name": "玛丽亚的营养饮料",
+    "aliases": [],
+    "description": "玛丽亚想做补身体的营养饮料，请帮忙找一些材料。材料是绿液球和 蘑菇芽孢……很好奇啊，会出现什么饮料呢？",
+    "npc_ids": [
+      2103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      4000004,
+      4000011
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1115,
+    "name": "玛亚的爱的证物",
+    "aliases": [],
+    "description": "玛亚说要我证明我的爱，让我带来40个花蘑菇盖 。",
+    "npc_ids": [
+      1012101
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000001,
+      4031683
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1028,
+    "name": "迈向明珠港！",
+    "aliases": [],
+    "description": "已经听到路卡斯的消息了，桑克斯让我免费上船。好，终于来到了金银岛！是地图 104000000！现在只要找到坤就行了？比彩虹岛大多了，能找到吗？",
+    "npc_ids": [
+      22000
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003,
+      2010001,
+      2010004
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1042,
+    "name": "麦加的第二次修炼",
+    "aliases": [],
+    "description": "打猎完木妖之后，她说我好像很有才能，让我们马上进入下一项修炼。这次打猎的怪物是5只红蜗牛。红蜗牛的速度要比木妖快，打猎的时候一定要小心。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2010002,
+      2010003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1043,
+    "name": "麦加的第三次修炼",
+    "aliases": [],
+    "description": "打猎完5只红蜗牛后，麦加让我这次去打猎更强的怪物，让我打猎3个绿水灵，然后把1个绿液球交给她。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      4000004
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1041,
+    "name": "麦加的第一次修炼",
+    "aliases": [],
+    "description": "麦加让我先从容易的怪物入手，让我打猎5个木妖，搜集3个树枝后交给她。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1332066,
+      4000003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1016,
+    "name": "麦加的锻炼",
+    "aliases": [],
+    "description": "彩虹岛的武术高手麦加决定要锻炼我。 首先要打退弱小的怪物。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1027,
+    "name": "麦加的请求",
+    "aliases": [],
+    "description": "据说麦加作为佣兵在金银岛做过探险。但是地图 1010000的长老路卡斯为了防止平和的彩虹岛上潜伏的危险，雇佣了她。但是麦加最近因为事情太多而有些疲惫……。把麦加的话传达给路卡斯吧。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1017,
+    "name": "麦加的最后锻炼",
+    "aliases": [],
+    "description": "麦加这次希望我去打退在彩虹岛最强的怪物。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1042003
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 1044,
+    "name": "麦加的最后一次修炼",
+    "aliases": [],
+    "description": "击退绿水灵后，把绿液球带回去交给了麦加。麦加说这次需要打猎更强的怪物，让我去击退2只猪猪。",
+    "npc_ids": [
+      12100
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2010001,
+      2010004
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2034,
+    "name": "曼斯塔的拜托",
+    "aliases": [],
+    "description": "接受内拉的第三次委托。护身用品店的主人曼斯塔是个很特别的美食家，听说他需要烤火独眼兽尾的材料… 他只想要150个火独眼兽之尾，就可以做很久的饭菜……取得后交给内拉。",
+    "npc_ids": [
+      1052103
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1072003,
+      1072018,
+      1072035,
+      1072077,
+      1072081,
+      1072294,
+      4000007
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2018,
+    "name": "迷宫入口的守卫兵，鲁克",
+    "aliases": [],
+    "description": "在迷宫的入口见了叫鲁克的守卫兵。他拜托我收集有助于他母亲的健康所需要的100个青蛇的皮和10个蝙蝠的翅膀及1个沙拉。他说因为守卫工作很忙，不能亲自去。但我看起来他在这里一直睡觉..?!?!",
+    "npc_ids": [
+      1040000
+    ],
+    "map_ids": [],
+    "item_ids": [
+      2020000,
+      4000034,
+      4000042,
+      4021000,
+      4021001,
+      4021002,
+      4021003,
+      4021004,
+      4021005,
+      4021006,
+      4021007
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2019,
+    "name": "秘密之书",
+    "aliases": [],
+    "description": "在林中之城的高级桑拿房里遇见了叫泰素夫的秃头叔叔。他说他有一个儿子几天前拿着他最喜爱的书离家出走了。然后拜托我找到他的儿子拿回那本书。要是我找到他那本书，他会给我一件很实用的衣服。他又告诉我他的儿子洛尼常常去魔法密林附近的树林通道。所以我去那里找，应该能找到。不过，那本书比儿子还重要吗？到底是什么样的书啊...?!?!",
+    "npc_ids": [
+      1061003
+    ],
+    "map_ids": [],
+    "item_ids": [],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "quest_id": 2023,
+    "name": "秘密之书回收",
+    "aliases": [],
+    "description": "把那些菜给罗尼后收到了秘密之书，到底有什么内容?",
+    "npc_ids": [
+      1061004
+    ],
+    "map_ids": [],
+    "item_ids": [
+      1050018,
+      1051017,
+      4031016
+    ],
+    "monster_ids": [],
+    "confidence": 0.9,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  }
+]

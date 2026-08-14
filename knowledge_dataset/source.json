@@ -1,0 +1,18 @@
+{
+  "source_id": "mxdc-cn-community",
+  "source_name": "冒险岛怀旧服小册子（社区整理）",
+  "source_type": "COMMUNITY_DATABASE",
+  "source_reference": "https://mxdc.dvg.cn/",
+  "acquisition": "manual public snapshot",
+  "profile": "maple-cms-classic-community",
+  "server_profile": "cn-nostalgic-community",
+  "snapshot_version": "2026-08-14",
+  "sanitized": true,
+  "excluded": [
+    "screenshots",
+    "private paths",
+    "raw sessions",
+    "icon URLs",
+    "client files"
+  ]
+}

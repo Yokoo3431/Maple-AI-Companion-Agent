@@ -1,0 +1,1602 @@
+[
+  {
+    "npc_id": 1061001,
+    "name": "24小时 排档",
+    "aliases": [],
+    "map_id": 105070001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032103,
+    "name": "阿尔莫斯",
+    "aliases": [],
+    "map_id": 101010102,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002103,
+    "name": "阿尔院长",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013205,
+    "name": "阿弗利埃",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052000,
+    "name": "阿勒斯",
+    "aliases": [],
+    "map_id": 103000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013100,
+    "name": "艾娜",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052101,
+    "name": "安德里亚",
+    "aliases": [],
+    "map_id": 103000005,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012110,
+    "name": "桉",
+    "aliases": [],
+    "map_id": 100010000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012007,
+    "name": "巴罗德",
+    "aliases": [],
+    "map_id": 100000202,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012006,
+    "name": "巴特斯",
+    "aliases": [],
+    "map_id": 100000202,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032104,
+    "name": "巴缇",
+    "aliases": [],
+    "map_id": 101000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063002,
+    "name": "白花簇",
+    "aliases": [],
+    "map_id": 105040316,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 20001,
+    "name": "白瑞德",
+    "aliases": [],
+    "map_id": 50001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052008,
+    "name": "宝箱",
+    "aliases": [],
+    "map_id": 103000902,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002000,
+    "name": "比尔",
+    "aliases": [],
+    "map_id": 104000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 20002,
+    "name": "比格斯",
+    "aliases": [],
+    "map_id": 60000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012117,
+    "name": "比克·爱德华",
+    "aliases": [],
+    "map_id": 100000104,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052015,
+    "name": "比利",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012002,
+    "name": "比休斯",
+    "aliases": [],
+    "map_id": 100000100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 2002,
+    "name": "彼特",
+    "aliases": [],
+    "map_id": 30000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061100,
+    "name": "宾馆服务员",
+    "aliases": [],
+    "map_id": 105040400,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063006,
+    "name": "冰独眼兽通缉牌",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012104,
+    "name": "伯丽特",
+    "aliases": [],
+    "map_id": 100000104,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052105,
+    "name": "不认识的女人",
+    "aliases": [],
+    "map_id": 103000004,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012111,
+    "name": "布鲁斯",
+    "aliases": [],
+    "map_id": 100000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1043001,
+    "name": "草药丛",
+    "aliases": [],
+    "map_id": 101000104,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012001,
+    "name": "差不多医生",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052011,
+    "name": "出口",
+    "aliases": [],
+    "map_id": 103000900,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032009,
+    "name": "船员 普林",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063008,
+    "name": "刺蘑菇通缉牌",
+    "aliases": [],
+    "map_id": 105050200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061015,
+    "name": "崔斯坦的灵魂",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012112,
+    "name": "达尔利",
+    "aliases": [],
+    "map_id": 100000200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012113,
+    "name": "达尔米",
+    "aliases": [],
+    "map_id": 910010100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 10203,
+    "name": "达克鲁",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052004,
+    "name": "黛玛院长",
+    "aliases": [],
+    "map_id": 100000103,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052108,
+    "name": "倒掉的垃圾箱",
+    "aliases": [],
+    "map_id": 107000301,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052013,
+    "name": "电脑",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052006,
+    "name": "冬青",
+    "aliases": [],
+    "map_id": 103000100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013106,
+    "name": "发光的石碑",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1022006,
+    "name": "芳博士",
+    "aliases": [],
+    "map_id": 101030401,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052016,
+    "name": "废都中巴",
+    "aliases": [],
+    "map_id": 103000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063000,
+    "name": "粉红色花簇",
+    "aliases": [],
+    "map_id": 105040311,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032107,
+    "name": "愤怒的里弗",
+    "aliases": [],
+    "map_id": 910100000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063004,
+    "name": "风独眼兽通缉牌",
+    "aliases": [],
+    "map_id": 105040200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013103,
+    "name": "格里德",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1021100,
+    "name": "格里高利",
+    "aliases": [],
+    "map_id": 102000002,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061013,
+    "name": "葛温",
+    "aliases": [],
+    "map_id": 105090200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 10201,
+    "name": "汉斯",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061002,
+    "name": "豪素夫",
+    "aliases": [],
+    "map_id": 105040401,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 10200,
+    "name": "赫丽娜",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013202,
+    "name": "黑色影子",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1057001,
+    "name": "红雅",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052017,
+    "name": "洪先生",
+    "aliases": [],
+    "map_id": 103000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052002,
+    "name": "后街吉姆",
+    "aliases": [],
+    "map_id": 103000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032105,
+    "name": "胡小姐",
+    "aliases": [],
+    "map_id": 100050000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1043000,
+    "name": "花簇",
+    "aliases": [],
+    "map_id": 101000101,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1022008,
+    "name": "灰渣里的剑",
+    "aliases": [],
+    "map_id": 101030402,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1021001,
+    "name": "慧丽",
+    "aliases": [],
+    "map_id": 102000001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063005,
+    "name": "火独眼兽通缉牌",
+    "aliases": [],
+    "map_id": 105070100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013104,
+    "name": "鸡蛋桶",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002006,
+    "name": "吉夫",
+    "aliases": [],
+    "map_id": 104000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1022106,
+    "name": "吉米",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061011,
+    "name": "记忆者",
+    "aliases": [],
+    "map_id": 105040300,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052007,
+    "name": "检票口",
+    "aliases": [],
+    "map_id": 103000100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032008,
+    "name": "检票员",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002100,
+    "name": "简",
+    "aliases": [],
+    "map_id": 104000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002005,
+    "name": "金先生",
+    "aliases": [],
+    "map_id": 104000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012000,
+    "name": "金银岛中巴",
+    "aliases": [],
+    "map_id": 100000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1011000,
+    "name": "卡尔",
+    "aliases": [],
+    "map_id": 100000101,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012108,
+    "name": "卡米拉",
+    "aliases": [],
+    "map_id": 100000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032108,
+    "name": "开心的里弗",
+    "aliases": [],
+    "map_id": 910100001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 10204,
+    "name": "凯琳",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012008,
+    "name": "凯茜",
+    "aliases": [],
+    "map_id": 100000203,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012004,
+    "name": "科尔",
+    "aliases": [],
+    "map_id": 100000100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012005,
+    "name": "科洛伊",
+    "aliases": [],
+    "map_id": 100000200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061016,
+    "name": "可疑男子",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052003,
+    "name": "克利思",
+    "aliases": [],
+    "map_id": 103000006,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061000,
+    "name": "克利斯拉玛",
+    "aliases": [],
+    "map_id": 105040300,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1002101,
+    "name": "坤",
+    "aliases": [],
+    "map_id": 104000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063001,
+    "name": "蓝花簇",
+    "aliases": [],
+    "map_id": 105040313,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012009,
+    "name": "李先生",
+    "aliases": [],
+    "map_id": 100000200,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1010100,
+    "name": "丽娜",
+    "aliases": [],
+    "map_id": 100000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1021000,
+    "name": "利伯",
+    "aliases": [],
+    "map_id": 102000001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013102,
+    "name": "猎犬",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1052115,
+    "name": "林车长",
+    "aliases": [],
+    "map_id": 910320000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013001,
+    "name": "龙",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1013002,
+    "name": "龙的巢穴",
+    "aliases": [],
+    "map_id": null,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1011100,
+    "name": "卢娜",
+    "aliases": [],
+    "map_id": 100000102,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1040000,
+    "name": "鲁克",
+    "aliases": [],
+    "map_id": 106010100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 12000,
+    "name": "路卡斯",
+    "aliases": [],
+    "map_id": 1010000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1032004,
+    "name": "路易斯",
+    "aliases": [],
+    "map_id": 101000100,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1022101,
+    "name": "露妮",
+    "aliases": [],
+    "map_id": 101000000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 11100,
+    "name": "露茜",
+    "aliases": [],
+    "map_id": 1010003,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1063003,
+    "name": "绿蘑菇通缉牌",
+    "aliases": [],
+    "map_id": 105030000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 2003,
+    "name": "罗宾",
+    "aliases": [],
+    "map_id": 40000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 2000,
+    "name": "罗杰",
+    "aliases": [],
+    "map_id": 10000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1061004,
+    "name": "洛尼",
+    "aliases": [],
+    "map_id": 101020001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 2103,
+    "name": "玛丽亚",
+    "aliases": [],
+    "map_id": 50000,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1051001,
+    "name": "玛帕",
+    "aliases": [],
+    "map_id": 103000001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  },
+  {
+    "npc_id": 1012101,
+    "name": "玛亚",
+    "aliases": [],
+    "map_id": 100000001,
+    "description": "",
+    "confidence": 0.95,
+    "version": "mxdc-cn-community-20260814-v1",
+    "provenance": {
+      "game_profile": "maple-cms-classic-community",
+      "source_type": "COMMUNITY_DATABASE",
+      "source_id": "mxdc-cn-community",
+      "data_version": "mxdc-cn-community-20260814-v1",
+      "server_profile": "cn-nostalgic-community"
+    }
+  }
+]

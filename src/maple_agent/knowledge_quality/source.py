@@ -150,9 +150,25 @@ def sanitize_source_metadata(source: KnowledgeSourceReference | dict) -> dict:
         else dict(source)
     )
     for key in ("source_reference", "path", "private_path", "session_path"):
-        if data.get(key):
+        value = data.get(key)
+        if (
+            value
+            and key == "source_reference"
+            and isinstance(value, str)
+            and value.startswith(("http://", "https://"))
+        ):
+            continue
+        if value:
             data[key] = "<REDACTED_PATH>"
     for key, value in list(data.items()):
-        if isinstance(value, str) and ("\\" in value or ":/" in value):
+        if (
+            isinstance(value, str)
+            and not value.startswith(("http://", "https://"))
+            and (
+                "\\" in value
+                or value.startswith("/")
+                or (len(value) >= 3 and value[1:3] in (":/", ":\\"))
+            )
+        ):
             data[key] = "<REDACTED_PATH>"
     return data

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "dataset_version": "mxdc-cn-community-20260814-v1",
+  "source_id": "mxdc-cn-community",
+  "source_name": "冒险岛怀旧服小册子（社区整理）",
+  "source_type": "COMMUNITY_DATABASE",
+  "source_reference": "https://mxdc.dvg.cn/",
+  "game_profile": "maple-cms-classic-community",
+  "server_profile": "cn-nostalgic-community",
+  "snapshot_version": "2026-08-14",
+  "content_hash": "3563ca50e176b8eec534a5fd15a0d16c073045b04400761d77ae80fa460ead27",
+  "entity_counts": {
+    "maps": 50,
+    "npcs": 100,
+    "monsters": 0,
+    "items": 200,
+    "equipment": 0,
+    "quests": 50,
+    "story_lore": 0
+  },
+  "expected_counts": {
+    "maps": 50,
+    "npcs": 100,
+    "quests": 50,
+    "items": 200
+  },
+  "provenance_fields": [
+    "source_id",
+    "source_type",
+    "game_profile",
+    "server_profile",
+    "data_version"
+  ],
+  "license_or_terms_reference": "https://mxdc.dvg.cn/",
+  "sanitized": true
+}
