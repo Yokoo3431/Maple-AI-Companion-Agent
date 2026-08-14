@@ -120,6 +120,64 @@ class KnowledgeQualityBenchmark:
         coverage_known = bool(denominators)
         if not coverage_known:
             reasons.append("dataset denominator unavailable")
+        expected_total = 0
+        if denominators:
+            entity_keys = {
+                "map",
+                "npc",
+                "monster",
+                "item",
+                "equipment",
+                "quest",
+                "story_lore",
+            }
+            expected_total = sum(
+                int(value)
+                for denominator in denominators
+                for key, value in denominator.expected_counts.items()
+                if key in entity_keys
+            )
+        entity_coverage = (
+            round(min(1.0, total_entities / expected_total), 4)
+            if expected_total
+            else None
+        )
+        alias_entities = sum(
+            1
+            for entity in (
+                list(dataset.maps)
+                + list(dataset.npcs)
+                + list(dataset.monsters)
+                + list(dataset.items)
+                + list(dataset.equipment)
+                + list(dataset.quests)
+                + list(dataset.story_lore)
+            )
+            if entity.aliases
+        )
+        alias_coverage = (
+            round(alias_entities / total_entities, 4)
+            if total_entities and alias_entities
+            else None
+        )
+        if total_entities and not alias_entities:
+            reasons.append("alias denominator unavailable")
+        missing_reference_count = sum(
+            1
+            for warning in manifest.warnings
+            if "关系引用缺失" in warning or "dangling" in warning.lower()
+        )
+        if topology is not None:
+            missing_reference_count = max(
+                missing_reference_count,
+                topology.dangling_source + topology.dangling_target,
+            )
+        reference_total = len(dataset.relations) + missing_reference_count
+        missing_reference_rate = (
+            round(missing_reference_count / reference_total, 4)
+            if reference_total
+            else 0.0
+        )
         values = [
             value
             for value in (
@@ -130,6 +188,9 @@ class KnowledgeQualityBenchmark:
                 map_topology_valid_rate,
                 portal_target_valid_rate,
                 source_validation_rate,
+                entity_coverage,
+                alias_coverage,
+                1.0 - missing_reference_rate,
             )
             if value is not None
         ]
@@ -149,6 +210,10 @@ class KnowledgeQualityBenchmark:
             item_count=len(dataset.items),
             equipment_count=len(dataset.equipment),
             story_lore_count=len(dataset.story_lore),
+            entity_coverage=entity_coverage,
+            alias_coverage=alias_coverage,
+            missing_reference_count=missing_reference_count,
+            missing_reference_rate=missing_reference_rate,
             canonical_id_coverage=canonical_coverage,
             provenance_coverage=provenance_coverage,
             profile_binding_coverage=profile_binding,
@@ -208,6 +273,23 @@ class KnowledgeQualityBenchmark:
             if total_entities
             else None
         )
+        alias_count = sum(1 for entity in entities if entity.aliases)
+        alias_coverage = (
+            round(alias_count / total_entities, 4)
+            if total_entities and alias_count
+            else None
+        )
+        missing_reference_count = sum(
+            1
+            for relation in graph.all_relations()
+            if graph.base.get_entity(relation.source_id) is None
+            or graph.base.get_entity(relation.target_id) is None
+        )
+        missing_reference_rate = (
+            round(missing_reference_count / len(graph.all_relations()), 4)
+            if graph.all_relations()
+            else 0.0
+        )
         resolutions = resolutions or []
         unresolved = sum(1 for result in resolutions if not result.resolved)
         conflicts = sum(1 for result in resolutions if result.conflict)
@@ -230,6 +312,8 @@ class KnowledgeQualityBenchmark:
                 provenance_coverage,
                 1.0 - unresolved_rate if unresolved_rate is not None else None,
                 1.0 - conflict_rate if conflict_rate is not None else None,
+                alias_coverage,
+                1.0 - missing_reference_rate,
             )
             if value is not None
         ]
@@ -244,6 +328,10 @@ class KnowledgeQualityBenchmark:
             equipment_count=counts["EQUIPMENT"],
             quest_count=counts["QUEST"],
             story_lore_count=counts["STORY_LORE"],
+            entity_coverage=1.0 if total_entities else None,
+            alias_coverage=alias_coverage,
+            missing_reference_count=missing_reference_count,
+            missing_reference_rate=missing_reference_rate,
             canonical_id_coverage=canonical_coverage,
             provenance_coverage=provenance_coverage,
             unresolved_reference_rate=unresolved_rate,

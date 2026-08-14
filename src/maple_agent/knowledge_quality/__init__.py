@@ -10,11 +10,13 @@ from maple_agent.knowledge_quality.consolidator import (
     AcquisitionResult,
     KnowledgeImportOrchestrator,
     to_generic_packet,
+    write_versioned_dataset_record,
 )
 from maple_agent.knowledge_quality.models import (
     CanonicalEntityReference,
     KnowledgeAcquisitionManifest,
     KnowledgeCoverageDenominator,
+    KnowledgeDatasetMetadata,
     KnowledgeQualityBenchmarkResult,
     KnowledgeReadinessPolicy,
     KnowledgeSourceReference,
@@ -30,6 +32,7 @@ from maple_agent.knowledge_quality.source import (
     StaticGameResourceAdapter,
     WikiCommunityAdapter,
     content_hash,
+    sanitize_source_metadata,
 )
 from maple_agent.knowledge_quality.topology import (
     TopologyValidationResult,
@@ -56,7 +59,7 @@ def save_knowledge_acquisition_trace(
     payload = {
         "schema_version": TRACE_SCHEMA_VERSION,
         "manifest": manifest,
-        "sources": sources,
+        "sources": sanitize_source_metadata(sources),
         "import_summary": import_summary,
         "mapping_summary": mapping_summary,
         "conflicts": conflicts,
@@ -76,6 +79,7 @@ __all__ = [
     "CanonicalMapper",
     "KnowledgeAcquisitionManifest",
     "KnowledgeCoverageDenominator",
+    "KnowledgeDatasetMetadata",
     "KnowledgeImportOrchestrator",
     "KnowledgeQualityBenchmark",
     "KnowledgeQualityBenchmarkResult",
@@ -93,6 +97,8 @@ __all__ = [
     "WorldTopologyValidator",
     "build_knowledge_readiness",
     "content_hash",
+    "sanitize_source_metadata",
     "save_knowledge_acquisition_trace",
     "to_generic_packet",
+    "write_versioned_dataset_record",
 ]

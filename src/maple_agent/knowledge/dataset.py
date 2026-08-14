@@ -23,9 +23,13 @@ logger = logging.getLogger("maple_agent.knowledge")
 
 
 class KnowledgeDataset(BaseModel):
-    """外部知识数据集。"""
+    """外部知识数据集及其版本化审计 metadata。"""
 
     version: str = "v1"
+    game_profile: str = ""
+    server_profile: str = ""
+    source_provenance: list[str] = Field(default_factory=list)
+    content_hash: str = ""
     maps: list[MapNode] = Field(default_factory=list)
     npcs: list[NPCNode] = Field(default_factory=list)
     monsters: list[MonsterNode] = Field(default_factory=list)
@@ -61,23 +65,45 @@ def load_dataset(directory: str | Path | None = None) -> KnowledgeDataset:
     meta = data_dir / "dataset.json"
     if meta.exists():
         try:
+            metadata = json.loads(meta.read_text(encoding="utf-8"))
             dataset.version = str(
-                json.loads(meta.read_text(encoding="utf-8")).get("version", "v1")
+                metadata.get("dataset_version", metadata.get("version", "v1"))
             )
+            dataset.game_profile = str(metadata.get("game_profile", ""))
+            dataset.server_profile = str(metadata.get("server_profile", ""))
+            provenance = metadata.get("source_provenance", [])
+            dataset.source_provenance = (
+                [str(item) for item in provenance]
+                if isinstance(provenance, list)
+                else []
+            )
+            dataset.content_hash = str(metadata.get("content_hash", ""))
         except Exception as exc:
             logger.warning("dataset 版本读取失败: %s", exc)
     dataset.maps = _load_list(data_dir / "maps.json", MapNode)
     dataset.npcs = _load_list(data_dir / "npcs.json", NPCNode)
     dataset.monsters = _load_list(data_dir / "monsters.json", MonsterNode)
     dataset.items = _load_list(data_dir / "items.json", ItemNode)
+    dataset.equipment = _load_list(data_dir / "equipment.json", EquipmentNode)
+    dataset.quests = _load_list(data_dir / "quests.json", QuestNode)
+    dataset.story_lore = _load_list(
+        data_dir / "story_lore.json", StoryLoreNode
+    )
     dataset.relations = _load_list(data_dir / "relations.json", Relation)
     logger.info(
-        "knowledge dataset loaded: version=%s maps=%d npcs=%d monsters=%d items=%d relations=%d",
+        "knowledge dataset loaded: version=%s profile=%s/%s "
+        "maps=%d npcs=%d monsters=%d items=%d equipment=%d quests=%d "
+        "story_lore=%d relations=%d",
         dataset.version,
+        dataset.game_profile,
+        dataset.server_profile,
         len(dataset.maps),
         len(dataset.npcs),
         len(dataset.monsters),
         len(dataset.items),
+        len(dataset.equipment),
+        len(dataset.quests),
+        len(dataset.story_lore),
         len(dataset.relations),
     )
     return dataset

@@ -41,6 +41,18 @@ class KnowledgeSourceReference(BaseModel):
     adapter_version: str = ""
 
 
+class KnowledgeDatasetMetadata(BaseModel):
+    """Version/provenance metadata for one imported dataset revision."""
+
+    dataset_version: str = ""
+    game_profile: str = ""
+    server_profile: str = ""
+    source_provenance: list[str] = Field(default_factory=list)
+    content_hash: str = ""
+    adapter_name: str = ""
+    adapter_version: str = ""
+
+
 class CanonicalEntityReference(BaseModel):
     """领域实体 canonical identity(名称不是唯一身份)。"""
 
@@ -113,6 +125,10 @@ class KnowledgeQualityBenchmarkResult(BaseModel):
     item_count: int = 0
     equipment_count: int = 0
     story_lore_count: int = 0
+    entity_coverage: float | None = None
+    alias_coverage: float | None = None
+    missing_reference_count: int = 0
+    missing_reference_rate: float | None = None
     canonical_id_coverage: float | None = None
     provenance_coverage: float | None = None
     profile_binding_coverage: float | None = None

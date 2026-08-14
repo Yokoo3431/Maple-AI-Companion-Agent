@@ -6,7 +6,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -23,6 +22,7 @@ from maple_agent.knowledge_quality import (  # noqa: E402
     LocalStaticKnowledgeAdapter,
     ManualCuratedAdapter,
     save_knowledge_acquisition_trace,
+    write_versioned_dataset_record,
 )
 from maple_agent.logging_setup import new_id  # noqa: E402
 from maple_agent.maple_knowledge import (  # noqa: E402
@@ -81,41 +81,8 @@ def _write_versioned_dataset(
     result,
     base_dir: Path,
 ) -> None:
-    """写 knowledge/versions/<dataset_version>/(不提交大型原始资源)。"""
-    version_dir = base_dir / result.manifest.data_version
-    version_dir.mkdir(parents=True, exist_ok=True)
-    (version_dir / "manifest.json").write_text(
-        json.dumps(
-            result.manifest.model_dump(mode="json"),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
-    (version_dir / "sources.json").write_text(
-        json.dumps(
-            result.source.model_dump(mode="json"),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
-    canonical_map = {
-        record.external_id: record.canonical_id
-        for record in result.mappings
-    }
-    (version_dir / "canonical_map.json").write_text(
-        json.dumps(canonical_map, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    (version_dir / "validation_report.json").write_text(
-        json.dumps(
-            result.benchmark.model_dump(mode="json"),
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
+    """写 versioned metadata only; raw source packets are never persisted."""
+    write_versioned_dataset_record(result, str(base_dir))
 
 
 def main() -> int:

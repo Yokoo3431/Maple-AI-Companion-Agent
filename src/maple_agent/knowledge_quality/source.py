@@ -15,6 +15,9 @@ from maple_agent.knowledge_quality.models import KnowledgeSourceReference
 class KnowledgeSourceAdapter(Protocol):
     """来源适配器契约:source -> structured import packet。"""
 
+    adapter_name: str
+    adapter_version: str
+
     def load(
         self,
         source: KnowledgeSourceReference,
@@ -23,6 +26,9 @@ class KnowledgeSourceAdapter(Protocol):
 
 class LocalStaticKnowledgeAdapter:
     """真实可运行:读取本地 JSON/YAML 静态文件(或直接 dict)。"""
+
+    adapter_name = "LocalStaticKnowledgeAdapter"
+    adapter_version = "1.0"
 
     def __init__(self, base_dir: str | Path | None = None) -> None:
         self.base_dir = Path(base_dir) if base_dir else None
@@ -54,6 +60,9 @@ class LocalStaticKnowledgeAdapter:
 
 class ManualCuratedAdapter:
     """把内置 demo 数据包装为 MANUAL_CURATED import packet(完整 provenance)。"""
+
+    adapter_name = "ManualCuratedAdapter"
+    adapter_version = "1.0"
 
     def __init__(self) -> None:
         self.last_packet: dict = {}
@@ -87,6 +96,9 @@ class ManualCuratedAdapter:
 class WikiCommunityAdapter:
     """离线 snapshot 导入(预留;不访问互联网;无 snapshot 时返回空)。"""
 
+    adapter_name = "WikiCommunityAdapter"
+    adapter_version = "1.0"
+
     def __init__(self) -> None:
         self.last_packet: dict = {}
 
@@ -108,6 +120,9 @@ class WikiCommunityAdapter:
 class StaticGameResourceAdapter:
     """离线静态游戏资源(协议 stub;未实现 WZ parser,不编造万能解析)。"""
 
+    adapter_name = "StaticGameResourceAdapter"
+    adapter_version = "1.0"
+
     def __init__(self) -> None:
         self.last_packet: dict = {}
 
@@ -125,3 +140,19 @@ def content_hash(packet: dict) -> str:
     """确定性内容哈希(用于 provenance / manifest)。"""
     payload = json.dumps(packet, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def sanitize_source_metadata(source: KnowledgeSourceReference | dict) -> dict:
+    """Serialize source metadata without leaking source paths or raw packets."""
+    data = (
+        source.model_dump(mode="json")
+        if isinstance(source, KnowledgeSourceReference)
+        else dict(source)
+    )
+    for key in ("source_reference", "path", "private_path", "session_path"):
+        if data.get(key):
+            data[key] = "<REDACTED_PATH>"
+    for key, value in list(data.items()):
+        if isinstance(value, str) and ("\\" in value or ":/" in value):
+            data[key] = "<REDACTED_PATH>"
+    return data

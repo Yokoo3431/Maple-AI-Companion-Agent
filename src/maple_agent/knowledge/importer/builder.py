@@ -234,6 +234,9 @@ def build_dataset(
         imported_npcs=len(npcs),
         imported_monsters=len(monsters),
         imported_items=len(items),
+        imported_equipment=len(equipment),
+        imported_quests=len(quests),
+        imported_story_lore=len(story_lore),
         imported_relations=len(relations),
         warnings=warnings,
     )
