@@ -38,6 +38,7 @@
 | Phase 13I.3 | Cross-Machine Evidence Gate(Office 暂停检查点恢复;HOME/OFFICE 证据门) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 | Phase 13I.4 | Segmented HP/MP Bar Perception Calibration(分段 HP/MP 条感知校准) | ✅ Phase COMPLETED / Real Vision = FOUNDATION_ONLY |
 | Phase 13-J | Knowledge Graph & Semantic State Foundation(知识图谱与语义游戏状态基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
+| Phase 13-K | Temporal Memory & Semantic State Evolution(时间记忆与语义状态演化) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 
 当前架构路线:
 

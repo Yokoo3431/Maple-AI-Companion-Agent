@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
@@ -29,6 +30,7 @@ class CurrentObservation(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     evidence: list[PerceptionEvidence] = Field(default_factory=list)
     player_status: PlayerStateReference | None = None
+    source: str = ""
 
 
 class MapStateReference(BaseModel):
@@ -71,6 +73,15 @@ class GameStateReference(BaseModel):
     reasoning: list[str] = Field(default_factory=list)
 
 
+class EntityLifecycle(StrEnum):
+    """Temporal lifecycle of a semantic entity reference."""
+
+    VISIBLE = "VISIBLE"
+    LOST = "LOST"
+    UNKNOWN = "UNKNOWN"
+    EXPIRED = "EXPIRED"
+
+
 class SemanticEntityReference(BaseModel):
     """Resolved canonical reference linked back to observation evidence."""
 
@@ -81,6 +92,9 @@ class SemanticEntityReference(BaseModel):
     evidence_ids: list[str] = Field(default_factory=list)
     source: str = ""
     version: str = ""
+    lifecycle: EntityLifecycle = EntityLifecycle.VISIBLE
+    last_observed_at: datetime | None = None
+    reason: str = ""
 
 
 class SemanticGameState(BaseModel):
@@ -88,6 +102,7 @@ class SemanticGameState(BaseModel):
 
     state_id: str
     observation_id: str
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     location: SemanticEntityReference | None = None
     player_status: PlayerStateReference | None = None
     nearby_entities: list[SemanticEntityReference] = Field(default_factory=list)
@@ -97,4 +112,10 @@ class SemanticGameState(BaseModel):
     unresolved_evidence_ids: list[str] = Field(default_factory=list)
     evidence: list[PerceptionEvidence] = Field(default_factory=list)
     confidence: float = Field(default=0.0, ge=0, le=1)
+    history_size: int = Field(default=1, ge=0)
+    stale_evidence_ids: list[str] = Field(default_factory=list)
+    conflict_evidence_ids: list[str] = Field(default_factory=list)
+    unknown_references: list[SemanticEntityReference] = Field(
+        default_factory=list
+    )
     reasoning: list[str] = Field(default_factory=list)

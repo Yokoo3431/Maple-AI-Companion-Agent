@@ -1,3 +1,23 @@
+# Handoff(13-K,COMPLETED)
+
+- **Last completed phase**:13-J Knowledge Graph & Semantic State Foundation
+- **Current phase**:13-K Temporal Memory & Semantic State Evolution(COMPLETED)
+- **Baseline semantics**:`.project/BASELINE.json` remains on its 13-I.4 source commit; no recursive metadata commit created
+- **What changed**:
+  - append-only `ObservationHistory` stores timestamp, evidence, resolution, confidence and source without pruning
+  - `StateReducer` performs deterministic recency-weighted confidence aggregation over multiple observations
+  - explicit `VISIBLE / LOST / UNKNOWN / EXPIRED` lifecycle projection with stale and expiry thresholds
+  - conflict detection for competing single-value location evidence; nearby multi-entity observations remain valid
+  - unknown evidence remains an explicit `UNKNOWN` reference and is never converted into absence
+  - sanitized `semantic_memory_trace.json` stores transition summaries only, without screenshots, private paths or raw session values
+  - design record: `docs/architecture/knowledge/phase13k_design.md`
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Overall=NOT_READY(自动生成)
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input provider, keyboard/mouse control, automation, hooks, injection or memory reading
+- **Tests**:full pytest `981 passed, 1 warning`; architecture contract `10 passed, 1 warning`; Ruff passed
+- **Next action**:停止在 Phase 13-K；后续阶段需显式授权
+
+---
+
 # Handoff(13-J,COMPLETED)
 
 - **Last completed phase**:13-I.4 Segmented HP/MP Perception Calibration
