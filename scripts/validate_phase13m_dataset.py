@@ -6,6 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
+from maple_agent.knowledge.importer.builder import build_dataset
+from maple_agent.knowledge_graph import KnowledgeGraph, KnowledgeGraphValidator
 from maple_agent.knowledge_quality import (
     CanonicalMapper,
     KnowledgeDatasetPackage,
@@ -27,6 +29,21 @@ def main() -> int:
     validation = package.validate()
     payload: dict = {"package_validation": validation.model_dump(mode="json")}
     if validation.valid:
+        dataset, import_result = build_dataset(
+            package.packet,
+            source=package.manifest.source_id,
+            version=package.manifest.dataset_version,
+        )
+        graph = KnowledgeGraph(
+            maps=dataset.maps,
+            npcs=dataset.npcs,
+            monsters=dataset.monsters,
+            items=dataset.items,
+            equipment=dataset.equipment,
+            quests=dataset.quests,
+            story_lore=dataset.story_lore,
+            relations=dataset.relations,
+        )
         source = package.source_reference()
         adapter = KnowledgeDatasetPackageAdapter()
         result = KnowledgeImportOrchestrator(
@@ -39,6 +56,10 @@ def main() -> int:
         )
         payload.update(
             {
+                "graph_validation": KnowledgeGraphValidator()
+                .validate(graph)
+                .model_dump(mode="json"),
+                "imported_relation_count": import_result.imported_relations,
                 "import_manifest": result.manifest.model_dump(mode="json"),
                 "benchmark": result.benchmark.model_dump(mode="json")
                 if result.benchmark

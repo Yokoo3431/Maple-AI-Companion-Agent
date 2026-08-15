@@ -8,7 +8,7 @@
   "game_profile": "maple-cms-classic-community",
   "server_profile": "cn-nostalgic-community",
   "snapshot_version": "2026-08-14",
-  "content_hash": "3563ca50e176b8eec534a5fd15a0d16c073045b04400761d77ae80fa460ead27",
+  "content_hash": "abfc7480502030a1a4a126d22b7613f1cb7dd1457b086576066f9392ce2db316",
   "entity_counts": {
     "maps": 50,
     "npcs": 100,
@@ -32,5 +32,10 @@
     "data_version"
   ],
   "license_or_terms_reference": "https://mxdc.dvg.cn/",
-  "sanitized": true
+  "sanitized": true,
+  "relation_counts": {
+    "CONTAINS": 12,
+    "GIVES": 20,
+    "REQUIRES": 100
+  }
 }

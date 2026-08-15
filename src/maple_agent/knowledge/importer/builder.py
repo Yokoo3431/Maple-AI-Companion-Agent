@@ -213,6 +213,8 @@ def build_dataset(
                 target=item.get("target", ""),
                 target_id=item.get("target_id"),
                 relation_type=RelationType(relation_type),
+                provenance=provenance(item),
+                confidence=item.get("confidence", 0.0),
             )
         )
 

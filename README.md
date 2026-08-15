@@ -41,6 +41,13 @@
 | Phase 13-K | Temporal Memory & Semantic State Evolution(时间记忆与语义状态演化) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-L | Knowledge Acquisition Pipeline & Dataset Foundation(知识获取管线与数据集基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-M | Real Knowledge Dataset Acquisition & Validation(真实知识数据集获取与验证) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
+| Phase 13-N | Knowledge Graph Relationship & Planning Reference Foundation(知识图谱关系与规划参考基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
+
+### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
+
+Phase 13-N 在既有 Phase 4-E Generic Import Pipeline、Phase 13-L 数据包和 Phase 13-J/13-K 语义边界上增加了可审计关系层：`Map CONTAINS NPC`、`NPC GIVES Quest`、`Quest REQUIRES Item`、`Monster DROPS Item`、`Quest REWARDS Item`。关系保留来源 provenance 与 confidence，并对重复边、悬空端点、非法类型/端点、缺失来源和非法置信度做确定性拒绝校验。
+
+关系查询只返回相关知识参考；`PlanningContext` 只包含当前语义状态、相关知识和可能参考，不包含 command、action、input 或 executor。当前真实脱敏快照已验证 132 条关系（CONTAINS 12、GIVES 20、REQUIRES 100）；快照中没有足够可证明的怪物掉落或任务奖励字段，因此没有臆造这两类数据。Readiness 仍由既有质量门自动保持 `Knowledge = FOUNDATION_ONLY`、Overall=`NOT_READY`。
 
 当前架构路线:
 

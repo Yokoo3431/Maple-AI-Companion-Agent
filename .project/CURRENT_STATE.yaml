@@ -9,9 +9,9 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-M
+  current: 13-N
   status: COMPLETED
-  last_completed: 13-L
+  last_completed: 13-M
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -28,5 +28,5 @@ development:
 
 handoff:
   status: READY
-  next_action: "STOP: Phase 13-M completed; real dataset remains a bounded community snapshot and Knowledge remains FOUNDATION_ONLY; next phase requires explicit authorization"
+  next_action: "STOP: Phase 13-N completed; relationship graph and planning reference remain read-only foundation and Knowledge remains FOUNDATION_ONLY; next phase requires explicit authorization"
   blockers: []

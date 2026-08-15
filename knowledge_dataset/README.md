@@ -1,4 +1,4 @@
-# Phase 13-M 中国怀旧服知识快照
+# Phase 13-N 中国怀旧服知识快照与关系基础
 
 这是一个用于架构验证的有限、脱敏、版本化快照，不是完整生产数据库。
 
@@ -8,6 +8,7 @@
 - Server profile：`cn-nostalgic-community`
 - 快照版本：`2026-08-14`
 - 规模：50 张地图、100 个 NPC、50 个任务、200 个道具
+- 关系：132 条（`CONTAINS` 12、`GIVES` 20、`REQUIRES` 100）
 - hash：以 `manifest.json` 的 `content_hash` 为准
 
 快照只保存 ID、中文名称、最小语义引用、canonical index 和 provenance。
@@ -15,3 +16,8 @@
 
 任务引用可能指向本有限切片之外的实体；这会由校验报告中的
 `missing_reference_count` 明确记录，不能据此推断全量覆盖或官方版本一致性。
+
+关系记录同样要求双方 canonical ID、关系类型、confidence 和完整 provenance，
+并由 Phase 13-N 图校验器检查重复边、悬空端点和非法端点。当前快照没有可验证的
+怪物掉落或任务奖励字段，因此 `DROPS` / `REWARDS` 不在真实快照中；测试 fixture
+覆盖这两种关系类型，避免把缺失资料臆造为事实。

@@ -26,6 +26,9 @@ def build_graph(knowledge: KnowledgeProvider) -> KnowledgeGraph:
             npcs=dataset.npcs,
             monsters=dataset.monsters,
             items=dataset.items,
+            equipment=dataset.equipment,
+            quests=dataset.quests,
+            story_lore=dataset.story_lore,
             relations=dataset.relations,
         )
     maps = [

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from maple_agent.knowledge.importer.builder import build_dataset
 from maple_agent.knowledge.importer.validator import DatasetValidator
+from maple_agent.knowledge_graph.validation import validate_relation_records
 from maple_agent.knowledge_quality.models import (
     CanonicalEntityReference,
     KnowledgeCoverageDenominator,
@@ -62,6 +64,7 @@ class KnowledgeDatasetPackageManifest(BaseModel):
     snapshot_version: str
     content_hash: str
     entity_counts: dict[str, int] = Field(default_factory=dict)
+    relation_counts: dict[str, int] = Field(default_factory=dict)
     expected_counts: dict[str, int] = Field(default_factory=dict)
     provenance_fields: list[str] = Field(
         default_factory=lambda: list(REQUIRED_PROVENANCE_FIELDS)
@@ -82,6 +85,14 @@ class DatasetPackageValidation(BaseModel):
     alias_conflict_count: int = 0
     missing_reference_count: int = 0
     invalid_relation_count: int = 0
+    relation_count: int = 0
+    duplicate_edge_count: int = 0
+    dangling_relation_count: int = 0
+    invalid_entity_type_count: int = 0
+    invalid_relation_type_count: int = 0
+    invalid_relation_endpoint_count: int = 0
+    missing_relation_provenance_count: int = 0
+    invalid_relation_confidence_count: int = 0
     errors: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
 
@@ -183,6 +194,12 @@ class KnowledgeDatasetPackage:
             for key in ENTITY_FILES
             if key != "relations"
         }
+        actual_relation_counts = dict(
+            Counter(
+                str(relation.get("relation_type", "")).upper()
+                for relation in self.packet.get("relations", [])
+            )
+        )
         expected_counts = dict(self.manifest.expected_counts)
         coverage = {
             key: (
@@ -206,6 +223,10 @@ class KnowledgeDatasetPackage:
             errors.append("package is not marked sanitized")
         if self.manifest.entity_counts != actual_counts:
             errors.append("manifest entity_counts do not match package files")
+        if self.manifest.relation_counts and (
+            self.manifest.relation_counts != actual_relation_counts
+        ):
+            errors.append("manifest relation_counts do not match package relations")
         if self.manifest.content_hash != content_hash(self.packet):
             errors.append("manifest content_hash does not match package files")
 
@@ -219,6 +240,15 @@ class KnowledgeDatasetPackage:
                 for item in self.packet.get(entity_type, [])
             }
             for entity_type, id_field in ENTITY_ID_FIELDS.items()
+        }
+        relation_known_ids = {
+            "map": known_ids["maps"],
+            "npc": known_ids["npcs"],
+            "monster": known_ids["monsters"],
+            "item": known_ids["items"],
+            "equipment": known_ids["equipment"],
+            "quest": known_ids["quests"],
+            "story_lore": known_ids["story_lore"],
         }
         for entity_type, id_field in ENTITY_ID_FIELDS.items():
             seen_ids: set[str] = set()
@@ -274,6 +304,13 @@ class KnowledgeDatasetPackage:
                 f"{missing_reference_count} (partial package warning)"
             )
 
+        relation_validation = validate_relation_records(
+            self.packet.get("relations", []),
+            relation_known_ids,
+        )
+        if not relation_validation.valid:
+            errors.extend(relation_validation.errors)
+
         dataset, import_result = build_dataset(
             self.packet,
             source=self.manifest.source_id,
@@ -290,6 +327,11 @@ class KnowledgeDatasetPackage:
             for message in [*import_result.warnings, *dataset_validation.errors]
             if "非法关系" in message or "invalid relation" in message.lower()
         )
+        invalid_relation_count = max(
+            invalid_relation_count,
+            relation_validation.invalid_relation_type_count
+            + relation_validation.invalid_endpoint_count,
+        )
         if invalid_relation_count:
             errors.append(f"invalid relations: {invalid_relation_count}")
         errors.extend(dataset_validation.errors)
@@ -305,8 +347,17 @@ class KnowledgeDatasetPackage:
             missing_reference_count=max(
                 missing_reference_count,
                 importer_missing_reference_count,
+                relation_validation.dangling_reference_count,
             ),
             invalid_relation_count=invalid_relation_count,
+            relation_count=relation_validation.edge_count,
+            duplicate_edge_count=relation_validation.duplicate_edge_count,
+            dangling_relation_count=relation_validation.dangling_reference_count,
+            invalid_entity_type_count=relation_validation.invalid_entity_type_count,
+            invalid_relation_type_count=relation_validation.invalid_relation_type_count,
+            invalid_relation_endpoint_count=relation_validation.invalid_endpoint_count,
+            missing_relation_provenance_count=relation_validation.missing_provenance_count,
+            invalid_relation_confidence_count=relation_validation.invalid_confidence_count,
             errors=list(dict.fromkeys(errors)),
             warnings=list(dict.fromkeys(warnings)),
         )

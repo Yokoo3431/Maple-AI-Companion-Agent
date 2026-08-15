@@ -11,8 +11,15 @@ from maple_agent.knowledge_graph.models import (
     NPCNode,
     QuestNode,
     Relation,
+    RelationReference,
     RelationType,
     StoryLoreNode,
+)
+from maple_agent.knowledge_graph.planning import PlanningContext, PlanningReference
+from maple_agent.knowledge_graph.validation import (
+    KnowledgeGraphValidator,
+    RelationValidationResult,
+    validate_relation_records,
 )
 
 __all__ = [
@@ -25,7 +32,13 @@ __all__ = [
     "NPCNode",
     "QuestNode",
     "Relation",
+    "RelationReference",
     "RelationType",
     "StoryLoreNode",
     "build_graph",
+    "KnowledgeGraphValidator",
+    "RelationValidationResult",
+    "validate_relation_records",
+    "PlanningContext",
+    "PlanningReference",
 ]

@@ -1,3 +1,24 @@
+# Handoff(13-N,COMPLETED)
+
+- **Last completed phase**:13-M Real Knowledge Dataset Acquisition & Validation
+- **Current phase**:13-N Knowledge Graph Relationship & Planning Reference Foundation(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Yokoo3431/Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Architecture**:复用唯一的 Phase 4-E Generic Import Pipeline、Phase 13-L `KnowledgeDatasetPackage`、Phase 13-G provenance/quality gate、Phase 13-J resolver 和 Phase 13-K temporal memory；没有新增 importer、第二知识图或第二 resolver
+- **Relation model**:`Relation` 新增可审计 `provenance` 与 `confidence`；支持 `CONTAINS`、`GIVES`、`REQUIRES`、`DROPS`、`REWARDS`，并保留既有关系枚举兼容性。`KnowledgeGraph` 扩展到 Map/NPC/Monster/Item/Equipment/Quest/Story-Lore，并提供只读相关实体查询
+- **Graph validation**:确定性拒绝重复边、悬空 source/target、非法实体类型、非法关系类型、非法端点、缺失关系 provenance 和越界 confidence；不静默修复、不覆盖观测证据
+- **Planning reference**:`PlanningContext` 只保存当前 `SemanticGameState`、相关知识和可能参考，明确不含 command/action/input/executor；没有动作规划或执行路径
+- **Real snapshot**:`knowledge_dataset/` 当前 50 maps / 100 NPCs / 50 quests / 200 items，新增 132 条真实快照可证明关系：`CONTAINS=12`、`GIVES=20`、`REQUIRES=100`；清单 hash 已更新为 `abfc7480502030a1a4a126d22b7613f1cb7dd1457b086576066f9392ce2db316`
+- **Quality result**:package valid；entity coverage maps/NPC/quest/item 均 `1.0`；provenance coverage `1.0`；duplicate IDs `0`；alias conflicts `0`；relation duplicate edges `0`；dangling relation endpoints `0`；invalid entity/relation/endpoint `0`；missing relation provenance `0`；bounded snapshot missing references `129` 仍作为有限切片 warning 保留
+- **Benchmark meaning**:132 条关系已进入同一导入器并由同一图校验器验证；没有为没有来源分母的 `DROPS` / `REWARDS` 伪造生产数据，测试 fixture 覆盖其 schema/端点规则
+- **Privacy**:仅保存脱敏结构化实体、关系、manifest、canonical index 和来源字段；无截图、会话、日志、个人路径、客户端提取结果或私有数据
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Overall=`NOT_READY`；自动质量门没有因为关系层完成而虚报 READY
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input provider, keyboard/mouse control, automation, hooks, DLL injection or memory reading
+- **Tests**:Phase 13-N 定向测试 `6 passed`；此前定向兼容回归 `23 passed, 1 warning`；全量 pytest `999 passed, 1 warning`；architecture contract `10 passed, 1 warning`；Ruff `All checks passed`
+- **Known limitations**:当前社区快照并非官方腾讯/Nexon 数据，也不是已证明的特定国服构建；没有可验证怪物表和任务奖励字段；关系查询只提供参考，不提供动作、命令或执行器
+- **Next action**:停止在 Phase 13-N；后续阶段需显式授权
+
+---
+
 # Handoff(13-M,COMPLETED)
 
 - **Last completed phase**:13-L Knowledge Acquisition Pipeline & Dataset Foundation

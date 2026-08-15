@@ -13,8 +13,10 @@ class RelationType(StrEnum):
     CONTAINS = "CONTAINS"
     LOCATED_AT = "LOCATED_AT"
     SPAWNS = "SPAWNS"
+    GIVES = "GIVES"
     REQUIRES = "REQUIRES"
     REWARD = "REWARD"
+    REWARDS = "REWARDS"
     DROPS = "DROPS"
     CONNECTED_TO = "CONNECTED_TO"
     USES = "USES"
@@ -136,10 +138,27 @@ class StoryLoreNode(BaseModel):
 
 
 class Relation(BaseModel):
-    """实体关系。"""
+    """实体关系及其可审计来源。"""
 
     source: str
     source_id: int | str
     target: str
     target_id: int | str
     relation_type: RelationType
+    provenance: KnowledgeEntityProvenance = Field(
+        default_factory=KnowledgeEntityProvenance
+    )
+    confidence: float = Field(default=0.0, ge=0, le=1)
+
+
+class RelationReference(BaseModel):
+    """Read-only query result retaining edge semantics and provenance."""
+
+    entity_type: str
+    entity_id: int | str
+    name: str
+    relation_type: RelationType
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    provenance: KnowledgeEntityProvenance = Field(
+        default_factory=KnowledgeEntityProvenance
+    )
