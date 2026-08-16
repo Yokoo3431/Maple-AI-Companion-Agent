@@ -42,12 +42,19 @@
 | Phase 13-L | Knowledge Acquisition Pipeline & Dataset Foundation(知识获取管线与数据集基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-M | Real Knowledge Dataset Acquisition & Validation(真实知识数据集获取与验证) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-N | Knowledge Graph Relationship & Planning Reference Foundation(知识图谱关系与规划参考基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
+| Phase 13-O | Context Reasoning Layer(上下文推理层) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
 Phase 13-N 在既有 Phase 4-E Generic Import Pipeline、Phase 13-L 数据包和 Phase 13-J/13-K 语义边界上增加了可审计关系层：`Map CONTAINS NPC`、`NPC GIVES Quest`、`Quest REQUIRES Item`、`Monster DROPS Item`、`Quest REWARDS Item`。关系保留来源 provenance 与 confidence，并对重复边、悬空端点、非法类型/端点、缺失来源和非法置信度做确定性拒绝校验。
 
 关系查询只返回相关知识参考；`PlanningContext` 只包含当前语义状态、相关知识和可能参考，不包含 command、action、input 或 executor。当前真实脱敏快照已验证 132 条关系（CONTAINS 12、GIVES 20、REQUIRES 100）；快照中没有足够可证明的怪物掉落或任务奖励字段，因此没有臆造这两类数据。Readiness 仍由既有质量门自动保持 `Knowledge = FOUNDATION_ONLY`、Overall=`NOT_READY`。
+
+### Phase 13-O: Context Reasoning Layer
+
+Phase 13-O 在 `SemanticGameState`、Phase 13-K 生命周期、Phase 13-N 已校验关系和 provenance/confidence 之上生成只读 `ContextUnderstanding`。规则是确定性的：可见地图-NPC-任务关系生成 `QUEST_RELATED_CONTEXT`，可见任务-背包物品需求生成 `ITEM_QUEST_CONTEXT`；低置信度关系、冲突、未知、丢失和过期实体均保留为 uncertainty 或历史参考，不被强制提升为当前事实。
+
+上下文置信度采用输入最小值公式：`min(state confidence, entity confidence, relation confidence)`，不制造高于输入的确定性。该层不生成 planner、command、action、input 或执行权限；`PlanningContext` 保持原样。当前 readiness 仍为 `Knowledge = FOUNDATION_ONLY`、Overall=`NOT_READY`。
 
 当前架构路线:
 

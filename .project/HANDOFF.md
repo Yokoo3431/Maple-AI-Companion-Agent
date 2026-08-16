@@ -1,3 +1,23 @@
+# Handoff(13-O,COMPLETED)
+
+- **Last completed phase**:13-N Knowledge Graph Relationship & Planning Reference Foundation
+- **Current phase**:13-O Context Reasoning Layer(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Yokoo3431/Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Architecture boundary**:新增 `context_reasoning/` 纯只读分析包，消费现有 `SemanticGameState`、Phase 13-K 生命周期投影和唯一 Phase 13-N `KnowledgeGraph`；没有修改 Vision/OCR/CV、Generic Importer、resolver、Safety Contract、Input 相关代码，也没有创建第二套 memory/graph/planner
+- **Context model**:`ContextUnderstanding` 包含 context id、语义状态引用、相关实体、相关关系、描述性 `ContextType`、置信度、reasoning trace 和 uncertainties；没有 command/action/input/executor 等字段
+- **Rules**:可见 Map-NPC 的 `CONTAINS` 加 NPC-Quest 的 `GIVES` 生成 `QUEST_RELATED_CONTEXT`；可见 Quest-Inventory Item 的 `REQUIRES` 生成 `ITEM_QUEST_CONTEXT`；Location/NPC/Item 等仅产生描述性 fallback context；未知保持 `UNKNOWN_CONTEXT`
+- **Temporal integration**:`TemporalState` 只是由 Phase 13-K `SemanticGameState` 派生的 lifecycle/history/stale/conflict 只读视图，不存储第二份历史；`VISIBLE` 可参与当前推理，`LOST` 仅历史参考，`EXPIRED` 不参与当前上下文，`UNKNOWN` 保留不确定性
+- **Confidence**:上下文置信度使用 `min(semantic state confidence, participating entity confidence, participating relation confidence)`，四舍五入到 4 位；低于默认 `0.7` 的关系只进入 uncertainty，不进入 active related relations
+- **Dataset integration**:使用现有 Phase 13-M 社区快照和 Phase 4-E importer 构建图；真实脱敏关系链已完成 `CONTAINS + GIVES → QUEST_RELATED_CONTEXT` 集成验证，relation provenance 保留 `mxdc-cn-community`
+- **Benchmark**:`ContextReasoningBenchmark` 输出 total/promoted/uncertain/context-type counts、promotion rate、uncertainty rate 和 relation provenance coverage；没有输入样本时 coverage 保持 `None`
+- **Tests**:Phase 13-O tests `10 passed`；覆盖 location/NPC/quest、item/quest、unknown、conflict、expired、lost、low-confidence、temporal projection、real snapshot integration、no action leakage
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Overall=`NOT_READY`
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input, automation, execution, hooks, DLL injection or memory reading
+- **Known limitations**:规则集是小型确定性基础，不是 LLM/ML 推理；社区数据仍是有限快照，缺失引用和数据覆盖限制继续存在；上下文理解不等于 planner，也不输出动作建议
+- **Next action**:停止在 Phase 13-O；后续阶段需显式授权
+
+---
+
 # Handoff(13-N,COMPLETED)
 
 - **Last completed phase**:13-M Real Knowledge Dataset Acquisition & Validation
