@@ -1,3 +1,21 @@
+# Handoff(13-P,COMPLETED)
+
+- **Last completed phase**:13-O Context Reasoning Layer
+- **Current phase**:13-P Evaluation / Simulation Layer(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Yokoo3431/Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Architecture**:新增 `evaluation/` 只读评估入口，消费现有 `ContextReasoner`、Phase 13-K `TemporalState` 和 `SemanticGameState`；没有修改 Vision/OCR/CV、resolver、temporal reducer、importer、KnowledgeGraph core、Safety Contract 或输入相关代码
+- **Compatibility**:仓库原有 Phase 5-F Agent Loop 的 `EvaluationResult/AgentMetrics` 保持兼容；Phase 13-P 使用独立的 `ContextEvaluationResult`，避免破坏旧执行评估模型，也没有创建第二套执行链
+- **Benchmark**:新增脱敏结构化 `phase13p_benchmark.json`，覆盖 A-G 七类语义场景：正常任务、任务物品、未知、过期、丢失、冲突、低置信度关系；不含截图、OCR raw、session、个人路径或私人游戏数据
+- **Metrics**:报告输出 context accuracy、unknown preservation、conflict preservation、false promotion、expired exclusion、lost handling、confidence bound violations，并保存每项 denominator；空分母返回 `INSUFFICIENT_DATA`/`null`，不伪造 100%
+- **Temporal replay**:复用 Phase 13-K/13-O 的生命周期投影，验证 `VISIBLE -> LOST -> EXPIRED`；`semantic_context_replay_report.json` 只保存生命周期、上下文类型、active/historical 和 uncertainty count
+- **Confidence**:评估记录上下文置信度与最弱输入置信度边界；任何越界计数，不自动修正或提升语义确定性
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Context Reasoning=`FOUNDATION` / Overall=`NOT_READY`
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no input provider, keyboard/mouse control, automation, execution, hooks, DLL injection or memory reading
+- **Known limitations**:基准是小型脱敏结构化 fixture，不代表完整 Maple 数据；评估验证确定性规则稳定性，不等于真实客户端精度或 READY；未启动任何规划或执行能力
+- **Next action**:停止在 Phase 13-P；后续阶段需显式授权
+
+---
+
 # Handoff(13-O,COMPLETED)
 
 - **Last completed phase**:13-N Knowledge Graph Relationship & Planning Reference Foundation

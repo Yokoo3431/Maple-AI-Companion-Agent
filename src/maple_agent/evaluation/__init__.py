@@ -1,9 +1,12 @@
-"""Agent Evaluation 自评估层(Phase 5-F,只读,不改变 Agent 行为)。"""
+"""Phase 13-P read-only semantic evaluation layer."""
 
-from maple_agent.evaluation.benchmark import EvaluationBenchmark
+from maple_agent.evaluation.benchmark import (
+    EvaluationBenchmark,
+    evaluate_cases,
+    load_benchmark_fixture,
+)
 from maple_agent.evaluation.evaluator import (
     DecisionEvaluator,
-    EvaluationComponent,
     ExecutionEvaluator,
     MemoryEvaluator,
     PlanEvaluator,
@@ -12,22 +15,35 @@ from maple_agent.evaluation.evaluator import (
 from maple_agent.evaluation.metrics import overall_score
 from maple_agent.evaluation.models import (
     AgentMetrics,
+    ContextEvaluationResult,
     EvaluationCase,
+    EvaluationMetrics,
+    EvaluationReport,
     EvaluationResult,
 )
-from maple_agent.evaluation.report import EvaluationReport
+from maple_agent.evaluation.replay import (
+    TemporalReplayReport,
+    run_temporal_replay,
+    write_temporal_replay_report,
+)
 
 __all__ = [
-    "AgentMetrics",
-    "DecisionEvaluator",
-    "EvaluationBenchmark",
     "EvaluationCase",
-    "EvaluationComponent",
+    "ContextEvaluationResult",
+    "EvaluationMetrics",
     "EvaluationReport",
     "EvaluationResult",
+    "AgentMetrics",
+    "DecisionEvaluator",
     "ExecutionEvaluator",
+    "EvaluationBenchmark",
     "MemoryEvaluator",
     "PlanEvaluator",
     "ReflectionEvaluator",
     "overall_score",
+    "TemporalReplayReport",
+    "evaluate_cases",
+    "load_benchmark_fixture",
+    "run_temporal_replay",
+    "write_temporal_replay_report",
 ]

@@ -1,0 +1,52 @@
+{
+  "dataset_id": "phase13p-context-fixture-v1",
+  "version": "13-P.1",
+  "profile": "maple_community_snapshot_sanitized",
+  "server_profile": "generic_reference_only",
+  "content_hash": "sha256:phase13p-sanitized-fixture",
+  "graph": {
+    "maps": [
+      {"map_id": "m1", "name": "Henesys Reference", "confidence": 0.9},
+      {"map_id": "m2", "name": "Perion Reference", "confidence": 0.8}
+    ],
+    "npcs": [{"npc_id": "n1", "name": "Henesys Instructor", "confidence": 0.9}],
+    "quests": [{"quest_id": "q1", "name": "Reference Quest", "confidence": 0.85}],
+    "items": [{"item_id": "i1", "name": "Reference Item", "confidence": 0.85}],
+    "relations": [
+      {"source": "map", "source_id": "m1", "target": "npc", "target_id": "n1", "relation_type": "CONTAINS", "confidence": 0.9},
+      {"source": "npc", "source_id": "n1", "target": "quest", "target_id": "q1", "relation_type": "GIVES", "confidence": 0.8},
+      {"source": "quest", "source_id": "q1", "target": "item", "target_id": "i1", "relation_type": "REQUIRES", "confidence": 0.85},
+      {"source": "map", "source_id": "m1", "target": "npc", "target_id": "n1", "relation_type": "GIVES", "confidence": 0.5}
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "A", "input_reference": "semantic-fixture-state-a", "description": "Visible map and NPC with validated quest relation", "expected_context": "QUEST_RELATED_CONTEXT", "expected_active": true, "expected_uncertainty": true, "input_confidences": [0.9, 0.8, 0.9],
+      "semantic_state": {"state_id": "state-a", "observation_id": "observation-a", "location": {"canonical_id": "map_m1", "entity_type": "map", "display_name": "Henesys Reference", "confidence": 0.9, "lifecycle": "VISIBLE"}, "nearby_entities": [{"canonical_id": "npc_n1", "entity_type": "npc", "display_name": "Henesys Instructor", "confidence": 0.9, "lifecycle": "VISIBLE"}], "confidence": 0.9}
+    },
+    {
+      "case_id": "B", "input_reference": "semantic-fixture-state-b", "description": "Visible quest and inventory item with requirement relation", "expected_context": "ITEM_QUEST_CONTEXT", "expected_active": true, "expected_uncertainty": true, "input_confidences": [0.9, 0.85],
+      "semantic_state": {"state_id": "state-b", "observation_id": "observation-b", "quest_context": [{"canonical_id": "quest_q1", "entity_type": "quest", "display_name": "Reference Quest", "confidence": 0.9, "lifecycle": "VISIBLE"}], "inventory_references": [{"canonical_id": "item_i1", "entity_type": "item", "display_name": "Reference Item", "confidence": 0.85, "lifecycle": "VISIBLE"}], "confidence": 0.9}
+    },
+    {
+      "case_id": "C", "input_reference": "semantic-fixture-state-c", "description": "Unknown evidence remains unresolved", "expected_context": "UNKNOWN_CONTEXT", "expected_active": false, "expected_uncertainty": true, "input_confidences": [0.8],
+      "semantic_state": {"state_id": "state-c", "observation_id": "observation-c", "unknown_references": [{"canonical_id": "unknown_npc", "entity_type": "npc", "display_name": "UNKNOWN", "confidence": 0.8, "lifecycle": "UNKNOWN"}], "confidence": 0.8}
+    },
+    {
+      "case_id": "D", "input_reference": "semantic-fixture-state-d", "description": "Expired historical entity is excluded from active context", "expected_context": "UNKNOWN_CONTEXT", "expected_active": false, "expected_uncertainty": true, "expects_expired_exclusion": true, "input_confidences": [0.8],
+      "semantic_state": {"state_id": "state-d", "observation_id": "observation-d", "location": {"canonical_id": "map_m1", "entity_type": "map", "display_name": "Henesys Reference", "confidence": 0.8, "lifecycle": "EXPIRED"}, "confidence": 0.8}
+    },
+    {
+      "case_id": "E", "input_reference": "semantic-fixture-state-e", "description": "Lost entity is historical only, not a current fact", "expected_context": "UNKNOWN_CONTEXT", "expected_active": false, "expected_uncertainty": true, "expects_historical_reference": true, "input_confidences": [0.7],
+      "semantic_state": {"state_id": "state-e", "observation_id": "observation-e", "location": {"canonical_id": "map_m1", "entity_type": "map", "display_name": "Henesys Reference", "confidence": 0.7, "lifecycle": "LOST"}, "confidence": 0.7}
+    },
+    {
+      "case_id": "F", "input_reference": "semantic-fixture-state-f", "description": "Competing location candidates retain conflict uncertainty", "expected_context": "UNKNOWN_CONTEXT", "expected_active": false, "expected_uncertainty": true, "expects_conflict_preservation": true, "input_confidences": [0.6, 0.6],
+      "semantic_state": {"state_id": "state-f", "observation_id": "observation-f", "unknown_references": [{"canonical_id": "map_m1", "entity_type": "map", "display_name": "Henesys Reference", "confidence": 0.6, "lifecycle": "UNKNOWN"}, {"canonical_id": "map_m2", "entity_type": "map", "display_name": "Perion Reference", "confidence": 0.6, "lifecycle": "UNKNOWN"}], "conflict_evidence_ids": ["conflict-f"], "confidence": 0.6}
+    },
+    {
+      "case_id": "G", "input_reference": "semantic-fixture-state-g", "description": "Low-confidence relation remains uncertainty and is not promoted", "expected_context": "LOCATION_CONTEXT", "expected_active": true, "expected_uncertainty": true, "input_confidences": [0.8], "relation_confidence_threshold": 0.95,
+      "semantic_state": {"state_id": "state-g", "observation_id": "observation-g", "location": {"canonical_id": "map_m1", "entity_type": "map", "display_name": "Henesys Reference", "confidence": 0.8, "lifecycle": "VISIBLE"}, "nearby_entities": [{"canonical_id": "npc_n1", "entity_type": "npc", "display_name": "Henesys Instructor", "confidence": 0.8, "lifecycle": "VISIBLE"}], "confidence": 0.8}
+    }
+  ]
+}
