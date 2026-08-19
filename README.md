@@ -44,6 +44,7 @@
 | Phase 13-N | Knowledge Graph Relationship & Planning Reference Foundation(知识图谱关系与规划参考基础) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-O | Context Reasoning Layer(上下文推理层) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-P | Evaluation / Simulation Layer(评估与仿真层) | ✅ Phase COMPLETED / Overall = NOT_READY |
+| Phase 13-Q | Planning Reference Foundation(规划参考基础) | ✅ Phase COMPLETED / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -56,6 +57,10 @@ Phase 13-N 在既有 Phase 4-E Generic Import Pipeline、Phase 13-L 数据包和
 Phase 13-O 在 `SemanticGameState`、Phase 13-K 生命周期、Phase 13-N 已校验关系和 provenance/confidence 之上生成只读 `ContextUnderstanding`。规则是确定性的：可见地图-NPC-任务关系生成 `QUEST_RELATED_CONTEXT`，可见任务-背包物品需求生成 `ITEM_QUEST_CONTEXT`；低置信度关系、冲突、未知、丢失和过期实体均保留为 uncertainty 或历史参考，不被强制提升为当前事实。
 
 上下文置信度采用输入最小值公式：`min(state confidence, entity confidence, relation confidence)`，不制造高于输入的确定性。该层不生成 planner、command、action、input 或执行权限；`PlanningContext` 保持原样。当前 readiness 仍为 `Knowledge = FOUNDATION_ONLY`、Overall=`NOT_READY`。
+
+### Phase 13-Q: Planning Reference Foundation
+
+Phase 13-Q 在既有 `ContextUnderstanding`、`SemanticGameState`、TemporalState 和 `KnowledgeGraph` 之上生成只读 `PlanningReference`。它只回答“当前有哪些值得关注的信息”：任务上下文、未确认的任务条件、已知地点、相关实体、信息缺口和冲突提示；不生成 planner、action、input 或执行建议。置信度不超过最弱输入，未知、冲突、过期和低置信度关系保持不确定性，readiness 仍为 `Overall=NOT_READY`。
 
 当前架构路线:
 

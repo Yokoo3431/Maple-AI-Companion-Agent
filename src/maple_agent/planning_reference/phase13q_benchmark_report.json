@@ -1,0 +1,21 @@
+{
+  "report_id": "phase13q-planning-reference-evaluation",
+  "dataset_reference": "phase13q-reference-fixture-v1",
+  "results": [
+    {"case_id": "A", "expected_reference_types": ["QUEST_CONTEXT"], "actual_reference_types": ["QUEST_CONTEXT"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""},
+    {"case_id": "B", "expected_reference_types": ["MISSING_REQUIREMENT"], "actual_reference_types": ["MISSING_REQUIREMENT"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""},
+    {"case_id": "C", "expected_reference_types": ["INFORMATION_GAP"], "actual_reference_types": ["INFORMATION_GAP"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""},
+    {"case_id": "D", "expected_reference_types": ["INFORMATION_GAP"], "actual_reference_types": ["INFORMATION_GAP"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""},
+    {"case_id": "F", "expected_reference_types": ["CONFLICT_NOTICE"], "actual_reference_types": ["CONFLICT_NOTICE"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""},
+    {"case_id": "G", "expected_reference_types": ["KNOWN_LOCATION"], "actual_reference_types": ["KNOWN_LOCATION"], "reference_count": 1, "confidence_bound_violations": 0, "action_leakage_count": 0, "uncertainties_preserved": true, "expired_entities_excluded": true, "passed": true, "failure_reason": ""}
+  ],
+  "metrics": {
+    "denominator_status": "SUFFICIENT",
+    "denominators": {"reference_accuracy": 6, "uncertainty_preservation_rate": 6},
+    "reference_accuracy": 1.0,
+    "uncertainty_preservation_rate": 1.0,
+    "confidence_bound_violation_count": 0,
+    "action_leakage_count": 0
+  },
+  "sanitized": true
+}

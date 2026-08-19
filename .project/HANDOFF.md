@@ -1,3 +1,21 @@
+# Handoff(13-Q,COMPLETED)
+
+- **Last completed phase**:13-P Evaluation / Simulation Layer
+- **Current phase**:13-Q Planning Reference Foundation(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Yokoo3431/Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Architecture**:新增 `planning_reference/`，消费既有 `SemanticGameState`、Phase 13-K `TemporalState`、Phase 13-N `KnowledgeGraph` 和 Phase 13-O `ContextUnderstanding`；没有修改 Vision/OCR/CV、Resolver、Temporal Reducer、Importer、KnowledgeGraph Core 或 Safety Contract
+- **Planning boundary**:新增 `PlanningReference` 仅表示值得人工关注的信息；没有 Planner、Action Planner、命令、输入、执行器、移动/战斗/任务执行路径，也没有把 Phase 13-N `PlanningContext` 改造成 Planner
+- **Reference types**:支持 `QUEST_CONTEXT`、`MISSING_REQUIREMENT`、`KNOWN_LOCATION`、`RELATED_ENTITY`、`INFORMATION_GAP`、`CONFLICT_NOTICE`；它们是信息分类，不是动作类型
+- **Rules**:确认地图-NPC-任务关系时生成任务上下文；任务需要的物品未在已确认背包中时使用“未确认拥有”，不写成已确认缺少；未知/不足生成信息缺口；冲突不自动择一；过期实体不进入 supporting entities；低置信度关系只保留 uncertainty
+- **Confidence**:PlanningReference confidence 使用 state/context/supporting entity/relation 的最小值，不增加输入可信度；每条 reference 都包含 uncertainties 和 limitations
+- **Benchmark**:复用 Phase 13-P 脱敏语义 fixture，新增 6 个 Phase 13-Q reference cases，覆盖任务、未确认条件、未知、冲突、过期、低置信度和无动作泄漏验证；无截图、OCR raw、session、个人路径或私人数据
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Context Reasoning=`FOUNDATION` / Overall=`NOT_READY`
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no keyboard/mouse, input provider, automation, executor, movement/combat/quest execution, hooks, DLL injection or memory reading
+- **Known limitations**:参考层不是行为规划器；fixture 规模小且沿用有限社区快照；信息缺口只说明当前证据不足，不代表游戏事实不存在
+- **Next action**:停止在 Phase 13-Q；后续阶段需显式授权
+
+---
+
 # Handoff(13-P,COMPLETED)
 
 - **Last completed phase**:13-O Context Reasoning Layer

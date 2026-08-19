@@ -1,0 +1,14 @@
+{
+  "dataset_id": "phase13q-reference-fixture-v1",
+  "version": "13-Q.1",
+  "profile": "maple_community_snapshot_sanitized",
+  "content_hash": "sha256:phase13q-reference-fixture",
+  "cases": [
+    {"case_id": "A", "base_case_id": "A", "description": "Quest context reference", "expected_reference_types": ["QUEST_CONTEXT"]},
+    {"case_id": "B", "base_case_id": "B", "description": "Requirement not confirmed in inventory", "remove_inventory": true, "expected_reference_types": ["MISSING_REQUIREMENT"]},
+    {"case_id": "C", "base_case_id": "C", "description": "Unknown semantic information", "expected_reference_types": ["INFORMATION_GAP"]},
+    {"case_id": "D", "base_case_id": "D", "description": "Expired entity excluded", "expected_reference_types": ["INFORMATION_GAP"]},
+    {"case_id": "F", "base_case_id": "F", "description": "Conflict state preserved", "expected_reference_types": ["CONFLICT_NOTICE"]},
+    {"case_id": "G", "base_case_id": "G", "description": "Low confidence relation propagation", "expected_reference_types": ["KNOWN_LOCATION"]}
+  ]
+}
