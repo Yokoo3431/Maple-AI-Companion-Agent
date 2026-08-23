@@ -1,0 +1,322 @@
+{
+  "report_id": "phase13r-companion-loop-evaluation",
+  "dataset_reference": "phase13p-phase13q-sanitized-fixtures",
+  "results": [
+    {
+      "scenario_id": "A",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "QUEST_CONTEXT"
+      ],
+      "actual_reference_types": [
+        "QUEST_CONTEXT"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "B",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "actual_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "expects_unknown": true,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "C",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "MISSING_REQUIREMENT"
+      ],
+      "actual_reference_types": [
+        "MISSING_REQUIREMENT"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "D",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "CONFLICT_NOTICE"
+      ],
+      "actual_reference_types": [
+        "CONFLICT_NOTICE"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": true,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "UNKNOWN"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "E",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "actual_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "F",
+      "passed": true,
+      "snapshot_count": 3,
+      "expected_reference_types": [
+        "INFORMATION_GAP"
+      ],
+      "actual_reference_types": [
+        "QUEST_CONTEXT",
+        "INFORMATION_GAP",
+        "INFORMATION_GAP"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": true,
+      "lifecycle_sequence": [
+        "VISIBLE",
+        "LOST",
+        "EXPIRED"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "G",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "actual_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "H",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "actual_reference_types": [
+        "KNOWN_LOCATION"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "I",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "QUEST_CONTEXT"
+      ],
+      "actual_reference_types": [
+        "QUEST_CONTEXT"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "VISIBLE"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    },
+    {
+      "scenario_id": "J",
+      "passed": true,
+      "snapshot_count": 1,
+      "expected_reference_types": [
+        "INFORMATION_GAP"
+      ],
+      "actual_reference_types": [
+        "INFORMATION_GAP"
+      ],
+      "expects_unknown": false,
+      "expects_conflict": false,
+      "expects_temporal_sequence": false,
+      "lifecycle_sequence": [
+        "UNKNOWN"
+      ],
+      "input_evidence_preserved": true,
+      "unknown_preserved": true,
+      "conflict_preserved": true,
+      "temporal_continuity_correct": true,
+      "planning_reference_consistent": true,
+      "provenance_preserved": true,
+      "confidence_bound_violations": 0,
+      "action_leakage_count": 0,
+      "snapshot_generation_success": true,
+      "failure_categories": [],
+      "failure_reason": ""
+    }
+  ],
+  "metrics": {
+    "denominator_status": "SUFFICIENT",
+    "denominators": {
+      "scenario_pass_rate": 10,
+      "unknown_preservation_rate": 1,
+      "conflict_preservation_rate": 1,
+      "temporal_continuity_accuracy": 1,
+      "planning_reference_consistency": 10,
+      "provenance_preservation_rate": 10,
+      "snapshot_generation_success_rate": 10
+    },
+    "scenario_pass_rate": 1.0,
+    "unknown_preservation_rate": 1.0,
+    "conflict_preservation_rate": 1.0,
+    "temporal_continuity_accuracy": 1.0,
+    "planning_reference_consistency": 1.0,
+    "provenance_preservation_rate": 1.0,
+    "confidence_bound_violations": 0,
+    "action_leakage_count": 0,
+    "snapshot_generation_success_rate": 1.0
+  },
+  "long_run_smoke": {
+    "event_count": 101,
+    "history_size": 101,
+    "exception_count": 0,
+    "deterministic_context_types": true,
+    "average_observation_latency_ms": 2.2579,
+    "max_observation_latency_ms": 3.8112,
+    "average_snapshot_latency_ms": 0.3859,
+    "peak_memory_bytes": 612376
+  },
+  "sanitized": true
+}

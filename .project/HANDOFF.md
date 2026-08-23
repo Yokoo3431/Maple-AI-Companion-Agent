@@ -1,3 +1,20 @@
+# Handoff(13-R,COMPLETED)
+
+- **Last completed phase**:13-Q Planning Reference Foundation
+- **Current phase**:13-R End-to-End Read-Only Companion Loop Integration(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Architecture**:新增 `companion_runtime/` 组合协调层；严格串联既有 Phase 13-J Resolver/Semantic State、Phase 13-K ObservationHistory/StateReducer、Phase 13-N KnowledgeGraph、Phase 13-O ContextReasoner 和 Phase 13-Q PlanningReferenceEngine，未创建第二套 resolver、memory、graph、context reasoner 或 planner
+- **CompanionSnapshot**:输出脱敏的语义状态摘要、时间状态、上下文理解、PlanningReference、information gaps、uncertainties、confidence、data quality/readiness notes 和 source provenance；公开快照不含 raw evidence、OCR payload、evidence IDs、私人路径、PID/HWND 或动作字段
+- **Session**:一个 `CompanionSession` 对应一个既有 append-only `ObservationHistory`；结构化 replay 支持 `VISIBLE -> LOST -> EXPIRED` 连续投影；session 仅保存 snapshot/history reference IDs，不持久化原始观测
+- **Replay**:A-J 共 10 个脱敏场景，覆盖正常任务、未知 NPC、任务物品未确认、location conflict、低置信关系、时间生命周期、缺失关系、社区 provenance、多 NPC 和空证据；另有 101 observation long-run smoke
+- **Benchmark**:输出 scenario pass rate、unknown/conflict preservation、temporal continuity、planning-reference consistency、provenance preservation、confidence bound violation、action leakage 和 snapshot generation，并保留 denominator；空分母为 `INSUFFICIENT_DATA`
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; no keyboard/mouse, Input Provider, Executor, automation, action planning, hooks, DLL injection, memory reading or client modification
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Semantic State=`FOUNDATION` / Temporal Memory=`FOUNDATION` / Context Reasoning=`FOUNDATION` / Companion Loop=`FOUNDATION` / Overall=`NOT_READY`
+- **Known limitations**:仅验证现有认知链的确定性组合和安全边界；有限社区 fixture 不代表完整 Maple 数据，也不代表真实客户端 OCR/视觉 readiness；没有增加新的理解规则、规划规则或执行能力
+- **Next action**:停止在 Phase 13-R；后续阶段需显式授权
+
+---
+
 # Handoff(13-Q,COMPLETED)
 
 - **Last completed phase**:13-P Evaluation / Simulation Layer

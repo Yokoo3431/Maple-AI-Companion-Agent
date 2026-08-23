@@ -45,6 +45,7 @@
 | Phase 13-O | Context Reasoning Layer(上下文推理层) | ✅ Phase COMPLETED / Knowledge = FOUNDATION_ONLY |
 | Phase 13-P | Evaluation / Simulation Layer(评估与仿真层) | ✅ Phase COMPLETED / Overall = NOT_READY |
 | Phase 13-Q | Planning Reference Foundation(规划参考基础) | ✅ Phase COMPLETED / Overall = NOT_READY |
+| Phase 13-R | End-to-End Read-Only Companion Loop Integration(端到端只读 Companion Loop 集成) | ✅ Phase COMPLETED / Companion Loop = FOUNDATION / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -61,6 +62,10 @@ Phase 13-O 在 `SemanticGameState`、Phase 13-K 生命周期、Phase 13-N 已校
 ### Phase 13-Q: Planning Reference Foundation
 
 Phase 13-Q 在既有 `ContextUnderstanding`、`SemanticGameState`、TemporalState 和 `KnowledgeGraph` 之上生成只读 `PlanningReference`。它只回答“当前有哪些值得关注的信息”：任务上下文、未确认的任务条件、已知地点、相关实体、信息缺口和冲突提示；不生成 planner、action、input 或执行建议。置信度不超过最弱输入，未知、冲突、过期和低置信度关系保持不确定性，readiness 仍为 `Overall=NOT_READY`。
+
+### Phase 13-R: End-to-End Read-Only Companion Loop Integration
+
+Phase 13-R 将既有 Observation、Phase 13-J Resolver/Semantic State、Phase 13-K Temporal Memory、Phase 13-N KnowledgeGraph、Phase 13-O ContextUnderstanding 和 Phase 13-Q PlanningReference 组合为只读 `CompanionSnapshot`。结构化脱敏 replay 可验证解析、语义状态、生命周期、上下文、参考、置信度和 provenance 在同一 session 中连续传递；A-J 场景与 101 事件 smoke 只验证集成稳定性，不代表真实客户端 READY。新增 Companion Loop 状态为 `FOUNDATION`，Real Vision、Knowledge 和 Overall 仍保持 `FOUNDATION_ONLY`/`NOT_READY`，不包含 planner、executor、input 或游戏自动化。
 
 当前架构路线:
 

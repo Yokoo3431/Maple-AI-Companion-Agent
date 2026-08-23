@@ -93,7 +93,10 @@ class PlanningReferenceEngine:
         if missing:
             return missing
 
-        if context.context_type is ContextType.QUEST_RELATED_CONTEXT:
+        if context.context_type in {
+            ContextType.QUEST_RELATED_CONTEXT,
+            ContextType.ITEM_QUEST_CONTEXT,
+        }:
             return [
                 self._make_reference(
                     semantic_state,
