@@ -9,6 +9,7 @@ from maple_agent.companion_runtime.benchmark import (
     BASE_TIME,
     build_replay_scenarios,
     build_sanitized_graphs,
+    build_sanitized_source_provenance,
     evaluate_scenarios,
     run_long_run_smoke,
 )
@@ -39,7 +40,11 @@ def test_end_to_end_benchmark_passes_all_scenarios():
 def test_normal_observation_composes_resolver_state_context_reference_snapshot():
     scenario = next(item for item in build_replay_scenarios() if item.scenario_id == "A")
     resolution_graph, knowledge_graph = build_sanitized_graphs()
-    coordinator = CompanionRuntimeCoordinator(resolution_graph, knowledge_graph)
+    coordinator = CompanionRuntimeCoordinator(
+        resolution_graph,
+        knowledge_graph,
+        source_provenance=build_sanitized_source_provenance(),
+    )
 
     snapshot = coordinator.process_observation(
         scenario.observations[0], now=BASE_TIME

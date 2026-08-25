@@ -5,6 +5,9 @@ from __future__ import annotations
 import time
 from datetime import UTC, datetime
 
+from maple_agent.companion_runtime.knowledge_contract import (
+    RuntimeKnowledgeBundle,
+)
 from maple_agent.companion_runtime.models import (
     CompanionEntitySummary,
     CompanionSession,
@@ -35,9 +38,10 @@ class CompanionRuntimeCoordinator:
 
     def __init__(
         self,
-        resolution_graph: MapleKnowledgeGraph,
-        knowledge_graph: KnowledgeGraph,
+        resolution_graph: MapleKnowledgeGraph | None = None,
+        knowledge_graph: KnowledgeGraph | None = None,
         *,
+        knowledge_bundle: RuntimeKnowledgeBundle | None = None,
         evidence_resolver: EvidenceResolver | None = None,
         context_reasoner: ContextReasoner | None = None,
         planning_reference_engine: PlanningReferenceEngine | None = None,
@@ -47,17 +51,42 @@ class CompanionRuntimeCoordinator:
         expiry_after_seconds: float = 120.0,
         relation_confidence_threshold: float = 0.7,
     ) -> None:
-        self.resolution_graph = resolution_graph
-        self.knowledge_graph = knowledge_graph
+        if knowledge_bundle is None:
+            if resolution_graph is None or knowledge_graph is None:
+                raise ValueError(
+                    "resolution_graph and knowledge_graph are required "
+                    "when knowledge_bundle is not provided"
+                )
+            knowledge_bundle = RuntimeKnowledgeBundle.from_graphs(
+                resolution_graph,
+                knowledge_graph,
+                provenance=source_provenance
+                or SourceProvenanceSummary(
+                    source_id="UNBOUND",
+                    source_type="UNKNOWN",
+                    game_profile="UNKNOWN",
+                    server_profile="UNKNOWN",
+                    data_version="UNKNOWN",
+                    dataset_reference="UNBOUND",
+                ),
+            )
+        elif source_provenance is not None and source_provenance != knowledge_bundle.provenance:
+            raise ValueError(
+                "source_provenance must match knowledge_bundle provenance"
+            )
+        self.knowledge_bundle = knowledge_bundle
+        self.resolution_graph = knowledge_bundle.resolution_graph
+        self.knowledge_graph = knowledge_bundle.relationship_graph
+        self.contract_audit = knowledge_bundle.audit
         self.evidence_resolver = evidence_resolver or EvidenceResolver()
         self.reducer = StateReducer(
-            resolution_graph,
+            self.resolution_graph,
             evidence_resolver=self.evidence_resolver,
             stale_after_seconds=stale_after_seconds,
             expiry_after_seconds=expiry_after_seconds,
         )
         self.context_reasoner = context_reasoner or ContextReasoner(
-            knowledge_graph,
+            self.knowledge_graph,
             relation_confidence_threshold=relation_confidence_threshold,
         )
         self.planning_reference_engine = (
@@ -65,14 +94,7 @@ class CompanionRuntimeCoordinator:
         )
         self.history = ObservationHistory()
         self.session_store = CompanionSessionStore(session)
-        self.source_provenance = source_provenance or SourceProvenanceSummary(
-            source_id="phase13r-sanitized-community-fixture",
-            source_type="COMMUNITY_DATABASE",
-            game_profile="maple-v113",
-            server_profile="cn-nostalgic-community",
-            data_version="phase13r-fixture-v1",
-            dataset_reference="phase13p-phase13q-sanitized-fixtures",
-        )
+        self.source_provenance = knowledge_bundle.provenance
         self.last_resolutions: list[EvidenceResolution] = []
         self.last_semantic_state: SemanticGameState | None = None
         self.last_temporal_state: TemporalState | None = None
@@ -197,9 +219,13 @@ class CompanionRuntimeCoordinator:
             confidence=confidence,
             data_quality_notes=[
                 f"Knowledge source type: {self.source_provenance.source_type}",
+                f"Knowledge dataset: {self.source_provenance.data_version}",
+                f"Knowledge profile: {self.source_provenance.game_profile}/"
+                f"{self.source_provenance.server_profile}",
                 "Knowledge readiness: FOUNDATION_ONLY",
                 "Real Vision readiness: FOUNDATION_ONLY",
                 "当前知识为有限快照，未承诺完整覆盖",
+                *self.contract_audit.issues,
             ],
             readiness_notes=[
                 "Companion Loop: FOUNDATION",

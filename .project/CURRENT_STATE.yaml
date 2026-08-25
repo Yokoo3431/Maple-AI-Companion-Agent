@@ -9,9 +9,9 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-R
+  current: 13-S
   status: COMPLETED
-  last_completed: 13-Q
+  last_completed: 13-R
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -20,6 +20,7 @@ readiness:
   real_vision: FOUNDATION_ONLY
   knowledge: FOUNDATION_ONLY
   companion_loop: FOUNDATION
+  companion_session: FOUNDATION_ONLY
   controlled_execution: NOT_READY
 
 development:
@@ -29,5 +30,5 @@ development:
 
 handoff:
   status: READY
-  next_action: "STOP: Phase 13-R completed; Companion Loop is read-only FOUNDATION; Real Vision and Knowledge remain FOUNDATION_ONLY; Overall remains NOT_READY; next phase requires explicit authorization"
+  next_action: "STOP: Phase 13-S completed; replay is validated but real HOME session remains pending; Companion Session is FOUNDATION_ONLY; Overall remains NOT_READY; next phase requires explicit authorization"
   blockers: []

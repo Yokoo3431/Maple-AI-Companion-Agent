@@ -26,6 +26,8 @@ class SourceProvenanceSummary(BaseModel):
     server_profile: str
     data_version: str
     dataset_reference: str
+    source_reference: str = ""
+    content_hash: str = ""
 
 
 class CompanionEntitySummary(BaseModel):

@@ -192,24 +192,31 @@ class PlanningReferenceEngine:
         if not quests:
             return []
         inventory_ids = {
-            self._canonical_id(reference)
+            value
             for reference in state.inventory_references
             if effective_lifecycle(reference, temporal)
             is EntityLifecycle.VISIBLE
+            for value in (
+                reference.canonical_id,
+                self._canonical_id(reference),
+            )
         }
         references: list[PlanningReference] = []
         for quest in quests:
-            quest_id = self._canonical_id(quest)
             requirements = [
                 relation
                 for relation in graph.all_relations()
                 if relation.relation_type is RelationType.REQUIRES
                 and relation.source.strip().lower() == "quest"
-                and str(relation.source_id) == quest_id
+                and self._identifier_matches(
+                    relation.source_id, quest, "quest"
+                )
             ]
             for relation in requirements:
                 item_id = str(relation.target_id)
-                if item_id in inventory_ids:
+                if item_id in inventory_ids or self._identifier_matches_any(
+                    item_id, inventory_ids, "item"
+                ):
                     continue
                 entities = [
                     entity
@@ -266,6 +273,32 @@ class PlanningReferenceEngine:
             return reference.canonical_id[len(prefix) :]
         return reference.canonical_id
 
+    @classmethod
+    def _identifier_matches(
+        cls,
+        identifier: int | str,
+        reference: SemanticEntityReference,
+        entity_type: str,
+    ) -> bool:
+        values = {
+            str(reference.canonical_id),
+            str(cls._canonical_id(reference)),
+        }
+        raw_identifier = str(identifier)
+        return raw_identifier in values or raw_identifier == (
+            f"{entity_type}_{reference.canonical_id}"
+        )
+
+    @staticmethod
+    def _identifier_matches_any(
+        identifier: str,
+        known_ids: set[str],
+        entity_type: str,
+    ) -> bool:
+        return identifier in {
+            f"{entity_type}_{value}" for value in known_ids
+        }
+
     @staticmethod
     def _relation_reference(
         relation: Relation,
@@ -287,7 +320,11 @@ class PlanningReferenceEngine:
         node: Any,
     ) -> ContextEntityReference:
         return ContextEntityReference(
-            canonical_id=f"{entity_type}_{entity_id}",
+            canonical_id=(
+                str(entity_id)
+                if str(entity_id).startswith(f"{entity_type}_")
+                else f"{entity_type}_{entity_id}"
+            ),
             entity_type=entity_type,
             display_name=getattr(node, "name", "UNKNOWN"),
             lifecycle=EntityLifecycle.UNKNOWN,

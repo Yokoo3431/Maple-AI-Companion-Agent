@@ -9,6 +9,9 @@ from datetime import UTC, datetime, timedelta
 from pydantic import BaseModel, Field
 
 from maple_agent.companion_runtime.coordinator import CompanionRuntimeCoordinator
+from maple_agent.companion_runtime.knowledge_contract import (
+    RuntimeKnowledgeBundle,
+)
 from maple_agent.companion_runtime.models import (
     CompanionSnapshot,
     FailureCategory,
@@ -143,15 +146,17 @@ def build_sanitized_graphs(
     legacy_provenance = LegacyProvenance(
         source_id="phase13r-sanitized-community-fixture",
         source_type="COMMUNITY_DATABASE",
-        game_profile="maple-v113",
-        server_profile="cn-nostalgic-community",
+        game_profile="maple-v113-fixture",
+        server_profile="fixture",
         data_version="phase13r-fixture-v1",
+        snapshot_version="phase13r-fixture-v1",
+        content_hash="sha256:phase13r-sanitized-fixture",
     )
     modern_provenance = KnowledgeEntityProvenance(
         source_id="phase13r-sanitized-community-fixture",
         source_type="COMMUNITY_DATABASE",
-        game_profile="maple-v113",
-        server_profile="cn-nostalgic-community",
+        game_profile="maple-v113-fixture",
+        server_profile="fixture",
         data_version="phase13r-fixture-v1",
         snapshot_version="phase13r-fixture-v1",
         content_hash="sha256:phase13r-sanitized-fixture",
@@ -200,13 +205,13 @@ def build_sanitized_graphs(
         )
     modern_maps = [
         MapNode(
-            map_id="m1",
+            map_id="map_m1",
             name="Henesys Reference",
             confidence=0.95,
             provenance=modern_provenance,
         ),
         MapNode(
-            map_id="m2",
+            map_id="map_m2",
             name="Perion Reference",
             confidence=0.9,
             provenance=modern_provenance,
@@ -220,14 +225,14 @@ def build_sanitized_graphs(
             provenance=modern_provenance,
         )
         for identifier, name, confidence in [
-            ("n1", "Henesys Instructor", 0.9),
-            ("n2", "Henesys Guide", 0.88),
-            ("n3", "Henesys Resident", 0.86),
+            ("npc_n1", "Henesys Instructor", 0.9),
+            ("npc_n2", "Henesys Guide", 0.88),
+            ("npc_n3", "Henesys Resident", 0.86),
         ]
     ]
     modern_quests = [
         QuestNode(
-            quest_id="q1",
+            quest_id="quest_q1",
             name="Reference Quest",
             confidence=0.85,
             provenance=modern_provenance,
@@ -235,7 +240,7 @@ def build_sanitized_graphs(
     ]
     modern_items = [
         ItemNode(
-            item_id="i1",
+            item_id="item_i1",
             name="Reference Item",
             confidence=0.85,
             provenance=modern_provenance,
@@ -245,9 +250,9 @@ def build_sanitized_graphs(
     relations = [
         Relation(
             source="map",
-            source_id="m1",
+            source_id="map_m1",
             target="npc",
-            target_id="n1",
+            target_id="npc_n1",
             relation_type=RelationType.CONTAINS,
             confidence=relation_confidence,
             provenance=modern_provenance,
@@ -258,36 +263,36 @@ def build_sanitized_graphs(
             [
                 Relation(
                     source="map",
-                    source_id="m1",
+                    source_id="map_m1",
                     target="npc",
-                    target_id="n2",
+                    target_id="npc_n2",
                     relation_type=RelationType.CONTAINS,
                     confidence=relation_confidence,
                     provenance=modern_provenance,
                 ),
                 Relation(
                     source="map",
-                    source_id="m1",
+                    source_id="map_m1",
                     target="npc",
-                    target_id="n3",
+                    target_id="npc_n3",
                     relation_type=RelationType.CONTAINS,
                     confidence=relation_confidence,
                     provenance=modern_provenance,
                 ),
                 Relation(
                     source="npc",
-                    source_id="n1",
+                    source_id="npc_n1",
                     target="quest",
-                    target_id="q1",
+                    target_id="quest_q1",
                     relation_type=RelationType.GIVES,
                     confidence=relation_confidence,
                     provenance=modern_provenance,
                 ),
                 Relation(
                     source="quest",
-                    source_id="q1",
+                    source_id="quest_q1",
                     target="item",
-                    target_id="i1",
+                    target_id="item_i1",
                     relation_type=RelationType.REQUIRES,
                     confidence=relation_confidence,
                     provenance=modern_provenance,
@@ -302,6 +307,34 @@ def build_sanitized_graphs(
         relations=relations,
     )
     return MapleKnowledgeGraph(base), modern_graph
+
+
+def build_sanitized_source_provenance(
+    source_type: str = "COMMUNITY_DATABASE",
+) -> SourceProvenanceSummary:
+    """Fixture-only metadata; never used as a production default."""
+    return SourceProvenanceSummary(
+        source_id="phase13r-sanitized-community-fixture",
+        source_type=source_type,
+        game_profile="maple-v113-fixture",
+        server_profile="fixture",
+        data_version="phase13r-fixture-v1",
+        dataset_reference="phase13p-phase13q-sanitized-fixtures",
+        source_reference="fixture://phase13r",
+        content_hash="sha256:phase13r-sanitized-fixture",
+    )
+
+
+def build_sanitized_runtime_bundle(
+    variant: str = "standard",
+) -> RuntimeKnowledgeBundle:
+    resolution_graph, relationship_graph = build_sanitized_graphs(variant)
+    return RuntimeKnowledgeBundle.from_graphs(
+        resolution_graph,
+        relationship_graph,
+        provenance=build_sanitized_source_provenance(),
+        dataset_id="phase13r-fixture-v1",
+    )
 
 
 def build_replay_scenarios() -> list[ReplayScenario]:
@@ -452,20 +485,9 @@ def evaluate_scenarios(
     scenarios = scenarios or build_replay_scenarios()
     results: list[CompanionLoopEvaluationResult] = []
     for scenario in scenarios:
-        resolution_graph, knowledge_graph = build_sanitized_graphs(
-            scenario.graph_variant
-        )
+        bundle = build_sanitized_runtime_bundle(scenario.graph_variant)
         coordinator = CompanionRuntimeCoordinator(
-            resolution_graph,
-            knowledge_graph,
-            source_provenance=SourceProvenanceSummary(
-                source_id="phase13r-sanitized-community-fixture",
-                source_type=scenario.expected_source_type,
-                game_profile="maple-v113",
-                server_profile="cn-nostalgic-community",
-                data_version="phase13r-fixture-v1",
-                dataset_reference="phase13p-phase13q-sanitized-fixtures",
-            ),
+            knowledge_bundle=bundle,
         )
         snapshots: list[CompanionSnapshot] = []
         input_preserved = True
@@ -605,8 +627,9 @@ def evaluate_scenarios(
 
 
 def run_long_run_smoke(event_count: int = 101) -> LongRunSmokeResult:
-    resolution_graph, knowledge_graph = build_sanitized_graphs()
-    coordinator = CompanionRuntimeCoordinator(resolution_graph, knowledge_graph)
+    coordinator = CompanionRuntimeCoordinator(
+        knowledge_bundle=build_sanitized_runtime_bundle()
+    )
     latencies: list[float] = []
     snapshot_latencies: list[float] = []
     exceptions = 0

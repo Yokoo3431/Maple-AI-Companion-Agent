@@ -46,6 +46,7 @@
 | Phase 13-P | Evaluation / Simulation Layer(评估与仿真层) | ✅ Phase COMPLETED / Overall = NOT_READY |
 | Phase 13-Q | Planning Reference Foundation(规划参考基础) | ✅ Phase COMPLETED / Overall = NOT_READY |
 | Phase 13-R | End-to-End Read-Only Companion Loop Integration(端到端只读 Companion Loop 集成) | ✅ Phase COMPLETED / Companion Loop = FOUNDATION / Overall = NOT_READY |
+| Phase 13-S | Runtime Contract Reconciliation & Real/Replay Companion Session Validation(运行时契约对齐与真实/回放 Companion Session 验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -66,6 +67,10 @@ Phase 13-Q 在既有 `ContextUnderstanding`、`SemanticGameState`、TemporalStat
 ### Phase 13-R: End-to-End Read-Only Companion Loop Integration
 
 Phase 13-R 将既有 Observation、Phase 13-J Resolver/Semantic State、Phase 13-K Temporal Memory、Phase 13-N KnowledgeGraph、Phase 13-O ContextUnderstanding 和 Phase 13-Q PlanningReference 组合为只读 `CompanionSnapshot`。结构化脱敏 replay 可验证解析、语义状态、生命周期、上下文、参考、置信度和 provenance 在同一 session 中连续传递；A-J 场景与 101 事件 smoke 只验证集成稳定性，不代表真实客户端 READY。新增 Companion Loop 状态为 `FOUNDATION`，Real Vision、Knowledge 和 Overall 仍保持 `FOUNDATION_ONLY`/`NOT_READY`，不包含 planner、executor、input 或游戏自动化。
+
+### Phase 13-S: Runtime Contract Reconciliation & Real/Replay Session Validation
+
+Phase 13-S 审计并收束 Phase 13-J 的 resolution graph、Phase 13-N 的 relationship graph 与 Phase 13-M source-backed dataset package 的 ownership。新增 RuntimeKnowledgeBundle 只保存既有图的依赖引用和共享 dataset identity，不保存第三套知识事实；当前 400 个实体的两个图视图 canonical overlap 为 400，ID/alias/profile/provenance/version mismatch 均为 0。生产 Coordinator 不再猜测 maple-v113，缺失 metadata 时使用 UNKNOWN/UNBOUND；structured replay 和已有 CurrentObservation 使用同一个 runtime。Notebook 未检测到 Maple 客户端，因此真实 HOME session 保持 REAL_SESSION_PENDING，Companion Session 不升级为 validated，整体 readiness 仍为 NOT_READY。
 
 当前架构路线:
 

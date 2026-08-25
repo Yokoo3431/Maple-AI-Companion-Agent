@@ -1,3 +1,22 @@
+# Handoff(13-S,COMPLETED)
+
+- **Last completed phase**:13-R End-to-End Read-Only Companion Loop Integration
+- **Current phase**:13-S Runtime Contract Reconciliation & Real/Replay Companion Session Validation(COMPLETED)
+- **GitHub**:本阶段成果将同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Contract ownership**:Phase 13-J/9-D 的 MapleKnowledgeGraph 负责 canonical evidence lookup 与 alias resolution；Phase 4-A/13-N 的 KnowledgeGraph 负责 relation truth；Phase 13-M KnowledgeDatasetPackage manifest 负责 source dataset metadata；新增 RuntimeKnowledgeBundle 只组合现有图引用和 metadata，不保存第三套知识事实
+- **Source-backed audit**:复用既有 Phase 4-E build_dataset，从 knowledge_dataset 包建立两个历史图视图；resolution graph 与 relationship graph 均为 400 entities，canonical overlap=400，canonical mismatch=0，missing left/right=0，alias/profile/provenance/version mismatch=0，audit valid=true
+- **Provenance fix**:生产 CompanionRuntimeCoordinator 已移除 maple-v113 fixture default；无可信 metadata 时为 UNKNOWN/UNBOUND 并写入 data quality；fixture profile 仅保留在 benchmark factory；真实社区包使用 maple-cms-classic-community / cn-nostalgic-community / mxdc-cn-community-20260814-v1
+- **Unified runtime**:structured replay 和 ExistingVisionObservationAdapter 产生的 CurrentObservation 均进入同一个 CompanionRuntimeCoordinator；adapter 不捕获窗口、不运行 OCR、不新增 Vision backend
+- **Real session**:Notebook 未检测到 Maple 客户端，未运行伪造的 10 分钟/30–60 分钟 session；phase13s_real_session_report.json 明确为 REAL_SESSION_PENDING，HOME 真实证据待后续本地采集
+- **Baseline governance**:BASELINE.json 保持 Phase 13-I.4 reference snapshot，未修改；本阶段将其 active/reference 区分记录为 GOVERNANCE_AMBIGUITY，等待人工确认
+- **Privacy**:提交的报告只包含脱敏 aggregate metrics、canonical counters、profile/version/hash metadata 和 capability status；无截图、ROI、OCR raw、账号/角色/chat、PID/HWND、绝对路径或 raw observation
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Companion Loop=FOUNDATION / Companion Session=FOUNDATION_ONLY / Overall=NOT_READY
+- **Safety**:SAFETY_MODE=MOCK_ONLY; READ ONLY; NO INPUT; NO EXECUTION; no automation, hooks, DLL injection or memory reading
+- **Known limitations**:跨图一致性验证不是完整 Maple Knowledge 验证；真实 session 尚未在 HOME 运行；当前不新增 intelligence rule、planner、executor 或 action path
+- **Next action**:停止在 Phase 13-S；等待人工审核和 HOME 真实 session evidence，后续阶段需显式授权
+
+---
+
 # Handoff(13-R,COMPLETED)
 
 - **Last completed phase**:13-Q Planning Reference Foundation

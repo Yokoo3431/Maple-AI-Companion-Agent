@@ -1,0 +1,19 @@
+{
+  "dataset_id": "mxdc-cn-community-20260814-v1",
+  "game_profile": "maple-cms-classic-community",
+  "server_profile": "cn-nostalgic-community",
+  "resolution_graph_entity_count": 400,
+  "relationship_graph_entity_count": 400,
+  "canonical_overlap_count": 400,
+  "canonical_mismatch_count": 0,
+  "missing_left_count": 0,
+  "missing_right_count": 0,
+  "alias_conflict_count": 0,
+  "profile_mismatch_count": 0,
+  "provenance_mismatch_count": 0,
+  "version_mismatch_count": 0,
+  "denominator_status": "SUFFICIENT",
+  "valid": true,
+  "issues": [],
+  "sanitized": true
+}

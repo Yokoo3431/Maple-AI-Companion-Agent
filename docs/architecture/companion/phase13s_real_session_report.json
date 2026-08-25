@@ -1,0 +1,29 @@
+{
+  "status": "REAL_SESSION_PENDING",
+  "machine_profile": "NOTEBOOK",
+  "capture_backend": "NOT_RUN_NO_MAPLE_CLIENT_EVIDENCE",
+  "window_state": "NOT_OBSERVED",
+  "session_duration_seconds": 0.0,
+  "observation_count": 0,
+  "snapshot_count": 0,
+  "failure_counts": {
+    "REAL_SESSION_NOT_AVAILABLE": 1
+  },
+  "average_observation_interval_ms": null,
+  "average_cognitive_latency_ms": null,
+  "average_snapshot_latency_ms": null,
+  "history_size": 0,
+  "memory_growth_bytes": null,
+  "stale_count": 0,
+  "unknown_count": 0,
+  "resolved_evidence_count": 0,
+  "unresolved_evidence_count": 0,
+  "provenance_profile": {
+    "game_profile": "UNKNOWN",
+    "server_profile": "UNKNOWN",
+    "dataset_version": "UNKNOWN"
+  },
+  "privacy_status": "RAW_VISION_DATA=LOCAL_PRIVATE",
+  "safety_status": "MOCK_ONLY_READ_ONLY_NO_EXECUTION",
+  "sanitized": true
+}

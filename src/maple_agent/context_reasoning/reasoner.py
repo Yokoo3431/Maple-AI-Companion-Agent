@@ -381,8 +381,11 @@ class ContextReasoner:
         relation_confidence: float,
     ) -> ContextEntityReference:
         node = graph_node(self.graph, entity_type, entity_id)
+        canonical_id = str(entity_id)
+        if not canonical_id.startswith(f"{entity_type}_"):
+            canonical_id = f"{entity_type}_{canonical_id}"
         return ContextEntityReference(
-            canonical_id=f"{entity_type}_{entity_id}",
+            canonical_id=canonical_id,
             entity_type=entity_type,
             display_name=getattr(node, "name", "UNKNOWN"),
             lifecycle=EntityLifecycle.UNKNOWN,
@@ -418,7 +421,12 @@ class ContextReasoner:
             "inventory": "item",
             "inventory_item": "item",
         }.get(item[1], item[1])
-        return normalized_type == entity_type and str(item[2]) == str(entity_id)
+        candidate_id = str(item[2])
+        observed_id = str(entity_id)
+        return normalized_type == entity_type and observed_id in {
+            candidate_id,
+            f"{entity_type}_{candidate_id}",
+        }
 
     @staticmethod
     def _graph_type(entity_type: str) -> str:
