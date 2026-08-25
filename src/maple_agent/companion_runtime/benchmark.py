@@ -126,6 +126,14 @@ class LongRunSmokeResult(BaseModel):
     max_observation_latency_ms: float
     average_snapshot_latency_ms: float
     peak_memory_bytes: int = Field(ge=0)
+    snapshot_count: int = Field(default=0, ge=0)
+    timestamps_monotonic: bool = True
+    history_append_only: bool = True
+    duplicate_history_entries: int = Field(default=0, ge=0)
+    unknown_count: int = Field(default=0, ge=0)
+    unresolved_count: int = Field(default=0, ge=0)
+    stale_count: int = Field(default=0, ge=0)
+    average_observation_interval_ms: float | None = Field(default=None, ge=0)
 
 
 class CompanionLoopEvaluationReport(BaseModel):
@@ -634,6 +642,8 @@ def run_long_run_smoke(event_count: int = 101) -> LongRunSmokeResult:
     snapshot_latencies: list[float] = []
     exceptions = 0
     context_types: list[ContextType] = []
+    snapshot_timestamps: list[datetime] = []
+    snapshot_count = 0
     tracemalloc.start()
     for index in range(event_count):
         observation = CurrentObservation(
@@ -657,6 +667,8 @@ def run_long_run_smoke(event_count: int = 101) -> LongRunSmokeResult:
                 now=BASE_TIME + timedelta(seconds=index),
             )
             context_types.append(snapshot.context_understanding.context_type)
+            snapshot_timestamps.append(snapshot.timestamp)
+            snapshot_count += 1
             snapshot_latencies.append(
                 getattr(coordinator, "last_snapshot_latency_ms", 0.0)
             )
@@ -665,6 +677,27 @@ def run_long_run_smoke(event_count: int = 101) -> LongRunSmokeResult:
         latencies.append((time.perf_counter() - started) * 1000)
     _, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()
+    history_ids = [entry.observation_id for entry in coordinator.history.entries]
+    duplicate_history_entries = len(history_ids) - len(set(history_ids))
+    timestamp_monotonic = all(
+        left <= right
+        for left, right in zip(snapshot_timestamps, snapshot_timestamps[1:])
+    )
+    final_snapshot = coordinator.session.current_snapshot
+    average_interval = (
+        round(
+            sum(
+                (right - left).total_seconds() * 1000
+                for left, right in zip(
+                    snapshot_timestamps, snapshot_timestamps[1:]
+                )
+            )
+            / (len(snapshot_timestamps) - 1),
+            4,
+        )
+        if len(snapshot_timestamps) > 1
+        else None
+    )
     return LongRunSmokeResult(
         event_count=event_count,
         history_size=len(coordinator.history.entries),
@@ -676,6 +709,26 @@ def run_long_run_smoke(event_count: int = 101) -> LongRunSmokeResult:
             sum(snapshot_latencies) / len(snapshot_latencies), 4
         ),
         peak_memory_bytes=peak,
+        snapshot_count=snapshot_count,
+        timestamps_monotonic=timestamp_monotonic,
+        history_append_only=duplicate_history_entries == 0,
+        duplicate_history_entries=duplicate_history_entries,
+        unknown_count=(
+            final_snapshot.semantic_state.unknown_count
+            if final_snapshot is not None
+            else 0
+        ),
+        unresolved_count=(
+            final_snapshot.semantic_state.unresolved_evidence_count
+            if final_snapshot is not None
+            else 0
+        ),
+        stale_count=(
+            final_snapshot.semantic_state.stale_count
+            if final_snapshot is not None
+            else 0
+        ),
+        average_observation_interval_ms=average_interval,
     )
 
 
