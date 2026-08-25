@@ -48,6 +48,7 @@
 | Phase 13-R | End-to-End Read-Only Companion Loop Integration(端到端只读 Companion Loop 集成) | ✅ Phase COMPLETED / Companion Loop = FOUNDATION / Overall = NOT_READY |
 | Phase 13-S | Runtime Contract Reconciliation & Real/Replay Companion Session Validation(运行时契约对齐与真实/回放 Companion Session 验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-T | Real Companion Session Validation & Runtime Hardening(真实 Companion Session 验证与运行时加固) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
+| Phase 13-U | Real Session Evidence Validation(真实 Session 证据验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -76,6 +77,10 @@ Phase 13-S 审计并收束 Phase 13-J 的 resolution graph、Phase 13-N 的 rela
 ### Phase 13-T: Real Companion Session Validation & Runtime Hardening
 
 Phase 13-T 在不改变既有 Vision 和 Companion Runtime 架构的前提下，增加 session hardening 指标：observation/snapshot 数量、append-only history、重复 observation、快照时间单调性、异常、context determinism、latency、unknown/unresolved/stale 和 memory baseline。101-event replay hardening 全部通过；Notebook 未检测到 Maple 客户端，因此真实 HOME session 保持 REAL_SESSION_PENDING，未将 replay 结果解释为真实 Vision 成功，Companion Session 仍为 FOUNDATION_ONLY / NOT_VALIDATED。
+
+### Phase 13-U: Real Session Evidence Validation
+
+Phase 13-U 只验证已有 Vision Observation 是否能够进入同一个只读 CompanionRuntimeCoordinator 并生成 CompanionSnapshot；不新增 Vision、Resolver、Context、Planning 或执行能力。Notebook 本次未检测到用户手动启动的 Maple 客户端，因此明确记录 `REAL_SESSION_PENDING`，真实 observation/snapshot/duration 均为 0；101-event replay hardening 仅作为运行时回归基线，不能替代 HOME 真实证据，也不提升 Real Vision、Knowledge、Companion Session 或 Overall readiness。报告只保留脱敏 aggregate metrics，原始视觉、OCR、截图与会话数据不进入仓库。
 
 当前架构路线:
 

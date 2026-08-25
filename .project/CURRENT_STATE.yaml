@@ -9,9 +9,9 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-T
+  current: 13-U
   status: COMPLETED
-  last_completed: 13-S
+  last_completed: 13-T
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -30,5 +30,5 @@ development:
 
 handoff:
   status: READY
-  next_action: "STOP: Phase 13-T completed; replay hardening is validated but real HOME session remains pending; Companion Session is FOUNDATION_ONLY; Overall remains NOT_READY; next phase requires explicit authorization"
+  next_action: "STOP: Phase 13-U completed; no Maple client was available for user-started real evidence; REAL_SESSION_PENDING; replay hardening remains separate; Companion Session is FOUNDATION_ONLY / NOT_VALIDATED; Overall remains NOT_READY; next phase requires explicit authorization"
   blockers: []

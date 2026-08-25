@@ -1,3 +1,17 @@
+# Handoff(13-U,COMPLETED)
+
+- **Last completed phase**:13-T Real Companion Session Validation & Runtime Hardening
+- **Current phase**:13-U Real Session Evidence Validation(COMPLETED)
+- **GitHub**:本阶段成果将同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Real session gate**:Notebook 预检未检测到用户手动启动的 Maple/MapleStory 客户端，因此没有运行或模拟 Level A 10 分钟 session；`phase13u_real_session_report.json` 明确为 `REAL_SESSION_PENDING`，real duration/observation/snapshot 均为 0
+- **Unified runtime boundary**:Phase 13-U 只验证已有 Existing Vision Observation → CurrentObservation → CompanionRuntimeCoordinator → CompanionSnapshot 的契约准备；没有创建 RealRuntime/ReplayRuntime、Vision V2、第二 resolver、第二 temporal memory、第二 graph 或第二套 companion loop
+- **Replay baseline**:复用 Phase 13-R A-J 回放与 Phase 13-T 101-event hardening；回放用于检查确定性、history append-only、timestamp 单调和异常计数，不能解释成 Vision accuracy 或真实会话成功
+- **Runtime report**:报告仅含脱敏 aggregate metrics、failure category、latency/history/lifecycle counters、provenance 状态、privacy 和 safety 状态；无截图、OCR raw、ROI、账号/角色/聊天、PID/HWND、绝对路径或 raw observation
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; no keyboard/mouse, automation, executor, hooks, DLL injection, memory reading or client modification
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Loop=`FOUNDATION` / Companion Session=`FOUNDATION_ONLY / NOT_VALIDATED` / Overall=`NOT_READY`
+- **Known limitations**:真实 capture/OCR/CV、窗口状态、真实生命周期、真实 session memory growth 和 10 分钟连续性仍未测量；需要用户在 HOME 手动启动 Maple 后提供本地真实证据。当前不提升任何 readiness，不开始下一阶段
+- **Next action**:停止在 Phase 13-U；等待 HOME Level A/B 真实 session evidence 与人工审核，后续阶段需显式授权
+
 # Handoff(13-T,COMPLETED)
 
 - **Last completed phase**:13-S Runtime Contract Reconciliation & Real/Replay Companion Session Validation
