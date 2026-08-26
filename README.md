@@ -50,6 +50,7 @@
 | Phase 13-T | Real Companion Session Validation & Runtime Hardening(真实 Companion Session 验证与运行时加固) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U | Real Session Evidence Validation(真实 Session 证据验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U.1a | Read-only Window Binding Compatibility Fix(只读窗口绑定兼容性修复) | ✅ Phase COMPLETED / Real Session = NOT_STARTED / Overall = NOT_READY |
+| Phase 13-U.1c | Level A Real Read-only Companion Session(10 分钟真实只读 Companion Session) | ✅ Phase COMPLETED / Companion Session = REAL_SESSION_VALIDATED_LEVEL_A / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 

@@ -1,3 +1,17 @@
+# Handoff(13-U.1c,COMPLETED)
+
+- **Last completed phase**:13-U.1c Level A HOME Real Read-only Companion Session
+- **Current phase**:13-U.1c(COMPLETED)
+- **GitHub**:本阶段成果将同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Real session**:用户手动保持 Maple 客户端可见、非最小化、前台；连续运行 `600.58` 秒，使用既有 `WindowsScreenshotProvider` 的 `windows/imagegrab` 路径；584 次 capture/observation 与584次 CompanionSnapshot 全部生成，capture/observation/snapshot failure=0，exception=0
+- **Runtime hardening**:同一个 `CompanionRuntimeCoordinator` 与 append-only history 持续工作；history size=584，append-only=true，重复历史=0，snapshot timestamp monotonic=true；平均 observation latency=635.99ms，max=804.83ms，cognitive=0.88ms，snapshot=0.17ms
+- **Semantic evidence honesty**:真实帧没有产生可进入解析器的结构化实体 evidence，resolved/unresolved/unknown 均为0，故记录 `INSUFFICIENT_EVIDENCE`；本结果证明运行链路稳定，不证明 OCR/CV accuracy，也不代表 Vision/Knowledge READY
+- **Provenance**:runtime 使用实际加载的社区数据 metadata：`COMMUNITY_DATABASE` / `maple-cms-classic-community` / `cn-nostalgic-community` / `mxdc-cn-community-20260814-v1`
+- **Privacy**:报告 `docs/architecture/companion/phase13u1c_real_session_report.json` 仅含脱敏聚合指标；原始帧仅存在本次进程临时目录并清理，未提交截图、ROI、OCR原文、PID/HWND、标题、账号、角色或路径
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; no keyboard/mouse, activation, automation, executor, hooks, DLL injection or memory reading
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Loop=`FOUNDATION` / Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / Overall=`NOT_READY`
+- **Next action**:停止在 Phase 13-U.1c；不自动开始 Phase 13-V，等待人工审核
+
 # Handoff(13-U.1a,COMPLETED)
 
 - **Last completed phase**:13-U Real Session Evidence Validation framework
