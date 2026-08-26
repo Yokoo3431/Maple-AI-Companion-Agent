@@ -1,7 +1,11 @@
 """Phase 13-U.1a deterministic read-only window discovery tests."""
 
+import sys
+from types import SimpleNamespace
+
 from maple_agent.window import (
     WindowCandidate,
+    WindowsWindowDiscovery,
     default_game_window_profile,
     discover_window,
 )
@@ -119,3 +123,51 @@ def test_candidate_title_with_other_process_is_not_false_positive():
     )
 
     assert result.matched is False
+
+
+def test_windows_discovery_uses_win32process_pid_api(monkeypatch):
+    """真实 pywin32 将 GetWindowThreadProcessId 暴露在 win32process。"""
+    fake_gui = SimpleNamespace(
+        EnumWindows=lambda callback, unused: callback(106, unused),
+        IsWindowVisible=lambda hwnd: True,
+        GetWindowText=lambda hwnd: "冒险岛怀旧服",
+    )
+    fake_process = SimpleNamespace(
+        GetWindowThreadProcessId=lambda hwnd: (0, 1006),
+    )
+    monkeypatch.setitem(sys.modules, "win32process", fake_process)
+
+    result = WindowsWindowDiscovery(
+        win32gui=fake_gui,
+        process_name_resolver=lambda pid: "Maplestory_Classic",
+    ).discover(PROFILE)
+
+    assert result.matched is True
+    assert result.match_method == "process_and_title"
+
+
+def test_windows_discovery_skips_one_bad_window_metadata():
+    callbacks = []
+
+    def enum_windows(callback, unused):
+        for hwnd in (107, 108):
+            callbacks.append(hwnd)
+            callback(hwnd, unused)
+
+    fake_gui = SimpleNamespace(
+        EnumWindows=enum_windows,
+        IsWindowVisible=lambda hwnd: True,
+        GetWindowThreadProcessId=lambda hwnd: (0, hwnd + 900),
+        GetWindowText=lambda hwnd: (
+            (_ for _ in ()).throw(RuntimeError("metadata unavailable"))
+            if hwnd == 107
+            else "MapleStory"
+        ),
+    )
+    result = WindowsWindowDiscovery(
+        win32gui=fake_gui,
+        process_name_resolver=lambda pid: "Maplestory_Classic",
+    ).discover(PROFILE)
+
+    assert result.matched is True
+    assert callbacks == [107, 108]

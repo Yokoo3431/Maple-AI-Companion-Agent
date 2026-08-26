@@ -642,7 +642,7 @@ def test_webui_real_vision_disabled():
     assert resp.json()["enabled"] is False
 
 
-def test_smoke_script_no_client(tmp_path):
+def test_smoke_script_without_or_with_client(tmp_path):
     result = subprocess.run(
         [
             sys.executable,
@@ -657,6 +657,12 @@ def test_smoke_script_no_client(tmp_path):
         cwd=REPO_ROOT,
         timeout=90,
     )
-    assert "REAL CLIENT NOT AVAILABLE" in result.stdout
-    assert "NOT_READY" in result.stdout
+    # The smoke script is intentionally environment-aware: a manually running
+    # client may be present on a developer workstation.
+    if "REAL CLIENT NOT AVAILABLE" in result.stdout:
+        assert "WINDOW_BINDING: NOT_FOUND" in result.stdout
+        assert "RealVisionReadiness = NOT_READY" in result.stdout
+    else:
+        assert "WINDOW_BINDING: BOUND" in result.stdout
+        assert "RealVisionReadiness = FOUNDATION_ONLY" in result.stdout
     assert result.returncode == 0

@@ -162,20 +162,33 @@ class WindowsWindowDiscovery:
         candidates: list[WindowCandidate] = []
 
         def callback(hwnd: int, _unused: object) -> None:
-            if not win32gui.IsWindowVisible(hwnd):
-                return
-            _, pid = win32gui.GetWindowThreadProcessId(hwnd)
-            title = win32gui.GetWindowText(hwnd).strip()
-            process_name = self._resolve_process_name(pid)
-            candidates.append(
-                WindowCandidate(
-                    hwnd=int(hwnd),
-                    pid=int(pid),
-                    process_name=process_name,
-                    window_title=title,
-                    visible=True,
+            try:
+                if not win32gui.IsWindowVisible(hwnd):
+                    return
+                get_window_process = getattr(
+                    win32gui,
+                    "GetWindowThreadProcessId",
+                    None,
                 )
-            )
+                if get_window_process is None:
+                    import win32process  # type: ignore[import-not-found]
+
+                    get_window_process = win32process.GetWindowThreadProcessId
+                _, pid = get_window_process(hwnd)
+                title = win32gui.GetWindowText(hwnd).strip()
+                process_name = self._resolve_process_name(pid)
+                candidates.append(
+                    WindowCandidate(
+                        hwnd=int(hwnd),
+                        pid=int(pid),
+                        process_name=process_name,
+                        window_title=title,
+                        visible=True,
+                    )
+                )
+            except Exception:
+                # 一个窗口元数据读取失败不应阻断其余顶层窗口的发现。
+                return
 
         try:
             win32gui.EnumWindows(callback, None)
