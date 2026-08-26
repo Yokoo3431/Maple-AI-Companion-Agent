@@ -1,3 +1,17 @@
+# Handoff(13-U.1d,COMPLETED)
+
+- **Last completed phase**:13-U.1d Real Vision → Semantic Evidence Gap Audit
+- **Current phase**:13-U.1d(COMPLETED)
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Diagnostic**:用户手动保持 Maple 客户端可见、非最小化、前台；短诊断运行 `60.84` 秒，`41/41` 次 capture 成功、`41/41` 帧可用、`41/41` 次 OCR 返回非空结果、`41` 个 CompanionSnapshot 成功，snapshot timestamp 单调且 history append-only
+- **Evidence pipeline**:VisionDetector 调用 `41` 次但地图候选 `0`；专用 HP/MP numeric detector 在本次 live runtime 未被调用且独立 probe 无数字候选；parser HP/MP 检查 `41` 次但无候选；`PerceptionEvidence=0`、`CurrentObservation.evidence=0`、Resolver 输入 `0`、resolved/unresolved `0`
+- **Root cause**:断点确定为已有 OCR 输出没有满足当前 `VisionDetector` 的结构化 prefix/value 契约，且当前画面未产生可用 HP/MP 数字候选；不是 Capture、窗口绑定、Adapter 丢失或 Companion Runtime 崩溃。Adapter 保持薄层，不补造事实
+- **Result**:记录 `GAP_IDENTIFIED`，没有新增 Vision V2、NPC/Monster/Item detector、第二 Evidence model、第二 Resolver、Planner 或 Executor；脱敏计数报告为 `docs/architecture/companion/phase13u1d_evidence_gap_report.json`
+- **Privacy**:原始帧仅保存在临时目录并清理；未提交截图、ROI、OCR 原文、账号/角色/chat、PID/HWND、窗口标题、绝对路径或 raw observation
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; NO AUTOMATION; no keyboard/mouse, activation, hooks, DLL injection or memory reading
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Loop=`FOUNDATION` / Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / Overall=`NOT_READY`
+- **Next action**:停止在 Phase 13-U.1d；下一步只建议修复已确认的 Vision→Evidence 断点并重新做短诊断，不自动开始 Phase 13-V
+
 # Handoff(13-U.1c,COMPLETED)
 
 - **Last completed phase**:13-U.1c Level A HOME Real Read-only Companion Session

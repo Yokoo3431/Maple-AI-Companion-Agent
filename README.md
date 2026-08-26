@@ -51,6 +51,7 @@
 | Phase 13-U | Real Session Evidence Validation(真实 Session 证据验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U.1a | Read-only Window Binding Compatibility Fix(只读窗口绑定兼容性修复) | ✅ Phase COMPLETED / Real Session = NOT_STARTED / Overall = NOT_READY |
 | Phase 13-U.1c | Level A Real Read-only Companion Session(10 分钟真实只读 Companion Session) | ✅ Phase COMPLETED / Companion Session = REAL_SESSION_VALIDATED_LEVEL_A / Overall = NOT_READY |
+| Phase 13-U.1d | Real Vision → Semantic Evidence Gap Audit(真实视觉到语义证据断点审计) | ✅ GAP_IDENTIFIED / Real Vision = FOUNDATION_ONLY / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -83,6 +84,10 @@ Phase 13-T 在不改变既有 Vision 和 Companion Runtime 架构的前提下，
 ### Phase 13-U: Real Session Evidence Validation
 
 Phase 13-U 只验证已有 Vision Observation 是否能够进入同一个只读 CompanionRuntimeCoordinator 并生成 CompanionSnapshot；不新增 Vision、Resolver、Context、Planning 或执行能力。Notebook 本次未检测到用户手动启动的 Maple 客户端，因此明确记录 `REAL_SESSION_PENDING`，真实 observation/snapshot/duration 均为 0；101-event replay hardening 仅作为运行时回归基线，不能替代 HOME 真实证据，也不提升 Real Vision、Knowledge、Companion Session 或 Overall readiness。报告只保留脱敏 aggregate metrics，原始视觉、OCR、截图与会话数据不进入仓库。
+
+### Phase 13-U.1d: Real Vision → Semantic Evidence Gap Audit
+
+Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture 成功、41/41 帧可用、41/41 次 OCR 返回非空结果、41/41 次 CompanionSnapshot 成功，时间单调与 append-only history 均保持；但现有 `VisionDetector` 没有产生地图/实体候选，现有 HP/MP 数字探针也没有候选，最终 `PerceptionEvidence=0`、`CurrentObservation.evidence=0`、Resolver 输入为 0。断点确定为已有视觉输出未满足结构化解析契约/当前视觉信号不足，而不是窗口绑定、Adapter 丢失或 Runtime 崩溃；结果记录为 `GAP_IDENTIFIED`，未新增 Vision、Resolver 或推理能力。详见脱敏报告 `docs/architecture/companion/phase13u1d_evidence_gap_report.json`。
 
 当前架构路线:
 

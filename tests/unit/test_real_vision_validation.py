@@ -38,6 +38,7 @@ from maple_agent.runtime import RuntimeManager
 from maple_agent.safety_vnext.models import ReadinessStatus
 from maple_agent.vision_runtime.models import ScreenObservation
 from maple_agent.webui.app import create_app
+from maple_agent.window.profile import GameWindowProfile
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = REPO_ROOT / "tests" / "fixtures" / "real_vision"
@@ -124,8 +125,14 @@ def test_real_provider_contract():
 
 
 def test_invalid_window():
-    provider = WindowsScreenshotProvider()
-    # win32 可用时 binding 为 DISCOVERABLE,但指定窗口不存在时 capture 仍须失败安全
+    provider = WindowsScreenshotProvider(
+        window_profile=GameWindowProfile(
+            profile_id="test-no-such-window",
+            process_candidates=("__no_such_maple_process__",),
+            title_candidates=("__no_such_maple_window__",),
+        )
+    )
+    # 显式使用不存在的进程/标题候选,避免真实 Maple 窗口影响环境测试。
     assert provider.binding_status() in ("NOT_FOUND", "DISCOVERABLE")
     frame = provider.capture()
     assert frame.confidence == 0.0

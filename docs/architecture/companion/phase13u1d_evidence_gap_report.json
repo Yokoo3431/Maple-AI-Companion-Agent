@@ -1,0 +1,95 @@
+{
+  "phase": "13-U.1d",
+  "status": "GAP_IDENTIFIED",
+  "purpose": "Real Vision to structured semantic evidence gap audit",
+  "session": {
+    "duration_seconds": 60.84,
+    "capture_attempts": 41,
+    "capture_success": 41,
+    "frame_available": 41,
+    "snapshot_count": 41,
+    "snapshot_failure_count": 0,
+    "timestamp_monotonic": true,
+    "history_append_only": true
+  },
+  "pipeline_counts": {
+    "map_detector_invoked": 41,
+    "map_detector_candidate_count": 0,
+    "hp_detector_invoked": 0,
+    "hp_candidate_count": 0,
+    "mp_detector_invoked": 0,
+    "mp_candidate_count": 0,
+    "parser_hp_mp_attempts": 41,
+    "ocr_invoked": 41,
+    "ocr_result_count": 41,
+    "ocr_nonempty_count": 41,
+    "vision_result_count": 41,
+    "adapter_input_count": 41,
+    "perception_evidence_count": 0,
+    "current_observation_evidence_count": 0,
+    "resolver_input_count": 0,
+    "resolved_count": 0,
+    "unresolved_count": 0
+  },
+  "component_audit": {
+    "capture": "SUCCESS",
+    "ocr": "NON_EMPTY_BUT_NOT_CONTRACT_COMPATIBLE",
+    "vision_detector": "NO_PREFIX_STRUCTURED_CANDIDATE",
+    "game_state_parser": "SCREEN_OBSERVATION_WITHOUT_ENTITY_OR_PLAYER_CANDIDATE",
+    "observation_adapter": "NO_DATA_LOSS; RECEIVED_EMPTY_EVIDENCE",
+    "evidence_resolver": "NOT_INVOKED_WITH_ENTITY_EVIDENCE",
+    "runtime": "SUCCESS_WITH_EMPTY_OBSERVATION",
+    "roi_profile": "OFFICE_PROFILE_MATCHES_1366X768_CLIENT",
+    "numeric_hp_mp_probe": "NO_DIGIT_CANDIDATE",
+    "template_map_probe": "NO_REPOSITORY_TEMPLATE_MANIFEST"
+  },
+  "failure_taxonomy": {
+    "NO_DETECTOR_OUTPUT": 41,
+    "INSUFFICIENT_VISUAL_SIGNAL": 41,
+    "DETECTOR_OUTPUT_NOT_ADAPTED": 0,
+    "ADAPTER_OUTPUT_EMPTY": 0,
+    "EVIDENCE_NOT_RESOLVER_ELIGIBLE": 0,
+    "RESOLVER_UNRESOLVED": 0,
+    "ROI_PROFILE_MISMATCH": 0,
+    "OCR_NOT_INVOKED": 0,
+    "OCR_FAILED": 0,
+    "UNKNOWN": 0
+  },
+  "root_cause": [
+    "Existing full-frame OCR returned non-empty low-confidence text, but none of the 41 samples contained a supported structured prefix/value pair for VisionDetector.",
+    "The existing real-time parser therefore produced no map, NPC, monster, item, quest, HP, or MP candidate.",
+    "ExistingVisionObservationAdapter is a thin evidence-to-observation adapter and correctly preserved the empty result; it must not invent evidence.",
+    "The existing numeric OCR and template utilities are separate benchmark capabilities and were not promoted into the live runtime by this audit; the numeric probe produced no digit candidate and no repository template manifest was available."
+  ],
+  "real_evidence": {
+    "result": "GAP_IDENTIFIED",
+    "structured_entity_evidence_closed": false,
+    "structured_player_state_closed": false,
+    "recommendation": "Fix or calibrate the confirmed existing Vision signal/profile/adapter contract with a bounded, deterministic change before another real evidence run; do not add a new detector family."
+  },
+  "provenance": {
+    "source_type": "COMMUNITY_DATABASE",
+    "game_profile": "maple-cms-classic-community",
+    "server_profile": "cn-nostalgic-community",
+    "data_version": "mxdc-cn-community-20260814-v1"
+  },
+  "privacy": {
+    "raw_data_committed": false,
+    "temporary_frames_deleted": true,
+    "omitted": ["screenshots", "roi_crops", "ocr_text", "account", "character", "chat", "pid", "hwnd", "window_title", "absolute_path", "raw_observation"]
+  },
+  "safety": {
+    "safety_mode": "MOCK_ONLY",
+    "read_only": true,
+    "no_input": true,
+    "no_execution": true,
+    "no_automation": true
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "companion_loop": "FOUNDATION",
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "overall": "NOT_READY"
+  }
+}
