@@ -21,6 +21,8 @@ import yaml
 from dotenv import dotenv_values
 from pydantic import BaseModel, ConfigDict, Field
 
+from maple_agent.window.profile import default_game_window_profile
+
 _DEFAULTS_FILE = Path(__file__).parent / "defaults.yaml"
 _ENV_FILE = Path.cwd() / ".env"
 
@@ -69,8 +71,11 @@ class GameConfig(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    process: str = _DEFAULTS["game"]["process"]
-    title: str = _DEFAULTS["game"]["title"]
+    profile: str = _DEFAULTS["game"].get(
+        "profile", default_game_window_profile().profile_id
+    )
+    process: str = default_game_window_profile().primary_process
+    title: str = default_game_window_profile().primary_title
 
 
 class KnowledgeConfig(BaseModel):

@@ -41,8 +41,8 @@ def test_defaults_without_env(monkeypatch):
     assert s.llm.provider == "deepseek"
     assert s.llm.model == "deepseek-v4-flash"
     assert s.llm.base_url == "https://api.deepseek.com"
-    assert s.game.process == "MapleStory.exe"
-    assert s.game.title == "MapleStory"
+    assert s.game.process == "Maplestory_Classic"
+    assert s.game.title == "冒险岛怀旧服"
     assert s.knowledge.game_profile == ""
     assert s.vision.capture_fps == 5
     assert s.vision.ocr_provider == "tesseract"

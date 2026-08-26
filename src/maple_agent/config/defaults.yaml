@@ -15,8 +15,7 @@ llm:
   timeout_sec: 30
 
 game:
-  process: MapleStory.exe
-  title: MapleStory
+  profile: maple_classic_cn
 
 knowledge:
   game_profile: ""

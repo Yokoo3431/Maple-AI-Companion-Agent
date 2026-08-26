@@ -21,6 +21,7 @@ from maple_agent.hybrid_vision import (  # noqa: E402
     window_state_from_provider,
 )
 from maple_agent.real_vision import WindowsScreenshotProvider  # noqa: E402
+from maple_agent.window.profile import default_game_window_profile  # noqa: E402
 
 
 def _image_stats(path: Path) -> dict:
@@ -42,7 +43,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Capture condition probe(只读;窗口状态由用户切换)"
     )
-    parser.add_argument("--window-title", default="冒险岛怀旧服")
+    parser.add_argument(
+        "--window-title", default=default_game_window_profile().primary_title
+    )
     parser.add_argument(
         "--condition",
         choices=[item.value for item in CaptureCondition],

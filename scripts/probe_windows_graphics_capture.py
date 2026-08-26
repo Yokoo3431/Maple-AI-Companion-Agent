@@ -16,12 +16,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from maple_agent.window.profile import default_game_window_profile  # noqa: E402
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Windows.Graphics.Capture feasibility probe(只读)"
     )
-    parser.add_argument("--window-title", default="冒险岛怀旧服")
+    parser.add_argument(
+        "--window-title", default=default_game_window_profile().primary_title
+    )
     parser.add_argument("--frames", type=int, default=3)
     parser.add_argument("--timeout", type=float, default=20.0)
     parser.add_argument("--output", default="sessions/wgc_probe")

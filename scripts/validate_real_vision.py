@@ -36,6 +36,7 @@ from maple_agent.real_vision import (  # noqa: E402
 from maple_agent.vision_runtime.detector import VisionDetector  # noqa: E402
 from maple_agent.vision_runtime.models import VisionFrame  # noqa: E402
 from maple_agent.vision_runtime.parser import GameStateParser  # noqa: E402
+from maple_agent.window.profile import default_game_window_profile  # noqa: E402
 
 ROI_NAMES = ("map_label", "hp", "mp", "quest", "dialog")
 
@@ -299,7 +300,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Real Vision 只读 Client Benchmark(Phase 13-I)"
     )
-    parser.add_argument("--window-title", default="MapleStory")
+    parser.add_argument(
+        "--window-title", default=default_game_window_profile().primary_title
+    )
     parser.add_argument("--profile", default="default-800x600")
     parser.add_argument("--frames", type=int, default=20)
     parser.add_argument("--interval", type=float, default=0.5)

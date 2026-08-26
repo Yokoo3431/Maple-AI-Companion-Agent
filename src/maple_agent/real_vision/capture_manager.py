@@ -14,6 +14,7 @@ from maple_agent.hybrid_vision.models import CaptureCondition
 from maple_agent.real_vision.capture import WindowsScreenshotProvider
 from maple_agent.real_vision.wgc import WindowsGraphicsCaptureProvider
 from maple_agent.vision_runtime.models import VisionFrame
+from maple_agent.window import GameWindowProfile, default_game_window_profile
 
 
 class CaptureManager:
@@ -22,16 +23,22 @@ class CaptureManager:
     def __init__(
         self,
         *,
-        window_title: str = "MapleStory",
+        window_title: str | None = None,
         save_dir: str | None = None,
+        window_profile: GameWindowProfile | None = None,
     ) -> None:
+        profile = window_profile or default_game_window_profile()
+        if window_title:
+            profile = profile.with_title_candidates((window_title,))
         self.wgc = WindowsGraphicsCaptureProvider(
             window_title=window_title,
             save_dir=save_dir,
+            window_profile=profile,
         )
         self.imagegrab = WindowsScreenshotProvider(
             window_title=window_title,
             save_dir=save_dir,
+            window_profile=profile,
         )
         self.preferred = "wgc" if self.wgc.available else "imagegrab"
         self.last_provider = ""

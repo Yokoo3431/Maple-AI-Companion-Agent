@@ -11,6 +11,12 @@ from maple_agent.vision_runtime.models import (
     VisionFrame,
     VisionSource,
 )
+from maple_agent.window import (
+    GameWindowProfile,
+    WindowDiscoveryResult,
+    WindowsWindowDiscovery,
+    default_game_window_profile,
+)
 
 
 class WindowsScreenshotProvider:
@@ -19,13 +25,18 @@ class WindowsScreenshotProvider:
     def __init__(
         self,
         *,
-        window_title: str = "MapleStory",
+        window_title: str | None = None,
         method: str = "auto",
         window_rect: dict | None = None,
         dpi_scale: float = 1.0,
         save_dir: str | None = None,
+        window_profile: GameWindowProfile | None = None,
     ) -> None:
-        self.window_title = window_title
+        profile = window_profile or default_game_window_profile()
+        if window_title:
+            profile = profile.with_title_candidates((window_title,))
+        self.window_profile = profile
+        self.window_title = window_title or profile.primary_title
         self.method = method
         self.window_rect = dict(window_rect or {})
         self.dpi_scale = dpi_scale
@@ -35,6 +46,7 @@ class WindowsScreenshotProvider:
         self.last_capture: CaptureReference | None = None
         self.last_status: CaptureStatus = CaptureStatus.UNAVAILABLE
         self.last_window_info: dict = {}
+        self.last_discovery: WindowDiscoveryResult | None = None
         self._win32 = self._probe_win32()
         self.call_count = 0
 
@@ -84,10 +96,17 @@ class WindowsScreenshotProvider:
             return {}
 
     def _find_window(self) -> int:
-        """按标题查找窗口;未找到时返回 0。"""
+        """兼容候选 profile 的只读窗口发现;旧 fake provider 保留精确回退。"""
         try:
+            if hasattr(self._win32, "EnumWindows"):
+                result = WindowsWindowDiscovery(win32gui=self._win32).discover(
+                    self.window_profile
+                )
+                self.last_discovery = result
+                return int(result.hwnd or 0)
             return int(self._win32.FindWindow(None, self.window_title) or 0)
         except Exception:
+            self.last_discovery = None
             return 0
 
     def _collect_window_info(self, handle: int) -> None:
@@ -146,6 +165,14 @@ class WindowsScreenshotProvider:
         except Exception:
             pass
         self.last_window_info = info
+        if self.last_discovery is not None:
+            info.update(
+                {
+                    "match_method": self.last_discovery.match_method,
+                    "match_confidence": self.last_discovery.confidence,
+                    "match_reason": self.last_discovery.reason,
+                }
+            )
 
     def _finalize_window_info(self) -> None:
         """在 client/screen rect 填充后派生 resolution 与 window_mode。"""

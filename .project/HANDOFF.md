@@ -1,3 +1,18 @@
+# Handoff(13-U.1a,COMPLETED)
+
+- **Last completed phase**:13-U Real Session Evidence Validation framework
+- **Current phase**:13-U.1a Read-only Window Binding Compatibility Fix(COMPLETED)
+- **GitHub**:本阶段成果将同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Root cause**:旧入口和 Provider 默认精确查找 `MapleStory` / `MapleStory.exe`；当前国服客户端使用 `Maplestory_Classic` / `冒险岛怀旧服`，且脚本之间默认值不一致
+- **Compatibility fix**:新增唯一 `GameWindowProfile`(`maple_classic_cn`) 和 `WindowsWindowDiscovery`；对可见顶层窗口做进程/标题候选匹配、确定性排序和结构化结果输出；不激活窗口、不发送输入
+- **Runtime boundary**:Existing Vision capture 仅复用新的只读绑定结果；没有修改 OCR/CV/template matching/WGC/ImageGrab 算法，也没有修改 Knowledge、Companion Runtime 或真实 Session 流程
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; no automation, executor, hooks, DLL injection, memory reading or client modification
+- **Real session**:本阶段明确没有开始 Level A/B；真实 Session 仍为 pending，绑定兼容性修复不等于真实 Vision 验证
+- **Validation**:新增 CN/legacy match、unknown rejection、duplicate deterministic selection、no visible window、false-positive rejection 测试；Ruff 与 diff check 通过；本机 pytest 被失效的 Python 3.12 `.venv` 启动器阻塞，CI 需完成最终回归
+- **Privacy**:测试只使用脱敏候选窗口数据；没有提交真实 HWND、PID、窗口标题、截图、OCR 或 raw session
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Session=`FOUNDATION_ONLY / NOT_VALIDATED` / Overall=`NOT_READY`
+- **Next action**:停止在 Phase 13-U.1a；不自动开始 Phase 13-U 真实 Session，等待人工审核和环境修复
+
 # Handoff(13-U,COMPLETED)
 
 - **Last completed phase**:13-T Real Companion Session Validation & Runtime Hardening

@@ -18,6 +18,12 @@ from maple_agent.vision_runtime.models import (
     VisionFrame,
     VisionSource,
 )
+from maple_agent.window import (
+    GameWindowProfile,
+    WindowDiscoveryResult,
+    WindowsWindowDiscovery,
+    default_game_window_profile,
+)
 
 
 class WindowsGraphicsCaptureProvider:
@@ -26,17 +32,23 @@ class WindowsGraphicsCaptureProvider:
     def __init__(
         self,
         *,
-        window_title: str = "MapleStory",
+        window_title: str | None = None,
         save_dir: str | None = None,
         frame_timeout_s: float = 5.0,
+        window_profile: GameWindowProfile | None = None,
     ) -> None:
-        self.window_title = window_title
+        profile = window_profile or default_game_window_profile()
+        if window_title:
+            profile = profile.with_title_candidates((window_title,))
+        self.window_profile = profile
+        self.window_title = window_title or profile.primary_title
         self.save_dir = save_dir
         self.frame_timeout_s = max(0.5, frame_timeout_s)
         self.capture_method = "wgc"
         self.last_capture: CaptureReference | None = None
         self.last_status: CaptureStatus = CaptureStatus.UNAVAILABLE
         self.last_window_info: dict = {}
+        self.last_discovery: WindowDiscoveryResult | None = None
         self.available = (
             importlib.util.find_spec("win32gui") is not None
             and importlib.util.find_spec("windows_capture") is not None
@@ -51,18 +63,26 @@ class WindowsGraphicsCaptureProvider:
         try:
             import win32gui  # type: ignore[import-not-found]
 
-            handle = int(
-                win32gui.FindWindow(None, self.window_title) or 0
+            result = WindowsWindowDiscovery(win32gui=win32gui).discover(
+                self.window_profile
             )
+            self.last_discovery = result
+            handle = int(result.hwnd or 0)
             if handle:
                 self.last_window_info = {
                     "hwnd": handle,
-                    "window_title": win32gui.GetWindowText(handle),
+                    "window_title": result.window_title,
+                    "pid": result.pid,
+                    "process_name": result.process_name,
+                    "match_method": result.match_method,
+                    "match_confidence": result.confidence,
+                    "match_reason": result.reason,
                     "minimized": bool(win32gui.IsIconic(handle)),
                     "visible": bool(win32gui.IsWindowVisible(handle)),
                 }
             return handle
         except Exception:
+            self.last_discovery = None
             return 0
 
     def capture(self, *, trace_id: str = "") -> VisionFrame:

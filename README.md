@@ -49,6 +49,7 @@
 | Phase 13-S | Runtime Contract Reconciliation & Real/Replay Companion Session Validation(运行时契约对齐与真实/回放 Companion Session 验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-T | Real Companion Session Validation & Runtime Hardening(真实 Companion Session 验证与运行时加固) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U | Real Session Evidence Validation(真实 Session 证据验证) | ✅ Phase COMPLETED / Companion Session = FOUNDATION_ONLY / Overall = NOT_READY |
+| Phase 13-U.1a | Read-only Window Binding Compatibility Fix(只读窗口绑定兼容性修复) | ✅ Phase COMPLETED / Real Session = NOT_STARTED / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 

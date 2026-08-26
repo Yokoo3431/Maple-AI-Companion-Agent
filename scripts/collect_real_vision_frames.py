@@ -23,6 +23,7 @@ from maple_agent.hybrid_vision.profile import (  # noqa: E402
     VisionProfileTransformer,
 )
 from maple_agent.real_vision.capture_manager import CaptureManager  # noqa: E402
+from maple_agent.window.profile import default_game_window_profile  # noqa: E402
 
 ROI_NAMES = ("map_label", "hp", "mp", "quest", "dialog")
 
@@ -32,7 +33,9 @@ def main() -> int:
         description="通用真实帧采集(只读;窗口状态由用户手动切换)"
     )
     parser.add_argument("--machine", default="HOME")
-    parser.add_argument("--window-title", default="冒险岛怀旧服")
+    parser.add_argument(
+        "--window-title", default=default_game_window_profile().primary_title
+    )
     parser.add_argument("--profile", default="home_pc_2560x1440")
     parser.add_argument(
         "--client-resolution", default="",
