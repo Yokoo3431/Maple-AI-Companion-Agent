@@ -24,6 +24,19 @@ from maple_agent.vision_runtime.validator import (
     VisionRuntimeValidator,
     VisionRuntimeVerdict,
 )
+from maple_agent.vision_runtime.visual_semantics import (
+    MockVisualSemanticProvider,
+    StrategyMetrics,
+    VisualCandidateType,
+    VisualSemanticCandidate,
+    VisualSemanticGate,
+    VisualSemanticGateDecision,
+    VisualSemanticProvider,
+    VisualSemanticRequest,
+    VisualSemanticResponse,
+    VisualSemanticStatus,
+    VisualSemanticTrigger,
+)
 
 
 def save_vision_runtime_trace(
@@ -65,5 +78,16 @@ __all__ = [
     "VisionRuntimeValidator",
     "VisionRuntimeVerdict",
     "VisionSource",
+    "MockVisualSemanticProvider",
+    "StrategyMetrics",
+    "VisualCandidateType",
+    "VisualSemanticCandidate",
+    "VisualSemanticGate",
+    "VisualSemanticGateDecision",
+    "VisualSemanticProvider",
+    "VisualSemanticRequest",
+    "VisualSemanticResponse",
+    "VisualSemanticStatus",
+    "VisualSemanticTrigger",
     "save_vision_runtime_trace",
 ]

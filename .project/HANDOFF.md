@@ -1,3 +1,19 @@
+# Handoff(13-U.1f,REVIEW_REQUIRED)
+
+- **Current phase**:13-U.1f Hybrid Visual Semantic Perception Feasibility
+- **Previous completed phase**:13-U.1e Minimal Real Semantic Evidence Closure
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Decision**:选择 `LOCAL_FIRST`；已有 FrameChangeDetector/VisionScheduler 负责变化门控，新增 `VisualSemanticProvider` 仅为严格隔离的低频实验契约。Notebook 没有稳定 Antigravity/Gemini CLI 或 provider 配置，真实决策为 `INSUFFICIENT_EVIDENCE`
+- **Real sample**:U.1f 真实事件门控诊断运行 63.05 秒：42/42 capture、42 snapshots、23 次 frame change、OCR 调用 1（约 0.95 次/分钟）、OCR 非空 1、结构化 candidate 0、Map/HP/MP candidate 均 0、PerceptionEvidence 0、Resolver input 0、SemanticState 0、异常 0；OCR useful yield=0/1=0.0%，不能用 OCR 非空率代替
+- **Local path**:Map candidate=0，原因仍为 `MAP_TEMPLATE_ASSET_GAP`；HP/MP candidate 各为 0，当前样本为 `INSUFFICIENT_VISUAL_SIGNAL`；没有新增模板、OCR 引擎或 detector family
+- **VLM path**:只实现 schema validation、privacy-safe request metadata、fail-closed response、cooldown/scene-change/unknown gate、mock provider 和 metrics；VLM invocation=0、valid candidate=0、外部图片发送=0
+- **Tests**:新增 8 项 deterministic visual semantic tests；定向 tests 与 Ruff 已通过；真实事件门控样本证明 42 帧未触发每帧 OCR，完整回归和 CI 待本阶段最终验证
+- **Files**:参考审阅 `docs/architecture/vision/phase13u1f_reference_review.md`；脱敏 feasibility report `docs/architecture/vision/phase13u1f_feasibility_report.json`
+- **Privacy**:未提交截图、ROI、OCR raw、VLM image/transcript、credentials、PID/HWND、绝对路径或 raw session
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; NO AUTOMATION; no planner/executor/hooks/DLL/memory reading
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / Real Semantic Evidence=`NOT_CLOSED` / Overall=`NOT_READY`
+- **Next action**:保持 `REVIEW_REQUIRED`；只建议在合法且用户明确授权的条件下补齐 map template asset 或复核 HP/MP profile，并另行进行真实 VLM/短诊断；不进入 Phase 13-V
+
 # Handoff(13-U.1e,REVIEW_REQUIRED)
 
 - **Current phase**:13-U.1e Minimal Real Semantic Evidence Closure

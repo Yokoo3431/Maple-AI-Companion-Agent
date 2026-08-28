@@ -53,6 +53,7 @@
 | Phase 13-U.1c | Level A Real Read-only Companion Session(10 分钟真实只读 Companion Session) | ✅ Phase COMPLETED / Companion Session = REAL_SESSION_VALIDATED_LEVEL_A / Overall = NOT_READY |
 | Phase 13-U.1d | Real Vision → Semantic Evidence Gap Audit(真实视觉到语义证据断点审计) | ✅ GAP_IDENTIFIED / Real Vision = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U.1e | Minimal Real Semantic Evidence Closure(最小真实语义证据闭合) | ⚠️ REVIEW_REQUIRED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED / Overall = NOT_READY |
+| Phase 13-U.1f | Hybrid Visual Semantic Perception Feasibility(混合视觉语义感知可行性) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -93,6 +94,10 @@ Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture
 ### Phase 13-U.1e: Minimal Real Semantic Evidence Closure
 
 本阶段在既有架构内增加了一个薄的 `ExistingVisionObservationAdapter.from_screen_observation()`：只将已有 `ScreenObservation` 字段转换为既有 `PerceptionEvidence`，并复用 `PlayerStateParser` 将 HP/MP 保留为 `PlayerStateReference`。随后完成 93.39 秒真实诊断：27/27 capture、27/27 snapshot 成功，异常 0；但 Map/HP/MP candidate 和 `PerceptionEvidence` 均为 0。Map 侧确认仓库 template manifest/assets 缺失，HP/MP 侧确认当前 Notebook profile-aware numeric probe 没有数字候选；因此 `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`，阶段保持 `REVIEW_REQUIRED`。详见脱敏报告 `docs/architecture/companion/phase13u1e_semantic_evidence_report.json`。
+
+### Phase 13-U.1f: Hybrid Visual Semantic Perception Feasibility
+
+本阶段完成了 Local CV、Selective ROI OCR 与低频 VLM fallback 的架构可行性审阅。项目已有 `FrameChangeDetector` / `VisionScheduler`，新增的 `VisualSemanticProvider` 只是严格 schema 与 gated experimental contract；VLM 输出必须经过校验后才能通过既有 `ExistingVisionObservationAdapter` 进入 `PerceptionEvidence` 或 `PlayerStateReference`，不会创建第二套 Vision/Resolver。U.1f 真实事件门控诊断运行 63.05 秒：42/42 capture、42 snapshots、23 次 frame change，但 OCR 只调用 1 次（约 0.95 次/分钟）；OCR 非空 1/1，结构化 useful yield 仍为 0/1，Map/HP/MP candidate 仍为 0。Notebook 没有稳定的 Antigravity/Gemini CLI 或 provider 配置，未执行外部图片调用，故本阶段选择 `INSUFFICIENT_EVIDENCE`，默认策略为 `LOCAL_FIRST`，不提升任何 readiness。参考审阅与脱敏指标见 `docs/architecture/vision/phase13u1f_reference_review.md`、`docs/architecture/vision/phase13u1f_feasibility_report.json`。
 
 当前架构路线:
 

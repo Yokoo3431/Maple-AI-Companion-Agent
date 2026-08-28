@@ -11,6 +11,10 @@ from maple_agent.game_state.models import (
 from maple_agent.game_state.player import PlayerStateParser
 from maple_agent.hybrid_vision.models import PerceptionEvidence, PerceptionMethod
 from maple_agent.vision_runtime.models import ScreenObservation
+from maple_agent.vision_runtime.visual_semantics import (
+    VisualCandidateType,
+    VisualSemanticCandidate,
+)
 
 
 class ExistingVisionObservationAdapter:
@@ -99,6 +103,67 @@ class ExistingVisionObservationAdapter:
                 observation.hp_reference is not None
                 or observation.mp_reference is not None
             )
+            else None
+        )
+        return ExistingVisionObservationAdapter.from_evidence(
+            observation_id=observation_id,
+            timestamp=timestamp,
+            evidence=evidence,
+            source=source,
+            player_status=player_status,
+        )
+
+    @staticmethod
+    def from_visual_semantic_candidates(
+        *,
+        observation_id: str,
+        timestamp: datetime,
+        candidates: list[VisualSemanticCandidate],
+        source: str = "VLM_VISUAL_OBSERVATION",
+    ) -> CurrentObservation:
+        """Adapt validated visible facts into the existing observation contract."""
+        evidence: list[PerceptionEvidence] = []
+        hp: float | None = None
+        mp: float | None = None
+        confidence = 0.0
+        for index, candidate in enumerate(candidates):
+            confidence = max(confidence, candidate.confidence)
+            if candidate.candidate_type is VisualCandidateType.HP:
+                try:
+                    value = float(candidate.candidate_value)
+                except ValueError:
+                    continue
+                if 0 <= value <= 1:
+                    hp = value
+                continue
+            if candidate.candidate_type is VisualCandidateType.MP:
+                try:
+                    value = float(candidate.candidate_value)
+                except ValueError:
+                    continue
+                if 0 <= value <= 1:
+                    mp = value
+                continue
+            evidence_type = (
+                "map"
+                if candidate.candidate_type is VisualCandidateType.MAP
+                else "ui_text"
+            )
+            evidence.append(
+                PerceptionEvidence(
+                    evidence_id=f"{candidate.frame_reference}:{index}",
+                    evidence_type=evidence_type,
+                    value=candidate.candidate_value,
+                    confidence=candidate.confidence,
+                    source=source,
+                    timestamp=timestamp,
+                    frame_id=candidate.frame_reference,
+                    method=PerceptionMethod.VLM_VISUAL_OBSERVATION,
+                )
+            )
+        player_status = (
+            PlayerStateReference(hp=hp, mp=mp)
+            if hp is not None or mp is not None
             else None
         )
         return ExistingVisionObservationAdapter.from_evidence(

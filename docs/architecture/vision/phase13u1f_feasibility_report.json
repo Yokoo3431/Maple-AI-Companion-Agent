@@ -1,0 +1,110 @@
+{
+  "phase": "13-U.1f",
+  "status": "REVIEW_REQUIRED",
+  "decision": "INSUFFICIENT_EVIDENCE",
+  "scope": "read-only hybrid visual semantic perception feasibility",
+  "real_semantic_evidence": "NOT_CLOSED",
+  "source_observation": {
+    "report": "phase13u1e_semantic_evidence_report.json",
+    "duration_seconds": 63.05,
+    "capture_attempts": 42,
+    "capture_success": 42,
+    "frame_change_count": 23,
+    "ocr_invocations": 1,
+    "ocr_calls_per_minute": 0.9516,
+    "ocr_nonempty": 1,
+    "ocr_nonempty_rate": 1.0,
+    "structured_candidates": 0,
+    "structured_candidate_yield": 0.0,
+    "snapshot_count": 42,
+    "exceptions": 0,
+    "average_processing_latency_ms": 239.924,
+    "p95_processing_latency_ms": 235.712,
+    "note": "This is the U.1f event-gated live sample; U.1e full-frame sample remains historical context. OCR non-empty is not treated as semantic useful yield"
+  },
+  "local_fast_path": {
+    "frame_change_detector": {
+      "available": true,
+      "live_invocations_in_source_sample": 42,
+      "live_changed_frames": 23,
+      "unit_gate_verified": true,
+      "event_gated_diagnostic": true
+    },
+    "map": {
+      "invocations": 1,
+      "valid_candidates": 0,
+      "useful_yield": 0.0,
+      "status": "MAP_TEMPLATE_ASSET_GAP"
+    },
+    "hp": {
+      "invocations": 1,
+      "valid_candidates": 0,
+      "useful_yield": 0.0,
+      "status": "INSUFFICIENT_VISUAL_SIGNAL"
+    },
+    "mp": {
+      "invocations": 1,
+      "valid_candidates": 0,
+      "useful_yield": 0.0,
+      "status": "INSUFFICIENT_VISUAL_SIGNAL"
+    },
+    "ocr_latency_ms": null,
+    "ocr_latency_status": "NOT_MEASURED_IN_U.1f_SAMPLE"
+  },
+  "vlm_experimental_path": {
+    "contract": "VisualSemanticProvider",
+    "provider_cli_available": false,
+    "configured_provider": false,
+    "invocations": 0,
+    "valid_structured_candidates": 0,
+    "verified_candidates": 0,
+    "false_candidates": 0,
+    "unknown": 0,
+    "structured_output_failure_count": 0,
+    "latency_ms": null,
+    "status": "UNSUPPORTED_ON_NOTEBOOK",
+    "note": "No external image or credential was used"
+  },
+  "hybrid": {
+    "invocations": 27,
+    "valid_structured_candidates": 0,
+    "useful_yield": 0.0,
+    "perception_evidence": 0,
+    "resolver_input": 0,
+    "semantic_state_nonempty": 0,
+    "status": "REAL_SEMANTIC_EVIDENCE_NOT_CLOSED"
+  },
+  "gating": {
+    "default_cooldown_seconds": 30.0,
+    "default_persistent_unknown_limit": 2,
+    "per_frame_vlm_calls": false,
+    "local_evidence_short_circuit": true,
+    "deterministic_mock_tests": 8
+  },
+  "ground_truth": {
+    "status": "UNKNOWN_GT",
+    "verified_candidates": 0,
+    "note": "No real structured candidate was produced for human comparison"
+  },
+  "provenance": {
+    "knowledge_source_type": "COMMUNITY_DATABASE",
+    "game_profile": "maple-cms-classic-community",
+    "server_profile": "cn-nostalgic-community",
+    "dataset_version": "mxdc-cn-community-20260814-v1"
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "real_semantic_evidence": "NOT_CLOSED",
+    "overall": "NOT_READY",
+    "safety_mode": "MOCK_ONLY"
+  },
+  "privacy": {
+    "raw_frames_committed": false,
+    "raw_ocr_committed": false,
+    "external_image_sent": false,
+    "credentials_committed": false,
+    "private_paths_committed": false
+  }
+}
