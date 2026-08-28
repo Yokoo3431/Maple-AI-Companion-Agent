@@ -52,6 +52,7 @@
 | Phase 13-U.1a | Read-only Window Binding Compatibility Fix(只读窗口绑定兼容性修复) | ✅ Phase COMPLETED / Real Session = NOT_STARTED / Overall = NOT_READY |
 | Phase 13-U.1c | Level A Real Read-only Companion Session(10 分钟真实只读 Companion Session) | ✅ Phase COMPLETED / Companion Session = REAL_SESSION_VALIDATED_LEVEL_A / Overall = NOT_READY |
 | Phase 13-U.1d | Real Vision → Semantic Evidence Gap Audit(真实视觉到语义证据断点审计) | ✅ GAP_IDENTIFIED / Real Vision = FOUNDATION_ONLY / Overall = NOT_READY |
+| Phase 13-U.1e | Minimal Real Semantic Evidence Closure(最小真实语义证据闭合) | ⚠️ REVIEW_REQUIRED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED / Overall = NOT_READY |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -88,6 +89,10 @@ Phase 13-U 只验证已有 Vision Observation 是否能够进入同一个只读 
 ### Phase 13-U.1d: Real Vision → Semantic Evidence Gap Audit
 
 Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture 成功、41/41 帧可用、41/41 次 OCR 返回非空结果、41/41 次 CompanionSnapshot 成功，时间单调与 append-only history 均保持；但现有 `VisionDetector` 没有产生地图/实体候选，现有 HP/MP 数字探针也没有候选，最终 `PerceptionEvidence=0`、`CurrentObservation.evidence=0`、Resolver 输入为 0。断点确定为已有视觉输出未满足结构化解析契约/当前视觉信号不足，而不是窗口绑定、Adapter 丢失或 Runtime 崩溃；结果记录为 `GAP_IDENTIFIED`，未新增 Vision、Resolver 或推理能力。详见脱敏报告 `docs/architecture/companion/phase13u1d_evidence_gap_report.json`。
+
+### Phase 13-U.1e: Minimal Real Semantic Evidence Closure
+
+本阶段在既有架构内增加了一个薄的 `ExistingVisionObservationAdapter.from_screen_observation()`：只将已有 `ScreenObservation` 字段转换为既有 `PerceptionEvidence`，并复用 `PlayerStateParser` 将 HP/MP 保留为 `PlayerStateReference`。随后完成 93.39 秒真实诊断：27/27 capture、27/27 snapshot 成功，异常 0；但 Map/HP/MP candidate 和 `PerceptionEvidence` 均为 0。Map 侧确认仓库 template manifest/assets 缺失，HP/MP 侧确认当前 Notebook profile-aware numeric probe 没有数字候选；因此 `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`，阶段保持 `REVIEW_REQUIRED`。详见脱敏报告 `docs/architecture/companion/phase13u1e_semantic_evidence_report.json`。
 
 当前架构路线:
 

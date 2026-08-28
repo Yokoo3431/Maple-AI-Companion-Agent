@@ -1,0 +1,116 @@
+{
+  "phase": "13-U.1e",
+  "status": "REVIEW_REQUIRED",
+  "result": "REAL_SEMANTIC_EVIDENCE_NOT_CLOSED",
+  "session": {
+    "duration_seconds": 93.39,
+    "capture_attempts": 27,
+    "capture_success": 27,
+    "frame_available": 27,
+    "snapshot_count": 27,
+    "snapshot_failure_count": 0,
+    "exception_count": 0,
+    "timestamp_monotonic": true,
+    "history_append_only": true
+  },
+  "pipeline_counts": {
+    "ocr_invoked": 27,
+    "ocr_result_count": 27,
+    "ocr_nonempty_count": 15,
+    "vision_result_count": 27,
+    "map_detector_invoked": 27,
+    "map_detector_candidate_count": 0,
+    "map_template_matcher_invoked": 0,
+    "map_template_candidate_count": 0,
+    "hp_detector_invoked": 27,
+    "hp_candidate_count": 0,
+    "mp_detector_invoked": 27,
+    "mp_candidate_count": 0,
+    "adapter_input_count": 27,
+    "perception_evidence_count": 0,
+    "current_observation_evidence_count": 0,
+    "player_state_count": 0,
+    "resolver_input_count": 0,
+    "resolved_count": 0,
+    "unresolved_count": 0,
+    "semantic_state_nonempty_count": 0,
+    "adapter_empty_count": 27
+  },
+  "capability_audit": {
+    "capture": "PASS; existing WindowsScreenshotProvider",
+    "ocr": "PASS; Tesseract returned non-empty output in 15 of 27 frames",
+    "map": "NOT_CLOSED; VisionDetector ran but produced no MAP_LABEL candidate",
+    "map_template": "MAP_TEMPLATE_ASSET_GAP; repository manifest absent, matcher not invoked",
+    "hp_mp_numeric": "NOT_CLOSED; existing numeric extractor ran against profile-aware ROI but produced no digit candidate",
+    "profile": "OFFICE_PROFILE_MATCHES_1366X768_CLIENT",
+    "adapter": "PASS_AS_CONTRACT; copied only existing ScreenObservation fields and created no fake evidence",
+    "resolver": "NOT_REACHED; no entity evidence entered",
+    "runtime": "PASS_WITH_EMPTY_INPUT; existing coordinator produced all 27 snapshots"
+  },
+  "failure_taxonomy": {
+    "MAP_TEMPLATE_ASSET_GAP": 27,
+    "NO_DETECTOR_OUTPUT": 27,
+    "INSUFFICIENT_VISUAL_SIGNAL": 27,
+    "DETECTOR_OUTPUT_NOT_ADAPTED": 0,
+    "ADAPTER_OUTPUT_EMPTY": 27,
+    "EVIDENCE_NOT_RESOLVER_ELIGIBLE": 0,
+    "RESOLVER_UNRESOLVED": 0,
+    "ROI_PROFILE_MISMATCH": 0,
+    "OCR_NOT_INVOKED": 0,
+    "OCR_FAILED": 0,
+    "OCR_NO_DIGITS": 27,
+    "VISION_PROCESSING_EXCEPTION": 0,
+    "UNKNOWN": 0
+  },
+  "root_cause": [
+    "The existing map template capability cannot run in this repository/runtime because the documented repository template manifest/assets are absent; the live runtime also has no template matcher invocation.",
+    "The existing full-frame OCR output did not produce a supported map/entity/quest prefix candidate in the 27-frame sample.",
+    "The existing HP/MP numeric extractor was invoked with the matching 1366x768 office profile and produced no digit candidate; this is a real Notebook signal gap, not evidence that the previously validated HOME path is broken.",
+    "The adapter contract gap is minimally closed for existing ScreenObservation values, but it cannot create evidence when the upstream ScreenObservation is empty."
+  ],
+  "changes": {
+    "production": [
+      "Added ExistingVisionObservationAdapter.from_screen_observation as a thin field-preserving bridge.",
+      "Reused PlayerStateParser for HP/MP player-state conversion; HP/MP are not knowledge entities."
+    ],
+    "tests": [
+      "Added four deterministic adapter contract tests.",
+      "Hardened invalid-window environment test to use an explicit nonexistent profile."
+    ],
+    "not_added": [
+      "Vision V2",
+      "new OCR engine",
+      "new detector family",
+      "new evidence model",
+      "new resolver",
+      "knowledge-to-observation inference",
+      "planner",
+      "executor",
+      "input or automation"
+    ]
+  },
+  "ground_truth": {
+    "status": "UNVERIFIED_CANDIDATE",
+    "verified": [],
+    "note": "No structured candidate was produced, so no detector output was promoted or compared as verified ground truth."
+  },
+  "provenance": {
+    "source_type": "COMMUNITY_DATABASE",
+    "game_profile": "maple-cms-classic-community",
+    "server_profile": "cn-nostalgic-community",
+    "data_version": "mxdc-cn-community-20260814-v1"
+  },
+  "readiness": {
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "real_semantic_evidence": "NOT_CLOSED",
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "overall": "NOT_READY",
+    "safety_mode": "MOCK_ONLY"
+  },
+  "privacy": {
+    "raw_data_committed": false,
+    "temporary_frames_deleted": true,
+    "omitted": ["screenshots", "roi_crops", "ocr_text", "account", "character", "chat", "pid", "hwnd", "window_title", "absolute_path", "raw_observation", "raw_session"]
+  }
+}

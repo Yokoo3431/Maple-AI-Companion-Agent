@@ -1,3 +1,17 @@
+# Handoff(13-U.1e,REVIEW_REQUIRED)
+
+- **Current phase**:13-U.1e Minimal Real Semantic Evidence Closure
+- **Previous completed phase**:13-U.1d Real Vision → Semantic Evidence Gap Audit
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Minimal change**:在既有 `ExistingVisionObservationAdapter` 增加 `from_screen_observation()`；只复制已有 map/entity/quest 字段为既有 `PerceptionEvidence`，并复用 `PlayerStateParser` 把 HP/MP 放入 `PlayerStateReference`，不做知识补全或视觉推理
+- **Real diagnostic**:用户手动保持客户端可见，运行 `93.39` 秒；27/27 capture 成功、27/27 frame 可用、OCR 调用 27、非空 15、map detector candidate 0、HP/MP numeric candidate 0、Adapter input 27、PerceptionEvidence 0、Resolver input 0、27/27 Snapshot 成功、异常 0
+- **Root cause**:Map 侧确认 `MAP_TEMPLATE_ASSET_GAP`（仓库 template manifest/assets 缺失，live runtime 也未调用 matcher）；HP/MP 侧在匹配的 1366x768 profile-aware ROI 下无数字候选。Adapter 已能处理非空 `ScreenObservation`，但不能从空上游结果创造证据
+- **Result**:`REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`; 没有真实 candidate，不能宣称 map/HP/MP semantic closure；报告为 `docs/architecture/companion/phase13u1e_semantic_evidence_report.json`
+- **Privacy**:未提交截图、ROI、OCR 原文、账号/角色/chat、PID/HWND、窗口标题、绝对路径、raw observation/session；临时帧已清理
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; NO AUTOMATION; no keyboard/mouse, planner, executor, hooks, DLL injection or memory reading
+- **Readiness**:Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / REAL_SEMANTIC_EVIDENCE=`NOT_CLOSED` / Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Overall=`NOT_READY`
+- **Next action**:保持 `REVIEW_REQUIRED`；只建议补齐合法的 map template asset/manifest 或修复已确认 HP/MP visual signal 后重跑短诊断，不进入 Phase 13-V
+
 # Handoff(13-U.1d,COMPLETED)
 
 - **Last completed phase**:13-U.1d Real Vision → Semantic Evidence Gap Audit

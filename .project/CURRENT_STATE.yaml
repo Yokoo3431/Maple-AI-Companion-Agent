@@ -9,8 +9,8 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-U.1d
-  status: COMPLETED
+  current: 13-U.1e
+  status: REVIEW_REQUIRED
   last_completed: 13-U.1d
 
 runtime:
@@ -21,6 +21,7 @@ readiness:
   knowledge: FOUNDATION_ONLY
   companion_loop: FOUNDATION
   companion_session: REAL_SESSION_VALIDATED_LEVEL_A
+  real_semantic_evidence: NOT_CLOSED
   controlled_execution: NOT_READY
 
 development:
@@ -29,6 +30,6 @@ development:
   git_repository_expected: true
 
 handoff:
-  status: READY
-  next_action: "STOP: Phase 13-U.1d completed with GAP_IDENTIFIED; 60.84-second real diagnostic captured 41 frames/snapshots but produced no structured semantic evidence; do not start Phase 13-V; fix only the confirmed Vision/Evidence contract gap after review"
+  status: REVIEW_REQUIRED
+  next_action: "STOP: Phase 13-U.1e bounded adapter bridge implemented, but 93.39-second real diagnostic produced no structured semantic evidence; REAL_SEMANTIC_EVIDENCE=NOT_CLOSED; resolve MAP_TEMPLATE_ASSET_GAP or HP/MP signal gap before any next phase"
   blockers: []
