@@ -34,11 +34,17 @@ def test_office_profile_exposes_dedicated_numeric_rois_at_client_size():
     assert rois["mp_numeric"]["y"] > 700
 
 
-def test_numeric_extractor_uses_valid_binary_when_env_is_directory(monkeypatch):
+def test_numeric_extractor_uses_valid_binary_when_env_is_directory(monkeypatch, tmp_path):
+    fallback = tmp_path / "tesseract.exe"
+    fallback.write_bytes(b"sanitized test executable placeholder")
     monkeypatch.setenv("TESSERACT_CMD", r"C:\invalid-tesseract-directory")
+    monkeypatch.setattr(
+        "maple_agent.hybrid_vision.hpmp.shutil.which",
+        lambda name: str(fallback),
+    )
     extractor = HpMpNumericExtractor()
     assert extractor.available is True
-    assert extractor.command.lower().endswith("tesseract.exe")
+    assert extractor.command == str(fallback)
 
 
 def test_numeric_extractor_without_binary_is_explicitly_unavailable(monkeypatch):
