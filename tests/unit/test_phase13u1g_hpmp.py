@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import sys
 from datetime import UTC, datetime
+from types import SimpleNamespace
 
 from maple_agent.companion_runtime.observation_adapter import (
     ExistingVisionObservationAdapter,
@@ -37,6 +39,10 @@ def test_office_profile_exposes_dedicated_numeric_rois_at_client_size():
 def test_numeric_extractor_uses_valid_binary_when_env_is_directory(monkeypatch, tmp_path):
     fallback = tmp_path / "tesseract.exe"
     fallback.write_bytes(b"sanitized test executable placeholder")
+    fake_pytesseract = SimpleNamespace(
+        pytesseract=SimpleNamespace(tesseract_cmd=""),
+    )
+    monkeypatch.setitem(sys.modules, "pytesseract", fake_pytesseract)
     monkeypatch.setenv("TESSERACT_CMD", r"C:\invalid-tesseract-directory")
     monkeypatch.setattr(
         "maple_agent.hybrid_vision.hpmp.shutil.which",
