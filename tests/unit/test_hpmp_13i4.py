@@ -216,6 +216,25 @@ def test_numeric_extractor_max_group_heuristic(monkeypatch):
     assert abs(ratio - 0.549) < 0.01
 
 
+def test_numeric_extractor_reports_candidate_denominators(monkeypatch):
+    extractor = HpMpNumericExtractor()
+    extractor.available = True
+
+    def fake_candidates(image, box):
+        return [(1, 2), (2, 2)] if box["kind"] == "hp" else [(3, 4)]
+
+    monkeypatch.setattr(extractor, "_read_candidates", fake_candidates)
+    result = extractor.extract(
+        None,
+        hp_box={"kind": "hp"},
+        mp_box={"kind": "mp"},
+    )
+    assert result.hp_candidate_count == 2
+    assert result.mp_candidate_count == 1
+    assert result.hp_parseable_count == 2
+    assert result.mp_parseable_count == 1
+
+
 def test_13i4_public_report_privacy_and_content():
     report_path = (
         REPO_ROOT

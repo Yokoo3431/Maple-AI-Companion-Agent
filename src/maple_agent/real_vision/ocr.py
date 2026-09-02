@@ -13,7 +13,7 @@ from maple_agent.vision_runtime.models import OcrResult, VisionFrame
 def _default_tesseract_cmd() -> str:
     """定位 tesseract 二进制:环境变量 > PATH > 常见安装路径。"""
     configured = os.environ.get("TESSERACT_CMD", "").strip()
-    if configured:
+    if configured and Path(configured).is_file():
         return configured
     discovered = shutil.which("tesseract")
     if discovered:
@@ -28,7 +28,12 @@ def _default_tessdata_dir() -> str:
     """定位 tessdata 目录:环境变量 > 常见安装路径。"""
     configured = os.environ.get("TESSDATA_PREFIX", "").strip()
     if configured and Path(configured).is_dir():
-        return configured
+        configured_path = Path(configured)
+        if (configured_path / "eng.traineddata").is_file():
+            return str(configured_path)
+        nested = configured_path / "tessdata"
+        if (nested / "eng.traineddata").is_file():
+            return str(nested)
     user_local = Path.home() / "AppData/Local/Tesseract-OCR/tessdata"
     if user_local.is_dir():
         return str(user_local)

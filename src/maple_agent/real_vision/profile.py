@@ -17,9 +17,13 @@ class VisionROIProfile(BaseModel):
     resolution: str
     window_mode: str
     dpi_scale: float = Field(default=1.0, ge=0)
+    base_profile: str = ""
+    display_resolution: str = ""
     map_label_roi: dict = Field(default_factory=dict)
     hp_roi: dict = Field(default_factory=dict)
     mp_roi: dict = Field(default_factory=dict)
+    hp_numeric_roi: dict = Field(default_factory=dict)
+    mp_numeric_roi: dict = Field(default_factory=dict)
     quest_roi: dict = Field(default_factory=dict)
     dialog_roi: dict = Field(default_factory=dict)
 

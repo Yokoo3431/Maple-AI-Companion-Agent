@@ -54,6 +54,7 @@
 | Phase 13-U.1d | Real Vision → Semantic Evidence Gap Audit(真实视觉到语义证据断点审计) | ✅ GAP_IDENTIFIED / Real Vision = FOUNDATION_ONLY / Overall = NOT_READY |
 | Phase 13-U.1e | Minimal Real Semantic Evidence Closure(最小真实语义证据闭合) | ⚠️ REVIEW_REQUIRED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED / Overall = NOT_READY |
 | Phase 13-U.1f | Hybrid Visual Semantic Perception Feasibility(混合视觉语义感知可行性) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
+| Phase 13-U.1g | HP/MP Live Signal Recalibration(HP/MP 实时信号重新校准) | ⚠️ REVIEW_REQUIRED / GAP_IDENTIFIED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -98,6 +99,10 @@ Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture
 ### Phase 13-U.1f: Hybrid Visual Semantic Perception Feasibility
 
 本阶段完成了 Local CV、Selective ROI OCR 与低频 VLM fallback 的架构可行性审阅。项目已有 `FrameChangeDetector` / `VisionScheduler`，新增的 `VisualSemanticProvider` 只是严格 schema 与 gated experimental contract；VLM 输出必须经过校验后才能通过既有 `ExistingVisionObservationAdapter` 进入 `PerceptionEvidence` 或 `PlayerStateReference`，不会创建第二套 Vision/Resolver。U.1f 真实事件门控诊断运行 63.05 秒：42/42 capture、42 snapshots、23 次 frame change，但 OCR 只调用 1 次（约 0.95 次/分钟）；OCR 非空 1/1，结构化 useful yield 仍为 0/1，Map/HP/MP candidate 仍为 0。Notebook 没有稳定的 Antigravity/Gemini CLI 或 provider 配置，未执行外部图片调用，故本阶段选择 `INSUFFICIENT_EVIDENCE`，默认策略为 `LOCAL_FIRST`，不提升任何 readiness。参考审阅与脱敏指标见 `docs/architecture/vision/phase13u1f_reference_review.md`、`docs/architecture/vision/phase13u1f_feasibility_report.json`。
+
+### Phase 13-U.1g: HP/MP Live Signal Recalibration
+
+本阶段只处理 HP/MP player-state 路径。审计确认 13-I.4 的真实 HOME 成功证据使用底部中央专用 numeric ROI、英文数字白名单、多尺度/PSM 投票和 `cur/max → normalized ratio`；当前 Notebook 的 Tesseract 配置曾把 `TESSERACT_CMD` 指向目录而非 executable，项目已增加安全回退，但这不是唯一断点。当前 1366×768 客户端经既有 profile transform 后，约 149.46 秒真实诊断取得 30/30 capture，HP/MP numeric 调用各 30 次，候选均为 0，PlayerStateReference 为 0；专用及宽 ROI 的有限预处理矩阵也均为 0。结论为 `GAP_IDENTIFIED` / `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`，具体 blocker 是当前 profile ROI 与真实 UI 布局/可见 HP/MP 信号不一致或画面未暴露数字。HP/MP 仍只允许进入既有 `PlayerStateReference`，不伪装成 KnowledgeEntity；脱敏报告见 `docs/architecture/vision/phase13u1g_hpmp_signal_report.json`，设计见 `docs/architecture/vision/phase13u1g_design.md`。
 
 当前架构路线:
 

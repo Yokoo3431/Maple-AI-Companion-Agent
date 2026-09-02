@@ -77,6 +77,10 @@ class HpMpGeometryResult(BaseModel):
     mp_partial_fraction: float = Field(default=0.0, ge=0, le=1)
     hp_failure: str = ""
     mp_failure: str = ""
+    hp_candidate_count: int = Field(default=0, ge=0)
+    mp_candidate_count: int = Field(default=0, ge=0)
+    hp_parseable_count: int = Field(default=0, ge=0)
+    mp_parseable_count: int = Field(default=0, ge=0)
 
 
 class TemplateMatch(BaseModel):

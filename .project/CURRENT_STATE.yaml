@@ -9,9 +9,9 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-U.1f
+  current: 13-U.1g
   status: REVIEW_REQUIRED
-  last_completed: 13-U.1e
+  last_completed: 13-U.1f
 
 runtime:
   safety_mode: MOCK_ONLY
@@ -22,6 +22,8 @@ readiness:
   companion_loop: FOUNDATION
   companion_session: REAL_SESSION_VALIDATED_LEVEL_A
   real_semantic_evidence: NOT_CLOSED
+  player_state_evidence: NOT_CLOSED
+  hp_mp_signal: INSUFFICIENT_VISUAL_SIGNAL
   visual_perception_feasibility: INSUFFICIENT_EVIDENCE
   controlled_execution: NOT_READY
 
@@ -32,5 +34,5 @@ development:
 
 handoff:
   status: REVIEW_REQUIRED
-  next_action: "STOP: Phase 13-U.1f selected LOCAL_FIRST with an experimental gated VLM contract, but no provider or new real structured candidate was available; REAL_SEMANTIC_EVIDENCE=NOT_CLOSED; resolve MAP_TEMPLATE_ASSET_GAP or HP/MP signal gap before any next phase"
+  next_action: "STOP: Phase 13-U.1g fixed invalid Tesseract path fallback and formalized HP/MP normalized-ratio semantics, but 149.46s real Notebook diagnostic still produced zero HP/MP candidates and zero PlayerStateReference; resolve HP_MP_SIGNAL_NOT_VISIBLE_OR_PROFILE_LAYOUT_MISMATCH before any next phase; MAP_TEMPLATE_ASSET_GAP remains separate"
   blockers: []

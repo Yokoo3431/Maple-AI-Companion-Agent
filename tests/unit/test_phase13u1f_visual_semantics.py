@@ -18,6 +18,7 @@ from maple_agent.vision_runtime.visual_semantics import (
     VisualSemanticResponse,
     VisualSemanticStatus,
     VisualSemanticTrigger,
+    VisualValueSemantics,
 )
 
 BASE = datetime(2026, 8, 29, tzinfo=UTC)
@@ -97,6 +98,20 @@ def test_hp_mp_candidates_remain_player_state_not_entities():
     assert current.player_status is not None
     assert current.player_status.hp == 0.8
     assert current.player_status.mp == 0.5
+
+
+def test_hp_mp_candidate_value_is_explicit_normalized_ratio():
+    candidate = _candidate(VisualCandidateType.HP, "0.8")
+    assert candidate.value_semantics is VisualValueSemantics.NORMALIZED_RATIO
+    invalid = {
+        **candidate.model_dump(),
+        "candidate_value": "472/472",
+    }
+    response = VisualSemanticResponse.from_payload(
+        {"status": "VALID", "candidates": [invalid]}
+    )
+    assert response.status is VisualSemanticStatus.INVALID
+    assert response.candidates == []
 
 
 def test_gate_skips_per_frame_calls_and_opens_after_cooldown():

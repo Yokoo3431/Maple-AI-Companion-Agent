@@ -21,6 +21,14 @@ class VisualCandidateType(StrEnum):
     UI_TEXT = "UI_TEXT"
 
 
+class VisualValueSemantics(StrEnum):
+    """Meaning of candidate_value; HP/MP never accept ambiguous text."""
+
+    AUTO = "AUTO"
+    VISIBLE_TEXT = "VISIBLE_TEXT"
+    NORMALIZED_RATIO = "NORMALIZED_RATIO"
+
+
 class VisualSemanticStatus(StrEnum):
     """Provider result state; unavailable/invalid never becomes evidence."""
 
@@ -111,6 +119,7 @@ class VisualSemanticCandidate(BaseModel):
     frame_reference: str
     candidate_type: VisualCandidateType
     candidate_value: str
+    value_semantics: VisualValueSemantics = VisualValueSemantics.AUTO
     confidence: float = Field(ge=0, le=1)
     uncertainties: list[str] = Field(default_factory=list)
     visible_text_summary: str = ""
@@ -128,6 +137,22 @@ class VisualSemanticCandidate(BaseModel):
         _assert_action_free_text(self.visible_text_summary)
         for uncertainty in self.uncertainties:
             _assert_action_free_text(uncertainty)
+        if self.candidate_type in (
+            VisualCandidateType.HP,
+            VisualCandidateType.MP,
+        ):
+            if self.value_semantics is VisualValueSemantics.AUTO:
+                self.value_semantics = VisualValueSemantics.NORMALIZED_RATIO
+            if self.value_semantics is not VisualValueSemantics.NORMALIZED_RATIO:
+                raise ValueError("HP/MP candidate must use normalized ratio semantics")
+            try:
+                ratio = float(self.candidate_value)
+            except ValueError as exc:
+                raise ValueError("HP/MP candidate_value must be a normalized ratio") from exc
+            if not 0 <= ratio <= 1:
+                raise ValueError("HP/MP normalized ratio must be between 0 and 1")
+        elif self.value_semantics is VisualValueSemantics.AUTO:
+            self.value_semantics = VisualValueSemantics.VISIBLE_TEXT
         return self
 
 

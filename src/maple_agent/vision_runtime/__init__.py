@@ -36,6 +36,7 @@ from maple_agent.vision_runtime.visual_semantics import (
     VisualSemanticResponse,
     VisualSemanticStatus,
     VisualSemanticTrigger,
+    VisualValueSemantics,
 )
 
 
@@ -81,6 +82,7 @@ __all__ = [
     "MockVisualSemanticProvider",
     "StrategyMetrics",
     "VisualCandidateType",
+    "VisualValueSemantics",
     "VisualSemanticCandidate",
     "VisualSemanticGate",
     "VisualSemanticGateDecision",

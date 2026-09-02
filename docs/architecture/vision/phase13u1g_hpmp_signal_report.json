@@ -1,0 +1,113 @@
+{
+  "phase": "13-U.1g",
+  "status": "REVIEW_REQUIRED",
+  "result": "GAP_IDENTIFIED",
+  "real_semantic_evidence": "NOT_CLOSED",
+  "scope": "bounded HP/MP live signal recalibration; read-only",
+  "historical_path": {
+    "phase": "13-I.4",
+    "source": "REAL_HOME aggregate evidence",
+    "client_resolution": "2560x1440",
+    "window_mode": "fullscreen-windowed",
+    "capture_family": "wgc+imagegrab",
+    "profile": "home_pc_2560x1440 -> maple_classic_default normalized ROI",
+    "numeric_roi": "dedicated bottom-center hp_numeric/mp_numeric",
+    "preprocessing": ["grayscale", "scale3", "scale5", "scale7"],
+    "ocr_config": "eng digit whitelist 0123456789/; PSM 7 and 13",
+    "parser": "cur/max grouped by maximum; ratio=cur/max",
+    "reported_detection": "HP/MP candidates present in the bounded HOME samples",
+    "ground_truth": "HP full/mid and MP full were not equally covered; low-state coverage insufficient"
+  },
+  "current_path": {
+    "source": "REAL_NOTEBOOK aggregate evidence",
+    "client_resolution": "1366x768",
+    "window_profile": "office_pc_1920x1080",
+    "capture_backend": "imagegrab",
+    "tesseract_version": "5.4.0.20240606",
+    "tesseract_languages": ["chi_sim", "eng", "osd"],
+    "invalid_environment_value_handled": true,
+    "profile_transform": "office normalized base ROI -> 1366x768",
+    "hpmp_mode": "numeric"
+  },
+  "diff_matrix": {
+    "machine_profile": "HOME validated numeric path vs NOTEBOOK transformed profile",
+    "client_dimensions": "2560x1440 vs 1366x768",
+    "dpi": "1.0 vs 1.0",
+    "capture_backend": "wgc+imagegrab historical vs imagegrab current foreground sample",
+    "roi_source": "dedicated numeric ROI in both paths; current layout signal not confirmed",
+    "ocr_language": "eng for numeric path in both",
+    "preprocessing": "same bounded numeric extractor; current probe added original/2x/3x/threshold audit",
+    "parser": "same cur/max parser",
+    "confidence": "no candidate means no confidence promotion"
+  },
+  "roi_probe": {
+    "frame_count": 1,
+    "frame_size": "1366x768",
+    "rois": {
+      "hp_numeric": {"size": "85x19", "candidate_hits_all_variants": 0},
+      "mp_numeric": {"size": "100x28", "candidate_hits_all_variants": 0},
+      "hp": {"size": "752x27", "candidate_hits_all_variants": 0},
+      "mp": {"size": "758x7", "candidate_hits_all_variants": 0}
+    },
+    "variants": ["original", "scale2", "scale3", "threshold"],
+    "raw_ocr_committed": false
+  },
+  "real_diagnostic": {
+    "capture_span_seconds": 149.46,
+    "capture_attempts": 30,
+    "capture_success": 30,
+    "ocr_backend_available": true,
+    "ocr_success_rate": 0.5667,
+    "hp_numeric_invocations": 30,
+    "mp_numeric_invocations": 30,
+    "hp_digit_candidates": 0,
+    "mp_digit_candidates": 0,
+    "hp_parseable_candidates": 0,
+    "mp_parseable_candidates": 0,
+    "hp_candidate_yield": 0.0,
+    "mp_candidate_yield": 0.0,
+    "player_state_reference_count": 0,
+    "semantic_state_nonempty_count": 0,
+    "companion_snapshot_count": 30,
+    "exception_count": 0,
+    "failure_taxonomy": {
+      "BLACK_FRAME": 2,
+      "OCR_EMPTY": 2,
+      "OCR_LOW_CONFIDENCE": 12,
+      "UNSUPPORTED_ENTITY_VISION": 1
+    }
+  },
+  "player_state_contract": {
+    "hp_mp_value_semantics": "NORMALIZED_RATIO",
+    "accepted_input": "validated numeric ratio in [0,1]",
+    "cur_max_text": "not accepted as ratio",
+    "knowledge_fabrication": false,
+    "existing_player_state_model": "PlayerStateReference"
+  },
+  "ground_truth": {
+    "status": "UNKNOWN_GT",
+    "human_verified_samples": 0,
+    "reason": "no structured candidate was produced"
+  },
+  "blockers": [
+    "HP_MP_SIGNAL_NOT_VISIBLE_OR_PROFILE_LAYOUT_MISMATCH",
+    "MAP_TEMPLATE_ASSET_GAP remains separate and untreated"
+  ],
+  "vlm": {"invocations": 0, "external_image_sent": false},
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "real_semantic_evidence": "NOT_CLOSED",
+    "overall": "NOT_READY",
+    "safety_mode": "MOCK_ONLY"
+  },
+  "privacy": {
+    "screenshots_committed": false,
+    "roi_committed": false,
+    "ocr_raw_committed": false,
+    "raw_session_committed": false,
+    "private_paths_committed": false,
+    "temporary_samples_cleaned": true
+  }
+}

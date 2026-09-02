@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import time
+from pathlib import Path
 
 from maple_agent.hybrid_vision.bar_model import BarFillModel
 from maple_agent.hybrid_vision.models import HpMpGeometryResult
@@ -318,18 +319,26 @@ class HpMpNumericExtractor:
 
     def __init__(self) -> None:
         self.backend = "numeric_ocr"
+        self.command = ""
+        self.last_candidate_count = 0
+        self.last_parseable_count = 0
         self._pytesseract = None
         try:
             import pytesseract  # type: ignore[import-not-found]
 
             self._pytesseract = pytesseract
+            configured = os.environ.get("TESSERACT_CMD", "").strip()
+            command = configured if configured and Path(configured).is_file() else ""
             command = (
-                os.environ.get("TESSERACT_CMD", "").strip()
+                command
                 or shutil.which("tesseract")
                 or r"C:\Program Files\Tesseract-OCR\tesseract.exe"
             )
-            if command and os.path.isfile(command):
-                pytesseract.pytesseract.tesseract_cmd = command
+            if not command or not Path(command).is_file():
+                self.available = False
+                return
+            pytesseract.pytesseract.tesseract_cmd = command
+            self.command = command
             self.available = True
         except ImportError:
             self.available = False
@@ -371,11 +380,17 @@ class HpMpNumericExtractor:
         box: dict,
     ) -> tuple[float | None, float, str]:
         if not self.available:
+            self.last_candidate_count = 0
+            self.last_parseable_count = 0
             return None, 0.0, "ocr-unavailable"
         try:
             candidates = self._read_candidates(image, box)
         except Exception:
+            self.last_candidate_count = 0
+            self.last_parseable_count = 0
             return None, 0.0, "ocr-error"
+        self.last_candidate_count = len(candidates)
+        self.last_parseable_count = len(candidates)
         if not candidates:
             return None, 0.0, "no-digits"
         # 按 max 分组(条容量恒定);取支持最多的 max 组,组内取最大 cur
@@ -400,7 +415,11 @@ class HpMpNumericExtractor:
     ) -> HpMpGeometryResult:
         start = time.perf_counter()
         hp_ratio, hp_conf, hp_failure = self._read_ratio(image, hp_box)
+        hp_candidate_count = self.last_candidate_count
+        hp_parseable_count = self.last_parseable_count
         mp_ratio, mp_conf, mp_failure = self._read_ratio(image, mp_box)
+        mp_candidate_count = self.last_candidate_count
+        mp_parseable_count = self.last_parseable_count
         reasons: list[str] = []
         if hp_failure:
             reasons.append(f"hp numeric: {hp_failure}")
@@ -418,4 +437,8 @@ class HpMpNumericExtractor:
             mp_strategy="NUMERIC_OCR",
             hp_failure=hp_failure,
             mp_failure=mp_failure,
+            hp_candidate_count=hp_candidate_count,
+            mp_candidate_count=mp_candidate_count,
+            hp_parseable_count=hp_parseable_count,
+            mp_parseable_count=mp_parseable_count,
         )

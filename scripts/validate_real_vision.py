@@ -18,6 +18,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from maple_agent.hybrid_vision import (  # noqa: E402
+    HpMpNumericExtractor,
+    VisionProfileRegistry,
+    resolve_pixel_rois_for,
+)
 from maple_agent.logging_setup import new_id  # noqa: E402
 from maple_agent.real_vision import (  # noqa: E402
     RealOCRProvider,
@@ -191,6 +196,7 @@ def _evaluate_and_report(
     provider_fallback: str,
     capability: dict,
     ground_truth_file: str,
+    hpmp_diagnostics: dict | None = None,
 ) -> int:
     """基于样本与预测计算 benchmark、readiness 并输出报告。"""
     dataset = VisionValidationDataset(samples)
@@ -255,6 +261,8 @@ def _evaluate_and_report(
         readiness=readiness,
         failures=list(failures or []),
     )
+    if hpmp_diagnostics:
+        report["hpmp_diagnostics"] = dict(hpmp_diagnostics)
     benchmark_path = save_real_vision_client_benchmark(
         output, trace_id, report
     )
@@ -283,6 +291,11 @@ def _evaluate_and_report(
     print("ocr_latency_ms =", metrics.mean_ocr_latency_ms)
     print("map_accuracy =", metrics.map_accuracy)
     print("hp_mae =", metrics.hp_mae, "mp_mae =", metrics.mp_mae)
+    if hpmp_diagnostics:
+        print(
+            "hpmp_diagnostics =",
+            json.dumps(hpmp_diagnostics, ensure_ascii=False),
+        )
     print("quest_state_accuracy =", metrics.quest_state_accuracy)
     print("failure_taxonomy =", json.dumps(metrics.failure_taxonomy))
     print(
@@ -306,6 +319,12 @@ def main() -> int:
     parser.add_argument("--profile", default="default-800x600")
     parser.add_argument("--frames", type=int, default=20)
     parser.add_argument("--interval", type=float, default=0.5)
+    parser.add_argument(
+        "--hpmp-mode",
+        choices=("auto", "numeric", "roi-ocr"),
+        default="auto",
+        help="HP/MP existing path: auto prefers dedicated numeric ROI",
+    )
     parser.add_argument(
         "--output",
         default="sessions",
@@ -524,13 +543,25 @@ def main() -> int:
     failures: list[dict] = []
     taxonomy: dict[str, int] = {}
     capture_ok = 0
+    hybrid_registry = VisionProfileRegistry()
+    numeric_extractor = HpMpNumericExtractor()
+    hp_numeric_invocations = 0
+    mp_numeric_invocations = 0
+    hp_digit_candidates = 0
+    mp_digit_candidates = 0
+    hp_parseable_candidates = 0
+    mp_parseable_candidates = 0
+    player_state_reference_count = 0
 
     def record_failure(failure_type: str, message: str) -> None:
         failures.append({"type": failure_type, "message": message})
         taxonomy[failure_type] = taxonomy.get(failure_type, 0) + 1
 
     def capture_one(*, do_ocr: bool, index: int) -> VisionFrame | None:
-        nonlocal capture_ok
+        nonlocal capture_ok, hp_numeric_invocations, mp_numeric_invocations
+        nonlocal hp_digit_candidates, mp_digit_candidates
+        nonlocal hp_parseable_candidates, mp_parseable_candidates
+        nonlocal player_state_reference_count
         start = time.perf_counter()
         frame = provider.capture(trace_id=trace_id)
         capture_ms = round((time.perf_counter() - start) * 1000, 2)
@@ -558,13 +589,69 @@ def main() -> int:
             roi_map_text = ""
             roi_hp: float | None = None
             roi_mp: float | None = None
+            numeric_result = None
+            frame_image = None
             if profile:
+                try:
+                    from PIL import Image
+
+                    frame_image = Image.open(image_path)
+                    frame_width, frame_height = frame_image.size
+                    pixel_rois = resolve_pixel_rois_for(
+                        hybrid_registry,
+                        args.profile,
+                        client_width=frame_width,
+                        client_height=frame_height,
+                    )
+                except (KeyError, OSError, ValueError):
+                    pixel_rois = {}
                 roi_map = {
-                    name: roi_profile.get(f"{name}_roi")
+                    name: pixel_rois.get(name)
+                    or roi_profile.get(f"{name}_roi")
                     for name in ROI_NAMES
                 }
+                hp_numeric_roi = pixel_rois.get("hp_numeric") or roi_profile.get(
+                    "hp_numeric_roi"
+                )
+                mp_numeric_roi = pixel_rois.get("mp_numeric") or roi_profile.get(
+                    "mp_numeric_roi"
+                )
+                use_numeric = (
+                    args.hpmp_mode == "numeric"
+                    or (
+                        args.hpmp_mode == "auto"
+                        and hp_numeric_roi
+                        and mp_numeric_roi
+                    )
+                )
+                if (
+                    use_numeric
+                    and numeric_extractor.available
+                    and hp_numeric_roi
+                    and mp_numeric_roi
+                ):
+                    from PIL import Image
+
+                    numeric_result = numeric_extractor.extract(
+                        frame_image or Image.open(image_path),
+                        hp_box=hp_numeric_roi,
+                        mp_box=mp_numeric_roi,
+                    )
+                    hp_numeric_invocations += 1
+                    mp_numeric_invocations += 1
+                    hp_digit_candidates += numeric_result.hp_candidate_count
+                    mp_digit_candidates += numeric_result.mp_candidate_count
+                    hp_parseable_candidates += numeric_result.hp_parseable_count
+                    mp_parseable_candidates += numeric_result.mp_parseable_count
+                    roi_hp = numeric_result.hp_ratio
+                    roi_mp = numeric_result.mp_ratio
                 for name, roi in roi_map.items():
                     if not roi:
+                        continue
+                    if (
+                        numeric_result is not None
+                        and name in ("hp", "mp")
+                    ):
                         continue
                     text, _confidence, _latency = _ocr_crop(
                         ocr,
@@ -589,6 +676,22 @@ def main() -> int:
                 ocr_result,
                 elements,
             )
+            observation = observation.model_copy(
+                update={
+                    "hp_reference": (
+                        roi_hp
+                        if roi_hp is not None
+                        else observation.hp_reference
+                    ),
+                    "mp_reference": (
+                        roi_mp
+                        if roi_mp is not None
+                        else observation.mp_reference
+                    ),
+                }
+            )
+            if observation.hp_reference is not None or observation.mp_reference is not None:
+                player_state_reference_count += 1
             if not ocr_result.text.strip() and not roi_map_text:
                 record_failure("OCR_EMPTY", f"frame {index} empty OCR")
             if ocr_result.confidence < 0.5 and ocr_result.text.strip():
@@ -734,6 +837,36 @@ def main() -> int:
         provider_fallback=provider.fallback_reason,
         capability=capability,
         ground_truth_file=args.ground_truth,
+        hpmp_diagnostics={
+            "mode": args.hpmp_mode,
+            "numeric_backend_available": numeric_extractor.available,
+            "hp_numeric_invocations": hp_numeric_invocations,
+            "mp_numeric_invocations": mp_numeric_invocations,
+            "hp_digit_candidates": hp_digit_candidates,
+            "mp_digit_candidates": mp_digit_candidates,
+            "hp_parseable_candidates": hp_parseable_candidates,
+            "mp_parseable_candidates": mp_parseable_candidates,
+            "player_state_reference_count": player_state_reference_count,
+            "hp_candidate_yield": (
+                round(
+                    hp_parseable_candidates
+                    / max(1, hp_numeric_invocations),
+                    4,
+                )
+                if hp_numeric_invocations
+                else None
+            ),
+            "mp_candidate_yield": (
+                round(
+                    mp_parseable_candidates
+                    / max(1, mp_numeric_invocations),
+                    4,
+                )
+                if mp_numeric_invocations
+                else None
+            ),
+            "player_state_contract": "PlayerStateReference normalized ratios",
+        },
     )
 
 

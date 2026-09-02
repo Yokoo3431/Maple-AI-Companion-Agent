@@ -1,3 +1,23 @@
+# Handoff(13-U.1g,REVIEW_REQUIRED)
+
+- **Current phase**:13-U.1g HP/MP Live Signal Recalibration & First Real Player-State Closure
+- **Previous completed phase**:13-U.1f Hybrid Visual Semantic Perception Feasibility
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Governance**:实际仓库为 GIT 模式，开始时 main、工作树 clean、HEAD 与 origin/main 同步；未修改 .project/BASELINE.json
+- **Historical path**:13-I.4 HOME 真实路径使用 2560×1440 fullscreen-windowed、底部中央专用 hp_numeric/mp_numeric ROI、Tesseract eng digit whitelist、3/5/7 倍缩放、PSM 7/13、多数投票，cur/max 解析为 normalized ratio；历史 aggregate 报告记录 HP/MP 候选存在，但低状态 ground truth 覆盖有限
+- **Current audit**:Notebook 当前窗口为 1366×768，使用既有 office_pc_1920x1080 normalized profile transform；Tesseract 5.4.0.20240606，语言包 chi_sim/eng/osd 可用。原环境 TESSERACT_CMD 错误指向目录而非 executable，项目已安全回退到现有官方 executable，并识别嵌套 tessdata；没有修改全局环境
+- **Bounded fix**:实时验证脚本优先复用 canonical hybrid profile 的 numeric ROI；numeric 结果仍通过既有 ScreenObservation → ExistingVisionObservationAdapter → PlayerStateReference 路径；HpMpGeometryResult 增加 candidate/parseable denominator；VisualSemanticCandidate 的 HP/MP 值语义固定为 NORMALIZED_RATIO，禁止将 472/472 等原文当比例
+- **Real diagnostic**:真实只读诊断跨度 149.46 秒，30/30 capture 成功；HP numeric 调用 30、MP numeric 调用 30，HP/MP digit candidate 与 parseable candidate 均为 0，PlayerStateReference=0，SemanticState non-empty=0，CompanionSnapshot=30，异常=0；OCR aggregate success=0.5667，包含 2 次黑帧和 12 次低置信度分类
+- **ROI matrix**:1 个真实临时帧，专用 HP 85×19、MP 100×28，宽 HP 752×27、MP 758×7；original/scale2/scale3/threshold 四种有限变体均为 0 个 cur/max candidate。原始帧/ROI/OCR 只保留在本机临时目录并已清理
+- **Result**: GAP_IDENTIFIED；当前具体 blocker 为 HP_MP_SIGNAL_NOT_VISIBLE_OR_PROFILE_LAYOUT_MISMATCH，已排除单一 Tesseract executable 配置错误，但尚无足够证据区分布局错位与当前 UI 未暴露数字
+- **Ground truth**: UNKNOWN_GT，没有产生候选，故没有人工验证样本；不得提升 REAL_SEMANTIC_EVIDENCE
+- **Map/VLM boundary**:Map 仍为 MAP_TEMPLATE_ASSET_GAP，本阶段未下载或生成模板；VLM/Antigravity 未调用、未发送图片；未新增实体 detector
+- **Tests**:新增 U.1g bounded tests 与诊断脚本；定向测试通过，完整 pytest、architecture contract、Ruff、diff check 需在本阶段最终提交前完成
+- **Privacy**:未提交截图、ROI、OCR raw、账号/角色/chat、PID/HWND、窗口标题、绝对路径、credentials 或 raw session
+- **Safety**:SAFETY_MODE=MOCK_ONLY；READ ONLY；NO INPUT；NO EXECUTION；NO AUTOMATION；无 keyboard/mouse/Input Provider/Executor/Planner/hooks/DLL/memory reading/client modification
+- **Readiness**:Real Vision=FOUNDATION_ONLY / Knowledge=FOUNDATION_ONLY / Companion Session=REAL_SESSION_VALIDATED_LEVEL_A / Player State Evidence=NOT_CLOSED / Real Semantic Evidence=NOT_CLOSED / Overall=NOT_READY
+- **Next action**:停止在 Phase 13-U.1g；仅建议用户人工确认 HP/MP 数字是否确实可见后，再做合法的 profile/layout 复核；不要进入 Phase 13-V，不处理 Map template 或 VLM
+
 # Handoff(13-U.1f,REVIEW_REQUIRED)
 
 - **Current phase**:13-U.1f Hybrid Visual Semantic Perception Feasibility
