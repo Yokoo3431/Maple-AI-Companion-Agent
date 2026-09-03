@@ -55,6 +55,7 @@
 | Phase 13-U.1e | Minimal Real Semantic Evidence Closure(最小真实语义证据闭合) | ⚠️ REVIEW_REQUIRED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED / Overall = NOT_READY |
 | Phase 13-U.1f | Hybrid Visual Semantic Perception Feasibility(混合视觉语义感知可行性) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 | Phase 13-U.1g | HP/MP Live Signal Recalibration(HP/MP 实时信号重新校准) | ⚠️ REVIEW_REQUIRED / GAP_IDENTIFIED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
+| Phase 13-U.1h | Antigravity Visual Bootstrap & First Real Semantic Scene Closure(Antigravity 视觉引导与首次真实语义场景闭合) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -103,6 +104,12 @@ Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture
 ### Phase 13-U.1g: HP/MP Live Signal Recalibration
 
 本阶段只处理 HP/MP player-state 路径。审计确认 13-I.4 的真实 HOME 成功证据使用底部中央专用 numeric ROI、英文数字白名单、多尺度/PSM 投票和 `cur/max → normalized ratio`；当前 Notebook 的 Tesseract 配置曾把 `TESSERACT_CMD` 指向目录而非 executable，项目已增加安全回退，但这不是唯一断点。当前 1366×768 客户端经既有 profile transform 后，约 149.46 秒真实诊断取得 30/30 capture，HP/MP numeric 调用各 30 次，候选均为 0，PlayerStateReference 为 0；专用及宽 ROI 的有限预处理矩阵也均为 0。结论为 `GAP_IDENTIFIED` / `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`，具体 blocker 是当前 profile ROI 与真实 UI 布局/可见 HP/MP 信号不一致或画面未暴露数字。HP/MP 仍只允许进入既有 `PlayerStateReference`，不伪装成 KnowledgeEntity；脱敏报告见 `docs/architecture/vision/phase13u1g_hpmp_signal_report.json`，设计见 `docs/architecture/vision/phase13u1g_design.md`。
+
+### Phase 13-U.1h: Antigravity Visual Bootstrap & First Real Semantic Scene Closure
+
+本阶段在既有 `VisualSemanticProvider` contract 上增加了只读 Antigravity CLI adapter、opaque frame token、临时图像传输、严格 JSON/schema 校验和多帧一致性报告；没有创建第二套 Vision、Evidence、Resolver、PlayerState 或执行链。临时图像只在 provider 调用期间存在，调用结束后删除；CLI 必须显式提供 `{image_path}`，并以无 shell subprocess 方式调用。HP/MP candidate 继续要求 `NORMALIZED_RATIO`，可选携带 current/max/ratio 三元组，current-only 不得猜比例。
+
+当前机器 PATH 没有 `antigravity` 或 `gemini` CLI；Google Cloud CLI 不是已验证的图像 provider，且其配置读取受权限阻塞。本阶段未读取认证信息、未修改其他 Agent 配置、未发送真实图像，因此 3–5 分钟真实 VLM 诊断状态为 `PENDING_PROVIDER`，阶段结论为 `INSUFFICIENT_EVIDENCE`。CI 使用 mock subprocess，不需要外部 provider；脱敏报告见 `docs/architecture/vision/phase13u1h_real_visual_report.json`，设计与外部架构审阅见 `docs/architecture/vision/phase13u1h_antigravity_bootstrap_design.md`。
 
 当前架构路线:
 

@@ -1,3 +1,21 @@
+# Handoff(13-U.1h,REVIEW_REQUIRED)
+
+- **Current phase**:13-U.1h Antigravity Visual Bootstrap & First Real Semantic Scene Closure
+- **Previous completed phase**:13-U.1g HP/MP Live Signal Recalibration & First Real Player-State Closure
+- **GitHub**:本阶段成果同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Governance**:开始时 main、工作树 clean；`git fetch origin` 因 `.git/FETCH_HEAD` 权限失败，使用只读 local HEAD/origin/main hash 复核同步；未修改 `.project/BASELINE.json`
+- **Reference study**:只借鉴 Project Aegis 的 frame-diff/provider isolation、4x-game-agent 的 cheap-local/low-frequency fallback、Cradle 的 screenshot/provider separation、AiGameCompanion 的 WGC/provider isolation；没有复制代码、模型、截图或执行逻辑
+- **Provider preflight**:当前 PATH 未发现 `antigravity` 或 `gemini` CLI；Google Cloud CLI 不是已验证图像 provider，且其配置读取权限受阻。未读取认证状态或 credentials，未修改 OpenClaw/Hermes/Gateway/其他配置
+- **Implementation**:复用既有 `VisualSemanticProvider`、`VisualSemanticRequest`、`VisualSemanticCandidate`、`VisualSemanticResponse`；新增 `AntigravityVisualSemanticProvider`、`EphemeralFrameStore` 和 `VisualSemanticAgreementGate`。临时图像使用 opaque token，provider 调用后在 finally 清理；CLI 无 shell 执行且必须声明 `{image_path}`
+- **HP/MP contract**:HP/MP 仍使用 `NORMALIZED_RATIO`；新增可选 `observed_current`、`observed_max`、`normalized_ratio` 一致性校验，current-only 不进入比例证据；继续使用既有 `PlayerStateReference`
+- **Real diagnostic**:未执行真实 3–5 分钟 VLM 诊断，因为没有可用 provider/image CLI；`vlm_invocations=0`、`real_image_sent=false`、真实 candidate/GT 均为 0，状态 `PENDING_PROVIDER`
+- **CI contract**:新增 mock subprocess、invalid JSON/extra field/action rejection、timeout/unavailable、temporary cleanup、frame-token mismatch、multi-frame consistency tests；CI 不要求外部 provider
+- **Result**:`INSUFFICIENT_EVIDENCE`; `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`; Local Map 仍 `MAP_TEMPLATE_ASSET_GAP`，Local HP/MP 仍 `INSUFFICIENT_VISUAL_SIGNAL`
+- **Privacy**:未提交截图、ROI、base64、OCR raw、VLM transcript、credentials、PID/HWND、窗口标题、绝对路径或 raw session；provider 只接收临时图像路径，日志/报告不保存路径
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; NO AUTOMATION；无 keyboard/mouse/Input Provider/Executor/Planner/hooks/DLL/memory reading/client modification
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / Real Semantic Evidence=`NOT_CLOSED` / Visual Bootstrap=`INSUFFICIENT_EVIDENCE` / Overall=`NOT_READY`
+- **Next action**:等待用户提供合法、已配置且支持图像输入的 Antigravity/Gemini CLI route 后，再考虑真实短诊断；不进入 Phase 13-V，不处理 Map template，不调用外部 provider，不扩展 Planner/Executor
+
 # Handoff(13-U.1g,REVIEW_REQUIRED)
 
 - **Current phase**:13-U.1g HP/MP Live Signal Recalibration & First Real Player-State Closure

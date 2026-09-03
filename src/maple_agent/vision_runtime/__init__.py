@@ -4,6 +4,12 @@ import json
 from pathlib import Path
 
 from maple_agent.architecture import TRACE_SCHEMA_VERSION
+from maple_agent.vision_runtime.antigravity import (
+    AntigravityVisualSemanticProvider,
+    EphemeralFrameStore,
+    VisualSemanticAgreementGate,
+    VisualSemanticAgreementResult,
+)
 from maple_agent.vision_runtime.capture import (
     MockScreenshotProvider,
     ScreenshotProvider,
@@ -79,6 +85,10 @@ __all__ = [
     "VisionRuntimeValidator",
     "VisionRuntimeVerdict",
     "VisionSource",
+    "AntigravityVisualSemanticProvider",
+    "EphemeralFrameStore",
+    "VisualSemanticAgreementGate",
+    "VisualSemanticAgreementResult",
     "MockVisualSemanticProvider",
     "StrategyMetrics",
     "VisualCandidateType",

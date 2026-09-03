@@ -1,0 +1,62 @@
+{
+  "phase": "13-U.1h",
+  "status": "REVIEW_REQUIRED",
+  "decision": "INSUFFICIENT_EVIDENCE",
+  "scope": "read-only Antigravity visual bootstrap feasibility",
+  "provider_preflight": {
+    "antigravity_cli": "NOT_FOUND_IN_PATH",
+    "gemini_cli": "NOT_FOUND_IN_PATH",
+    "gcloud": "PRESENT_BUT_NOT_VALIDATED_IMAGE_PROVIDER",
+    "gcloud_runtime_status": "CONFIG_ACCESS_BLOCKED",
+    "authentication_inspected": false,
+    "credentials_changed": false,
+    "external_provider_call": false
+  },
+  "implementation": {
+    "existing_provider_contract_reused": true,
+    "temporary_image_transport": true,
+    "opaque_frame_token": true,
+    "shell_execution": false,
+    "strict_json_validation": true,
+    "multi_frame_agreement": true,
+    "real_image_sent": false,
+    "ci_external_provider_required": false
+  },
+  "real_diagnostic": {
+    "status": "PENDING_PROVIDER",
+    "capture_attempts": null,
+    "vlm_invocations": 0,
+    "valid_structured_candidates": 0,
+    "verified_candidates": 0,
+    "current_observation_evidence": 0,
+    "player_state_references": 0,
+    "semantic_state_nonempty": 0,
+    "companion_snapshots": 0,
+    "exceptions": 0,
+    "ground_truth": "NOT_APPLICABLE"
+  },
+  "local_path": {
+    "preserved": true,
+    "role": "preferred_cheap_path",
+    "map_status": "MAP_TEMPLATE_ASSET_GAP",
+    "hp_mp_status": "INSUFFICIENT_VISUAL_SIGNAL"
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "real_semantic_evidence": "NOT_CLOSED",
+    "visual_perception_feasibility": "INSUFFICIENT_EVIDENCE",
+    "overall": "NOT_READY",
+    "safety_mode": "MOCK_ONLY"
+  },
+  "privacy": {
+    "raw_frames_committed": false,
+    "roi_committed": false,
+    "ocr_raw_committed": false,
+    "vlm_transcript_committed": false,
+    "credentials_committed": false,
+    "private_paths_committed": false,
+    "temporary_image_cleanup_tested": true
+  }
+}

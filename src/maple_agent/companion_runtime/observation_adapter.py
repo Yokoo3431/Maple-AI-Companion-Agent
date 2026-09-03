@@ -130,7 +130,11 @@ class ExistingVisionObservationAdapter:
             confidence = max(confidence, candidate.confidence)
             if candidate.candidate_type is VisualCandidateType.HP:
                 try:
-                    value = float(candidate.candidate_value)
+                    value = (
+                        candidate.normalized_ratio
+                        if candidate.normalized_ratio is not None
+                        else float(candidate.candidate_value)
+                    )
                 except ValueError:
                     continue
                 if 0 <= value <= 1:
@@ -138,7 +142,11 @@ class ExistingVisionObservationAdapter:
                 continue
             if candidate.candidate_type is VisualCandidateType.MP:
                 try:
-                    value = float(candidate.candidate_value)
+                    value = (
+                        candidate.normalized_ratio
+                        if candidate.normalized_ratio is not None
+                        else float(candidate.candidate_value)
+                    )
                 except ValueError:
                     continue
                 if 0 <= value <= 1:

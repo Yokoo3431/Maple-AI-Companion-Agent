@@ -120,6 +120,9 @@ class VisualSemanticCandidate(BaseModel):
     candidate_type: VisualCandidateType
     candidate_value: str
     value_semantics: VisualValueSemantics = VisualValueSemantics.AUTO
+    observed_current: float | None = Field(default=None, ge=0)
+    observed_max: float | None = Field(default=None, gt=0)
+    normalized_ratio: float | None = Field(default=None, ge=0, le=1)
     confidence: float = Field(ge=0, le=1)
     uncertainties: list[str] = Field(default_factory=list)
     visible_text_summary: str = ""
@@ -145,10 +148,28 @@ class VisualSemanticCandidate(BaseModel):
                 self.value_semantics = VisualValueSemantics.NORMALIZED_RATIO
             if self.value_semantics is not VisualValueSemantics.NORMALIZED_RATIO:
                 raise ValueError("HP/MP candidate must use normalized ratio semantics")
+            if (self.observed_current is None) != (self.observed_max is None):
+                raise ValueError("HP/MP current and maximum must be paired")
             try:
-                ratio = float(self.candidate_value)
+                ratio = (
+                    self.normalized_ratio
+                    if self.normalized_ratio is not None
+                    else float(self.candidate_value)
+                )
             except ValueError as exc:
                 raise ValueError("HP/MP candidate_value must be a normalized ratio") from exc
+            if self.observed_current is not None and self.observed_max is not None:
+                derived_ratio = self.observed_current / self.observed_max
+                if abs(derived_ratio - ratio) > 0.0001:
+                    raise ValueError("HP/MP normalized ratio disagrees with current/max")
+            try:
+                candidate_ratio = float(self.candidate_value)
+            except ValueError as exc:
+                raise ValueError("HP/MP candidate_value must be a normalized ratio") from exc
+            if abs(candidate_ratio - ratio) > 0.0001:
+                raise ValueError("HP/MP candidate_value disagrees with normalized ratio")
+            self.normalized_ratio = ratio
+            self.candidate_value = str(ratio)
             if not 0 <= ratio <= 1:
                 raise ValueError("HP/MP normalized ratio must be between 0 and 1")
         elif self.value_semantics is VisualValueSemantics.AUTO:
