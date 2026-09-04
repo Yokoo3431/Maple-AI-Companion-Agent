@@ -1,3 +1,19 @@
+# Handoff(13-U.1i,REVIEW_REQUIRED)
+
+- **Current phase**:13-U.1i Existing Antigravity Route Recovery & One-Image Real VLM Smoke
+- **Previous completed phase**:13-U.1h Antigravity Visual Bootstrap & First Real Semantic Scene Closure
+- **GitHub**:本阶段成果待完成提交后同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **Governance**:开始时 main、工作树 clean；`git fetch origin` 成功；HEAD 与 origin/main 均为 `c2a151ffcff0f979352a471131e69f8aed534408`；未修改 `.project/BASELINE.json`
+- **Provider discovery**:发现既有 `agy` CLI 1.1.24，模型列表包含 `gemini-3.7-flash-low`；独立 `antigravity`/`gemini` 不在 Windows PATH；Ubuntu WSL 未发现 `agy`；未读取或打印 credentials
+- **Capability evidence**:使用非私人 synthetic PNG 验证了本地图片输入（`--add-dir` + 文件提示）和 `--json-schema` structured output；synthetic 结果只证明 Route 能力，不计为真实 Maple 语义证据
+- **Implementation**:新增 `scripts/antigravity_visual_bridge.py`，作为 U.1h `AntigravityVisualSemanticProvider` 的薄 launcher；只接受 agy `structured_output`，复用既有 `VisualSemanticResponse` schema，丢弃自由文本/tool metadata，并 fail-closed
+- **Real Maple smoke**:未执行；既有 `WindowsWindowDiscovery` 本次未发现可见匹配 Maple 窗口，故 `image_sent=false`、真实 candidate/GT 均为 0，状态 `PENDING_CLIENT_WINDOW`
+- **Result**:`ROUTE_RECOVERED / REAL_MAPLE_SMOKE_PENDING`; `REAL_SEMANTIC_EVIDENCE=NOT_CLOSED`; Local Map 仍 `MAP_TEMPLATE_ASSET_GAP`，Local HP/MP 仍 `INSUFFICIENT_VISUAL_SIGNAL`
+- **Privacy**:未提交真实截图、ROI、base64、raw transcript、credentials、PID/HWND、窗口标题、绝对路径或 raw session；synthetic 临时文件仅用于本机探测
+- **Safety**:`SAFETY_MODE=MOCK_ONLY`; READ ONLY; NO INPUT; NO EXECUTION; NO AUTOMATION；无 keyboard/mouse/Input Provider/Executor/Planner/hooks/DLL/memory reading/client modification
+- **Readiness**:Real Vision=`FOUNDATION_ONLY` / Knowledge=`FOUNDATION_ONLY` / Companion Session=`REAL_SESSION_VALIDATED_LEVEL_A` / Real Semantic Evidence=`NOT_CLOSED` / Overall=`NOT_READY`
+- **Next action**:用户手动使 Maple 客户端在同一可访问桌面可见后，仅执行一次临时图片 read-only smoke；在此之前不发送真实图像、不进入 Phase 13-V、不扩展 provider/Vision/Planner/Executor
+
 # Handoff(13-U.1h,REVIEW_REQUIRED)
 
 - **Current phase**:13-U.1h Antigravity Visual Bootstrap & First Real Semantic Scene Closure

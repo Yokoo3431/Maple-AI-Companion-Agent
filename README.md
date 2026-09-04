@@ -56,6 +56,7 @@
 | Phase 13-U.1f | Hybrid Visual Semantic Perception Feasibility(混合视觉语义感知可行性) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 | Phase 13-U.1g | HP/MP Live Signal Recalibration(HP/MP 实时信号重新校准) | ⚠️ REVIEW_REQUIRED / GAP_IDENTIFIED / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
 | Phase 13-U.1h | Antigravity Visual Bootstrap & First Real Semantic Scene Closure(Antigravity 视觉引导与首次真实语义场景闭合) | ⚠️ REVIEW_REQUIRED / INSUFFICIENT_EVIDENCE / REAL_SEMANTIC_EVIDENCE = NOT_CLOSED |
+| Phase 13-U.1i | Existing Antigravity Route Recovery & One-Image Real VLM Smoke(既有 Antigravity 路由恢复与单图真实 VLM Smoke) | ⚠️ REVIEW_REQUIRED / ROUTE_RECOVERED / REAL_MAPLE_SMOKE = PENDING_CLIENT_WINDOW |
 
 ### Phase 13-N: Knowledge Graph Relationship & Planning Reference Foundation
 
@@ -110,6 +111,12 @@ Phase 13-U.1d 对真实客户端执行了 60.84 秒短诊断：41/41 次 capture
 本阶段在既有 `VisualSemanticProvider` contract 上增加了只读 Antigravity CLI adapter、opaque frame token、临时图像传输、严格 JSON/schema 校验和多帧一致性报告；没有创建第二套 Vision、Evidence、Resolver、PlayerState 或执行链。临时图像只在 provider 调用期间存在，调用结束后删除；CLI 必须显式提供 `{image_path}`，并以无 shell subprocess 方式调用。HP/MP candidate 继续要求 `NORMALIZED_RATIO`，可选携带 current/max/ratio 三元组，current-only 不得猜比例。
 
 当前机器 PATH 没有 `antigravity` 或 `gemini` CLI；Google Cloud CLI 不是已验证的图像 provider，且其配置读取受权限阻塞。本阶段未读取认证信息、未修改其他 Agent 配置、未发送真实图像，因此 3–5 分钟真实 VLM 诊断状态为 `PENDING_PROVIDER`，阶段结论为 `INSUFFICIENT_EVIDENCE`。CI 使用 mock subprocess，不需要外部 provider；脱敏报告见 `docs/architecture/vision/phase13u1h_real_visual_report.json`，设计与外部架构审阅见 `docs/architecture/vision/phase13u1h_antigravity_bootstrap_design.md`。
+
+### Phase 13-U.1i: Existing Antigravity Route Recovery & One-Image Real VLM Smoke
+
+本阶段恢复并验证了本机既有 `agy` Route（版本 1.1.24）：模型列表包含 `gemini-3.7-flash-low`，通过 `--add-dir` + 本地文件提示可以读取 synthetic 图片，并通过 `--json-schema` 返回结构化结果。由于 U.1h 既有 provider contract 要求 `{image_path}`，新增的 `scripts/antigravity_visual_bridge.py` 只是薄兼容 launcher：复用 `VisualSemanticResponse.model_json_schema()`，只消费 agy 的 `structured_output`，丢弃自由文本和工具元数据，再回到唯一既有 `AntigravityVisualSemanticProvider`；没有新增 Vision、Evidence、Resolver 或执行链。synthetic 探测取得 MAP/HP/MP 各 1 个结果，但明确不计为真实 Maple 证据。
+
+本次运行中既有 `WindowsWindowDiscovery` 未发现可见的 Maple 客户端窗口，因此没有截取或发送真实 Maple 图片，真实 one-image smoke 为 `PENDING_CLIENT_WINDOW`，`REAL_SEMANTIC_EVIDENCE` 仍为 `NOT_CLOSED`。Windows PATH 未发现独立 `antigravity`/`gemini` 命令，Ubuntu WSL 未发现 `agy`；未读取 credentials、未修改 OpenClaw/Hermes/Gateway、未提交真实图像或 transcript。脱敏报告与设计见 `docs/architecture/vision/phase13u1i_route_smoke_report.json`、`docs/architecture/vision/phase13u1i_route_recovery_design.md`。
 
 当前架构路线:
 

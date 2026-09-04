@@ -1,0 +1,73 @@
+{
+  "phase": "13-U.1i",
+  "status": "REVIEW_REQUIRED",
+  "scope": "existing Antigravity route recovery and one-image smoke",
+  "repository": {
+    "branch": "main",
+    "head": "c2a151ffcff0f979352a471131e69f8aed534408",
+    "origin_main": "c2a151ffcff0f979352a471131e69f8aed534408",
+    "working_tree_before_report": "clean"
+  },
+  "provider_discovery": {
+    "windows_agy": {
+      "status": "FOUND",
+      "version": "1.1.24",
+      "model_listing": "AVAILABLE",
+      "image_input": "SUPPORTED_VIA_ADD_DIR_AND_PROMPT",
+      "structured_output": "SUPPORTED_VIA_JSON_SCHEMA",
+      "probe_authentication": "PROBE_SUCCEEDED"
+    },
+    "windows_antigravity_command": "NOT_FOUND_IN_PATH",
+    "windows_gemini_command": "NOT_FOUND_IN_PATH",
+    "wsl_agy": "NOT_FOUND_IN_UBUNTU",
+    "gcloud": "NOT_SELECTED_NOT_A_VERIFIED_VISUAL_ROUTE"
+  },
+  "selected_route": {
+    "provider": "agy",
+    "model_profile": "gemini-3.7-flash-low",
+    "auth_state": "PROBE_SUCCEEDED",
+    "image_capability": "LOCAL_FILE_VIA_BOUNDED_ADD_DIR",
+    "project_compatibility": "THIN_LAUNCHER_ADDED"
+  },
+  "synthetic_capability_probe": {
+    "image_sent": true,
+    "image_type": "non_private_synthetic_png",
+    "strict_schema_result": "VALID",
+    "candidate_counts": {
+      "MAP": 1,
+      "HP": 1,
+      "MP": 1,
+      "UI_TEXT": 0
+    },
+    "treated_as_real_maple_evidence": false
+  },
+  "maple_one_image_smoke": {
+    "status": "PENDING_CLIENT_WINDOW",
+    "image_sent": false,
+    "candidate_count": 0,
+    "ground_truth": "UNAVAILABLE",
+    "window_discovery": "NO_PROFILE_CANDIDATE_MATCH",
+    "reason": "No visible matching Maple window was available to the read-only discovery layer during this run."
+  },
+  "existing_agent_chain": {
+    "current_observation": "NOT_REACHED_FOR_REAL_MAPLE_IMAGE",
+    "resolver_or_player_state": "NOT_REACHED_FOR_REAL_MAPLE_IMAGE",
+    "semantic_state": "NOT_REACHED_FOR_REAL_MAPLE_IMAGE",
+    "companion_snapshot": "NOT_REACHED_FOR_REAL_MAPLE_IMAGE"
+  },
+  "readiness": {
+    "real_vision": "FOUNDATION_ONLY",
+    "knowledge": "FOUNDATION_ONLY",
+    "companion_session": "REAL_SESSION_VALIDATED_LEVEL_A",
+    "real_semantic_evidence": "NOT_CLOSED",
+    "overall": "NOT_READY",
+    "safety_mode": "MOCK_ONLY"
+  },
+  "privacy": {
+    "real_image_persisted": false,
+    "raw_transcript_persisted": false,
+    "credentials_persisted": false,
+    "sensitive_window_metadata_persisted": false
+  },
+  "next_action": "Wait for a manually visible Maple client, then run exactly one temporary-image read-only smoke through the recovered route; do not enter Phase 13-V."
+}

@@ -9,7 +9,7 @@ baseline:
   previous_commit: bf83ba028211c810159678644fdb281b15224923
 
 phase:
-  current: 13-U.1h
+  current: 13-U.1i
   status: REVIEW_REQUIRED
   last_completed: 13-U.1g
 
@@ -35,5 +35,5 @@ development:
 
 handoff:
   status: REVIEW_REQUIRED
-  next_action: "STOP: Phase 13-U.1h added a fail-closed Antigravity CLI adapter and temporary image transport contract, but no antigravity/gemini CLI is available on this machine; real VLM diagnostic is PENDING_PROVIDER and REAL_SEMANTIC_EVIDENCE remains NOT_CLOSED; do not enter Phase 13-V; MAP_TEMPLATE_ASSET_GAP and HP_MP_SIGNAL_NOT_VISIBLE_OR_PROFILE_LAYOUT_MISMATCH remain separate"
-  blockers: []
+  next_action: "STOP: existing agy route recovered and synthetic image/schema capability verified, but no visible Maple client was available for the one-image real smoke; REAL_SEMANTIC_EVIDENCE remains NOT_CLOSED; do not enter Phase 13-V"
+  blockers: [REAL_MAPLE_WINDOW_NOT_VISIBLE]
