@@ -4,9 +4,10 @@
   "scope": "existing Antigravity route recovery and one-image smoke",
   "repository": {
     "branch": "main",
-    "head": "c2a151ffcff0f979352a471131e69f8aed534408",
-    "origin_main": "c2a151ffcff0f979352a471131e69f8aed534408",
-    "working_tree_before_report": "clean"
+    "base_head": "c2a151ffcff0f979352a471131e69f8aed534408",
+    "feature_commit": "3ad1778ec19b654d1700f58e6e72630f13b15ec3",
+    "origin_main_after_push": "3ad1778ec19b654d1700f58e6e72630f13b15ec3",
+    "working_tree_after_push": "clean"
   },
   "provider_discovery": {
     "windows_agy": {

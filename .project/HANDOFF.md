@@ -2,7 +2,7 @@
 
 - **Current phase**:13-U.1i Existing Antigravity Route Recovery & One-Image Real VLM Smoke
 - **Previous completed phase**:13-U.1h Antigravity Visual Bootstrap & First Real Semantic Scene Closure
-- **GitHub**:本阶段成果待完成提交后同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)
+- **GitHub**:本阶段成果已同步到 [Maple-AI-Companion-Agent](https://github.com/Yokoo3431/Maple-AI-Companion-Agent)，feature commit=`3ad1778ec19b654d1700f58e6e72630f13b15ec3`
 - **Governance**:开始时 main、工作树 clean；`git fetch origin` 成功；HEAD 与 origin/main 均为 `c2a151ffcff0f979352a471131e69f8aed534408`；未修改 `.project/BASELINE.json`
 - **Provider discovery**:发现既有 `agy` CLI 1.1.24，模型列表包含 `gemini-3.7-flash-low`；独立 `antigravity`/`gemini` 不在 Windows PATH；Ubuntu WSL 未发现 `agy`；未读取或打印 credentials
 - **Capability evidence**:使用非私人 synthetic PNG 验证了本地图片输入（`--add-dir` + 文件提示）和 `--json-schema` structured output；synthetic 结果只证明 Route 能力，不计为真实 Maple 语义证据
